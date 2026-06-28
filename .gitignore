@@ -1,0 +1,11 @@
+.env
+/myenv/
+
+/pycache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+/research_job.egg-info/
+/logs/
