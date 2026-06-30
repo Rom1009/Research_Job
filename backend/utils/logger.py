@@ -21,7 +21,7 @@ def setup_logger(name: str):
     file_handler = logging.FileHandler(LOG_DIR / f"{name}.log", encoding = "utf-8")
     file_handler.setFormatter(formatter)
 
-    if not logger.handlers():
+    if not logger.handlers:
         logger.addHandler(console_handler)
         logger.addHandler(file_handler)
 

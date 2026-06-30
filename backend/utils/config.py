@@ -18,8 +18,8 @@ class Settings(BaseSettings):
     GROQ_API_KEY: SecretStr
 
     model_config = SettingsConfigDict(
-        env_title = ".env",
-        env_file_encoding = "urf-8",
+        env_file = ".env",
+        env_file_encoding = "utf-8",
         extra = "ignore",
     )
 
