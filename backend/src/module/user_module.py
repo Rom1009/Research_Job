@@ -1,4 +1,4 @@
-from backend.src.controller.work_controller import WorkController
+from backend.src.controller.user_controller import WorkController
 from fastapi import APIRouter
 from backend.src.core.base_module import BaseModule
 
