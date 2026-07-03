@@ -9,3 +9,5 @@ __pycache__/
 
 /research_job.egg-info/
 /logs/
+
+test.db

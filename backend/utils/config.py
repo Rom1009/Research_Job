@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     ENV_MODE: EnvMode = EnvMode.DEV
     CONFIG_PATH : str = "config/input.yml"
 
+    DATABASE_URL: str = "sqlite:///./test.db"
+
     GROQ_API_KEY: SecretStr
 
     model_config = SettingsConfigDict(

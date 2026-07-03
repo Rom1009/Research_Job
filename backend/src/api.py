@@ -1,12 +1,12 @@
 from fastapi import APIRouter, FastAPI
-from backend.src.module.user_module import WorkModule
+from backend.src.module.user_module import UserModule
 
 def register_modules(app: FastAPI):
 
     api_router = APIRouter(prefix = "/api")
 
     modules = [
-        WorkModule()
+        UserModule()
     ]
 
     for module in modules:
