@@ -17,6 +17,9 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str = "sqlite:///./test.db"
 
+    BASE_SEARCH_URL: str = "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search"
+    DETAIL_SEARCH_URL: str = "https://www.linkedin.com/jobs-guest/jobs/api/jobPosting"
+
     GROQ_API_KEY: SecretStr
 
     model_config = SettingsConfigDict(

@@ -1,0 +1,16 @@
+from fastapi import APIRouter
+
+from backend.src.controller.job_controller import JobController
+from backend.src.core.base_module import BaseModule
+
+class JobModule(BaseModule):
+    prefix = "/job"
+    tags = ["jobs"]
+
+    def __init__(self):
+        super().__init__()
+        self.job_controller = JobController()
+    
+    def setup_router(self):
+        self.router = APIRouter()
+        self.router.post("/scrape")(self.job_controller.scraping_job_data)

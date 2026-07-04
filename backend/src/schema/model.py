@@ -48,6 +48,7 @@ class MatchResults(SQLModel, table = True):
 '''
 
 class UserRequest(SQLModel):
+    # user_id: UUID
     github_url: Optional[str] = Field(default = None)
     cv_url: Optional[str] = Field(default = None)
 
@@ -68,3 +69,18 @@ class SchemaCVResponse(SQLModel):
     additional_info: list[str]
 
     validation_status: Validation
+
+class JobRequest(SQLModel):
+    # job_id: UUID 
+    keywords: Optional[str] = Field(default = None)
+    location_search: Optional[str] = Field(default = None)
+    page_to_scrape: Optional[int] = Field(default = 1)
+    filter_level: Optional[str] = Field(default = None)
+
+class JobResponse(SQLModel):
+    job_id: UUID 
+    title: Optional[str] = Field(default = None)
+    company: Optional[str] = Field(default = None)
+    location: Optional[str] = Field(default = None)
+    job_url: Optional[str] = Field(default = None)
+    description: Optional[str] = Field(default = None)
