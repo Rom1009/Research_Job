@@ -84,3 +84,16 @@ class JobResponse(SQLModel):
     location: Optional[str] = Field(default = None)
     job_url: Optional[str] = Field(default = None)
     description: Optional[str] = Field(default = None)
+
+class ScoreResponse(SQLModel):
+    match_id: UUID
+    skill_score: Optional[float] = Field(default = None)
+    education_score: Optional[float] = Field(default = None)
+    work_experience_score: Optional[float] = Field(default = None)
+    project_score: Optional[float] = Field(default = None)
+    total_score: Optional[float] = Field(default = None)
+    ai_analysis_details : Optional[dict] = Field(default = None)
+
+class ScoreRequest(SQLModel):
+    profile_id: UUID
+    job_id: UUID
