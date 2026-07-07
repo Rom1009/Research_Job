@@ -1,6 +1,7 @@
 from fastapi import APIRouter, FastAPI
 from backend.src.module.user_module import UserModule
 from backend.src.module.job_module import JobModule
+from backend.src.module.score_module import ScoreModule
 
 def register_modules(app: FastAPI):
 
@@ -8,7 +9,8 @@ def register_modules(app: FastAPI):
 
     modules = [
         UserModule(),
-        JobModule()
+        JobModule(),
+        ScoreModule()
     ]
 
     for module in modules:

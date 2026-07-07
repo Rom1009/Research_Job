@@ -33,3 +33,12 @@ class UserRepository:
             logger.warning(f"No user profile found with ID: {user_id}")
 
         return result
+
+    def get_all_users(self):
+        logger.info("Fetching all user profiles")
+        
+        statement = select(UserProfile)
+        results = self.session.exec(statement).all()
+
+        logger.info(f"Total user profiles found: {len(results)}")
+        return results

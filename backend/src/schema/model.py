@@ -97,3 +97,18 @@ class ScoreResponse(SQLModel):
 class ScoreRequest(SQLModel):
     profile_id: UUID
     job_id: UUID
+
+class ScoreCV(SQLModel):
+    skill_score: int
+    education_score: int
+    work_experience_score: int
+    project_score: int
+
+    matched_skills: list[str]
+
+    gap_analysis: list[str]
+    actionable_advice: list[str]
+    evaluation_summary: str
+
+    project_impact: list[str]
+    technical_complexity: list[str]

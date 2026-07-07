@@ -31,4 +31,13 @@ class JobRepository:
             logger.warning(f"No job profile found with ID: {job_id}")
 
         return result
+
+    def get_all_jobs(self):
+        logger.info("Fetching all job profiles")
+        
+        statement = select(LinkedInJobs)
+        results = self.session.exec(statement).all()
+
+        logger.info(f"Total job profiles found: {len(results)}")
+        return results
         
