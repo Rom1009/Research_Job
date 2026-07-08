@@ -87,10 +87,6 @@ class JobResponse(SQLModel):
 
 class ScoreResponse(SQLModel):
     match_id: UUID
-    skill_score: Optional[float] = Field(default = None)
-    education_score: Optional[float] = Field(default = None)
-    work_experience_score: Optional[float] = Field(default = None)
-    project_score: Optional[float] = Field(default = None)
     total_score: Optional[float] = Field(default = None)
     ai_analysis_details : Optional[dict] = Field(default = None)
 
