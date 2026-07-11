@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import time
+import pandas as pd 
 
 # Cấu hình URL của Backend FastAPI (Sửa lại port nếu bạn dùng port khác)
 BASE_URL = "http://127.0.0.1:8000/api" 
@@ -129,25 +130,135 @@ elif st.session_state.step == 2:
 # BƯỚC 3: HIỂN THỊ KẾT QUẢ ĐIỂM SỐ
 # ==========================================
 elif st.session_state.step == 3:
-    st.header("🏆 Bước 3: Kết quả Đánh giá từ AI")
-    
-    # Hiển thị điểm số đẹp mắt bằng st.metric hoặc st.success
+    st.header("🏆 Kết Quả Phân Tích & Đối Chiếu Hồ Sơ")
+    st.balloons()
+
     score_data = st.session_state.final_score
-    
-    # Đoạn này tùy biến theo cấu trúc dữ liệu JSON thực tế từ API 3 của bạn trả về
-    # Ví dụ nếu trả về đơn giản là dictionary {"score": 90}
-    score_value = score_data.get("score", "N/A") if isinstance(score_data, dict) else score_data
-    
-    st.balloons() # Hiệu ứng bóng bay chúc mừng
-    
-    st.markdown("### Điểm số độ tương thích công việc của bạn:")
-    st.metric(label="MATCHING SCORE", value=f"{score_value} / 100")
-    
-    # Hiển thị chi tiết (nếu có thêm các thông tin giải thích từ model ScoreCV)
-    with st.expander("🔍 Xem chi tiết phản hồi từ hệ thống"):
-        st.json(score_data)
-        
-    # Nút để reset làm lại từ đầu
-    if st.button("Làm lại với hồ sơ mới"):
+
+    try:
+        # 1. Chuyển đổi dữ liệu JSON về dạng List các công việc
+        if isinstance(score_data, dict):
+            data_list = score_data.get("jobs", score_data.get("results", [score_data]))
+        elif isinstance(score_data, list):
+            data_list = score_data
+        else:
+            data_list = []
+
+        if data_list:
+            df = pd.DataFrame(data_list)
+
+            # Giả định nếu chưa có cột total_score/job_title để test, ta chuẩn hóa tên cột
+            if 'total_score' not in df.columns and 'score' in df.columns:
+                df = df.rename(columns={'score': 'total_score'})
+            if 'job_title' not in df.columns and 'title' in df.columns:
+                df = df.rename(columns={'title': 'job_title'})
+
+            # Ép kiểu điểm số về dạng số
+            df['total_score'] = pd.to_numeric(df.get('total_score', 0), errors='coerce').fillna(0)
+
+            # --- BỘ LỌC VÀ XÓA CỘT KHÔNG CẦN THIẾT ---
+            # Chỉ lấy công việc có điểm số > 70
+            df_filtered = df[df['total_score'] > 70].reset_index(drop=True)
+
+            # ❌ Bỏ cột match_id và cột chứa cục JSON thô ra khỏi bảng hiển thị chính
+            columns_to_show = [col for col in df_filtered.columns if col not in ['match_id', 'ai_analysis', 'ai_analysis_details']]
+
+            if not df_filtered.empty:
+                # --- THỂ HIỆN BẢNG TỔNG QUAN ---
+                st.subheader("📋 Các vị trí phù hợp nhất với bạn (Match Score > 70)")
+                
+                # Hiển thị bảng đã ẩn match_id và json
+                st.dataframe(
+                    df_filtered[columns_to_show],
+                    use_container_width=True,
+                    column_config={
+                        "total_score": st.column_config.ProgressColumn(
+                            "Điểm Phù Hợp",
+                            format="%d điểm",
+                            min_value=0,
+                            max_value=100,
+                        ),
+                        "job_title": "Vị trí ứng tuyển"
+                    }
+                )
+
+                # --- BIỂU ĐỒ CHART ---
+                st.write("---")
+                st.subheader("📊 Đồ thị so sánh mức độ tương thích")
+                x_col = 'job_title' if 'job_title' in df_filtered.columns else columns_to_show[0]
+                st.bar_chart(data=df_filtered, x=x_col, y='total_score', color="#00f5d4")
+
+                # --- 💎 ĐỔI KIỂU JSON THÀNH UI ĐẸP (AI ANALYSIS DETAILS) ---
+                st.write("---")
+                st.subheader("🔍 Báo cáo chi tiết từ Trí Tuệ Nhân Tạo")
+                st.caption("Chọn một công việc trong danh sách dưới đây để xem phân tích chi tiết hồ sơ:")
+
+                # Cho người dùng chọn công việc muốn xem phân tích sâu
+                job_options = df_filtered['job_title'].tolist()
+                selected_job = st.selectbox("Xem phân tích cho vị trí:", job_options)
+                
+                # Lấy dòng dữ liệu của công việc được chọn
+                job_row = df_filtered[df_filtered['job_title'] == selected_job].iloc[0]
+                
+                # Lấy dữ liệu phân tích (hỗ trợ cả 2 key đặt tên phổ biến)
+                ai_details = job_row.get('ai_analysis_details', job_row.get('ai_analysis', {}))
+
+                if isinstance(ai_details, dict) and ai_details:
+                    # A. Đánh giá tổng quan (Evaluation Summary)
+                    if "evaluation_summary" in ai_details:
+                        st.markdown("#### 📝 Tóm tắt đánh giá từ hệ thống")
+                        st.info(ai_details["evaluation_summary"])
+
+                    # B. Điểm thiếu sót & Lời khuyên (Gap Analysis vs Actionable Advice)
+                    st.markdown("#### 📊 Phân tích kỹ năng & Định hướng")
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        st.markdown("<div style='background-color:#ffe5ec; padding:15px; border-radius:10px; border-left:5px solid #ff4d6d;'><strong>⚠️ Điểm còn thiếu (Gap Analysis)</strong></div>", unsafe_allow_html=True)
+                        gaps = ai_details.get("gap_analysis", [])
+                        if isinstance(gaps, list) and gaps:
+                            for gap in gaps:
+                                st.markdown(f"- {gap}")
+                        else:
+                            st.write("*Không có thiếu sót lớn nào được ghi nhận.*")
+
+                    with col2:
+                        st.markdown("<div style='background-color:#e8f5e9; padding:15px; border-radius:10px; border-left:5px solid #2e7d32;'><strong>💡 Lời khuyên hành động (Actionable Advice)</strong></div>", unsafe_allow_html=True)
+                        advices = ai_details.get("actionable_advice", [])
+                        if isinstance(advices, list) and advices:
+                            for advice in advices:
+                                st.markdown(f"- {advice}")
+                        else:
+                            st.write("*Hồ sơ đã rất tối ưu cho vị trí này.*")
+
+                    # C. Tác động dự án & Độ phức tạp kỹ thuật (Project Impact & Technical Complexity)
+                    st.write("")
+                    with st.expander("🚀 Xem đánh giá về Dự án & Độ phức tạp Kỹ thuật"):
+                        tab1, tab2 = st.tabs(["💥 Tác động dự án (Project Impact)", "⚙️ Độ phức tạp kỹ thuật"])
+                        
+                        with tab1:
+                            impacts = ai_details.get("project_impact", [])
+                            for imp in impacts:
+                                st.markdown(f"🎯 {imp}")
+                                
+                        with tab2:
+                            complexities = ai_details.get("technical_complexity", [])
+                            for comp in complexities:
+                                st.markdown(f"🛠️ {comp}")
+                else:
+                    st.warning("⚠️ Vị trí này không chứa dữ liệu `ai_analysis` chi tiết.")
+            else:
+                st.warning("☹️ Không có công việc nào có điểm số Match Score vượt quá 70.")
+        else:
+            st.error("❌ Không nhận được dữ liệu phản hồi hợp lệ từ API.")
+
+    except Exception as e:
+        st.error(f"💥 Lỗi hiển thị dữ liệu: {str(e)}")
+        with st.expander("Xem JSON lỗi gốc"):
+            st.json(score_data)
+
+    # Nút bấm Reset
+    st.write("---")
+    if st.button("🔄 Thực hiện đợt Research mới", use_container_width=True):
         st.session_state.clear()
         st.rerun()

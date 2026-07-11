@@ -9,7 +9,7 @@ from backend.src.services.score_service import ScoreService
 logger = setup_logger("Score Controller")
 
 class ScoreController:
-    def calculate_score(self, score_request: ScoreRequest, session: Session = Depends(get_session)) -> list[ScoreResponse]:
+    def calculate_score(self, session: Session = Depends(get_session)) -> list[ScoreResponse]:
         score_service = ScoreService(session)
 
         content_score = score_service.calculate_score()
