@@ -5,3 +5,4 @@ fake-useragent==2.2.0
 docling==2.104.0
 groq==1.5.0
 beautifulsoup4==4.15.0
+pytest==9.1.1
