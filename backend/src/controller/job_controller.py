@@ -16,6 +16,6 @@ class JobController:
 
         job_data = job_request.model_dump()
         job_service = JobService(session)
-
+        
         all_jobs = await job_service.scrape_linkedin_job(job_data)
         return all_jobs
