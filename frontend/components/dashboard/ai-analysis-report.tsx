@@ -1,11 +1,13 @@
 'use client'
 
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Chart, ChartConfig, ChartContainer, ChartTooltip, ChartLegend } from '@/components/ui/chart'
+import { ChartConfig, ChartContainer, ChartTooltip, ChartLegend } from '@/components/ui/chart'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart, Scatter, ZAxis, Cell } from 'recharts'
 import { AlertCircle, TrendingUp, Users, Target, Zap } from 'lucide-react'
+
 
 // Skill gap analysis
 const skillGapData = [
@@ -16,6 +18,7 @@ const skillGapData = [
   { skill: 'AWS', required: 75, current: 45, gap: 30 },
 ]
 
+
 // Culture fit distribution
 const cultureFitData = [
   { name: 'Exceptional (90-100)', value: 12, fill: '#10b981' },
@@ -23,6 +26,7 @@ const cultureFitData = [
   { name: 'Good (60-74)', value: 18, fill: '#f59e0b' },
   { name: 'Needs Work (0-59)', value: 4, fill: '#ef4444' },
 ]
+
 
 // Experience vs Score scatter
 const experienceScatterData = [
@@ -35,6 +39,7 @@ const experienceScatterData = [
   { experience: 10, score: 91, name: 'Staff 1' },
   { experience: 12, score: 89, name: 'Staff 2' },
 ]
+
 
 // Hiring recommendations
 const recommendations = [
@@ -58,6 +63,7 @@ const recommendations = [
   },
 ]
 
+
 export function AIAnalysisReport() {
   return (
     <div className="space-y-6">
@@ -73,6 +79,7 @@ export function AIAnalysisReport() {
           </CardContent>
         </Card>
 
+
         <Card>
           <CardContent className="pt-6">
             <div className="space-y-2">
@@ -82,6 +89,7 @@ export function AIAnalysisReport() {
             </div>
           </CardContent>
         </Card>
+
 
         <Card>
           <CardContent className="pt-6">
@@ -93,6 +101,7 @@ export function AIAnalysisReport() {
           </CardContent>
         </Card>
 
+
         <Card>
           <CardContent className="pt-6">
             <div className="space-y-2">
@@ -103,6 +112,7 @@ export function AIAnalysisReport() {
           </CardContent>
         </Card>
       </div>
+
 
       {/* Skill Gap Heatmap */}
       <Card>
@@ -138,6 +148,7 @@ export function AIAnalysisReport() {
         </CardContent>
       </Card>
 
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Culture Fit Distribution */}
         <Card>
@@ -160,6 +171,7 @@ export function AIAnalysisReport() {
             </div>
           </CardContent>
         </Card>
+
 
         {/* Experience vs Score */}
         <Card>
@@ -191,6 +203,7 @@ export function AIAnalysisReport() {
         </Card>
       </div>
 
+
       {/* Hiring Recommendations */}
       <Card>
         <CardHeader>
@@ -204,6 +217,7 @@ export function AIAnalysisReport() {
               rec.priority === 'high'
                 ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900/50'
                 : 'bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/50'
+
 
             return (
               <div
@@ -230,6 +244,7 @@ export function AIAnalysisReport() {
         </CardContent>
       </Card>
 
+
       {/* AI Insights */}
       <Card>
         <CardHeader>
@@ -246,6 +261,7 @@ export function AIAnalysisReport() {
             </div>
           </div>
 
+
           <div className="flex gap-3">
             <TrendingUp className="size-5 text-green-500 flex-shrink-0 mt-0.5" />
             <div className="text-sm space-y-1">
@@ -255,6 +271,7 @@ export function AIAnalysisReport() {
               </p>
             </div>
           </div>
+
 
           <div className="flex gap-3">
             <Users className="size-5 text-purple-500 flex-shrink-0 mt-0.5" />
@@ -270,3 +287,6 @@ export function AIAnalysisReport() {
     </div>
   )
 }
+
+
+

@@ -21,16 +21,18 @@ export type Candidate = {
     consistency: number
   }
   // Enhanced fields
-  certifications: string[]
-  projects: { name: string; description: string; link: string }[]
-  companyHistory: { company: string; years: number; role: string }[]
-  interviewStatus: "not_started" | "scheduled" | "completed" | "rejected"
-  notes: string
-  source: "linkedin" | "github" | "referral" | "direct" | "recruiter"
-  cultureFit: number
-  availability: "immediate" | "2weeks" | "1month" | "negotiable"
+  certifications?: string[]
+  reasoning?: string
+  projects?: { name: string; description: string; link: string }[]
+  companyHistory?: { company: string; years: number; role: string }[]
+  interviewStatus?: "not_started" | "scheduled" | "completed" | "rejected"
+  notes?: string
+  source?: "linkedin" | "github" | "referral" | "direct" | "recruiter"
+  cultureFit?: number
+  availability?: "immediate" | "2weeks" | "1month" | "negotiable"
   salaryExpectation?: { min: number; max: number }
 }
+
 
 export const candidates: Candidate[] = [
   {
@@ -202,6 +204,7 @@ export const candidates: Candidate[] = [
   },
 ]
 
+
 // AI analysis aggregates for charts.
 export const skillCoverage = [
   { skill: "Backend", value: 88, fill: "var(--color-chart-1)" },
@@ -210,6 +213,7 @@ export const skillCoverage = [
   { skill: "Data / ML", value: 69, fill: "var(--color-chart-4)" },
   { skill: "Security", value: 58, fill: "var(--color-chart-5)" },
 ]
+
 
 export const scoreTrend = [
   { week: "W1", avgScore: 68, candidates: 12 },
@@ -220,6 +224,7 @@ export const scoreTrend = [
   { week: "W6", avgScore: 83, candidates: 35 },
 ]
 
+
 export const scoreDistribution = [
   { band: "50-59", count: 6 },
   { band: "60-69", count: 11 },
@@ -227,6 +232,7 @@ export const scoreDistribution = [
   { band: "80-89", count: 14 },
   { band: "90-100", count: 7 },
 ]
+
 
 export const competencyRadar = [
   { dimension: "Technical", pool: 84, top: 95 },
@@ -236,3 +242,6 @@ export const competencyRadar = [
   { dimension: "Growth", pool: 83, top: 92 },
   { dimension: "Consistency", pool: 80, top: 94 },
 ]
+
+
+

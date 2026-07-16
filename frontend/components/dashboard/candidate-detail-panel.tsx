@@ -1,5 +1,6 @@
 'use client'
 
+
 import { Candidate } from '@/lib/candidates'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -11,10 +12,12 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { GithubIcon, LinkedinIcon } from './brand-icons'
 
+
 interface CandidateDetailPanelProps {
   candidate: Candidate
   onClose: () => void
 }
+
 
 export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPanelProps) {
   const statusColors: Record<string, string> = {
@@ -24,6 +27,7 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
     'rejected': 'bg-red-500/20 text-red-700',
   }
 
+
   const sourceColors: Record<string, string> = {
     'linkedin': 'bg-blue-500/20 text-blue-700',
     'github': 'bg-gray-500/20 text-gray-700',
@@ -32,12 +36,22 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
     'recruiter': 'bg-teal-500/20 text-teal-700',
   }
 
+
   const availabilityLabel = {
     'immediate': 'Available Immediately',
     '2weeks': 'Available in 2 weeks',
     '1month': 'Available in 1 month',
     'negotiable': 'Availability Negotiable',
   }
+  const interviewStatus = candidate.interviewStatus ?? "not_started"
+  const availability = candidate.availability ?? "negotiable"
+  const source = candidate.source ?? "direct"
+  const reasoning = candidate.reasoning ?? "No specific reasoning provided."
+  const certifications = candidate.certifications ?? []
+  const projects = candidate.projects ?? []
+  const companyHistory = candidate.companyHistory ?? []
+  const cultureFit = candidate.cultureFit ?? 0
+
 
   return (
     <ScrollArea className="h-[calc(100vh-120px)]">
@@ -52,12 +66,14 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
           </Button>
         </div>
 
+
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="profile" className="text-xs">Profile</TabsTrigger>
             <TabsTrigger value="experience" className="text-xs">Experience</TabsTrigger>
             <TabsTrigger value="analysis" className="text-xs">Analysis</TabsTrigger>
           </TabsList>
+
 
           <TabsContent value="profile" className="space-y-4 mt-4">
             <Card>
@@ -67,11 +83,11 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
               <CardContent className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary">{candidate.score}% Match</Badge>
-                  <Badge variant="outline" className={statusColors[candidate.interviewStatus]}>
-                    {candidate.interviewStatus.replace('_', ' ')}
+                  <Badge variant="outline" className={statusColors[interviewStatus]}>
+                    {interviewStatus.replace('_', ' ')}
                   </Badge>
                 </div>
-                
+               
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-sm">
                     <MapPin className="size-3.5" />
@@ -82,11 +98,12 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
                     <span>{candidate.experience} years experience</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
-                    <Badge variant="outline" className={sourceColors[candidate.source]}>
-                      {candidate.source}
+                    <Badge variant="outline" className={sourceColors[source]}>
+                      {source}
                     </Badge>
                   </div>
                 </div>
+
 
                 <div className="flex gap-2 pt-2">
                   {candidate.github && (
@@ -109,6 +126,7 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
               </CardContent>
             </Card>
 
+
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Top Skills</CardTitle>
@@ -122,12 +140,13 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
               </CardContent>
             </Card>
 
+
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Availability</CardTitle>
               </CardHeader>
               <CardContent className="text-sm">
-                <p>{availabilityLabel[candidate.availability as keyof typeof availabilityLabel]}</p>
+                <p>{availabilityLabel[availability as keyof typeof availabilityLabel]}</p>
                 {candidate.salaryExpectation && (
                   <p className="text-muted-foreground mt-2">
                     ${candidate.salaryExpectation.min.toLocaleString()} - ${candidate.salaryExpectation.max.toLocaleString()}
@@ -135,6 +154,7 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
                 )}
               </CardContent>
             </Card>
+
 
             {candidate.notes && (
               <Card>
@@ -151,8 +171,9 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
             )}
           </TabsContent>
 
+
           <TabsContent value="experience" className="space-y-4 mt-4">
-            {candidate.certifications.length > 0 && (
+            {certifications.length > 0 && (
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center gap-2">
@@ -162,7 +183,7 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {candidate.certifications.map((cert, i) => (
+                    {certifications.map((cert, i) => (
                       <li key={i} className="text-sm flex items-start gap-2">
                         <span className="text-primary mt-1">•</span>
                         <span>{cert}</span>
@@ -173,7 +194,8 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
               </Card>
             )}
 
-            {candidate.projects.length > 0 && (
+
+            {projects.length > 0 && (
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base flex items-center gap-2">
@@ -182,7 +204,7 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {candidate.projects.map((project, i) => (
+                  {projects.map((project, i) => (
                     <div key={i} className="border-b pb-3 last:border-0 last:pb-0">
                       <p className="text-sm font-medium">{project.name}</p>
                       <p className="text-xs text-muted-foreground mt-1">{project.description}</p>
@@ -197,13 +219,14 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
               </Card>
             )}
 
-            {candidate.companyHistory.length > 0 && (
+
+            {companyHistory.length > 0 && (
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-base">Company History</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {candidate.companyHistory.map((company, i) => (
+                  {companyHistory.map((company, i) => (
                     <div key={i} className="border-b pb-3 last:border-0 last:pb-0">
                       <p className="text-sm font-medium">{company.role}</p>
                       <p className="text-xs text-muted-foreground">{company.company} • {company.years} years</p>
@@ -213,6 +236,7 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
               </Card>
             )}
           </TabsContent>
+
 
           <TabsContent value="analysis" className="space-y-4 mt-4">
             <Card>
@@ -232,6 +256,7 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
               </CardContent>
             </Card>
 
+
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Culture & Skills</CardTitle>
@@ -240,9 +265,9 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="text-sm font-medium">Culture Fit</label>
-                    <span className="text-xs font-semibold">{candidate.cultureFit}%</span>
+                    <span className="text-xs font-semibold">{cultureFit}%</span>
                   </div>
-                  <Progress value={candidate.cultureFit} className="h-2" />
+                  <Progress value={cultureFit} className="h-2" />
                 </div>
                 <div>
                   <div className="flex items-center justify-between mb-2">
@@ -254,12 +279,13 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
               </CardContent>
             </Card>
 
+
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-base">Recommendation</CardTitle>
               </CardHeader>
               <CardContent className="text-sm">
-                <p className="text-muted-foreground">{candidate.reasoning}</p>
+                <p className="text-muted-foreground">{reasoning}</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -268,3 +294,6 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
     </ScrollArea>
   )
 }
+
+
+

@@ -1,5 +1,6 @@
 'use client'
 
+
 import { Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,19 +9,23 @@ import { Button } from '@/components/ui/button'
 import { candidates, Candidate } from '@/lib/candidates'
 import { useState } from 'react'
 
+
 interface DashboardCandidateListProps {
   onSelectCandidate: (candidate: Candidate) => void
   selectedCandidateId?: string
 }
 
+
 export function DashboardCandidateList({ onSelectCandidate, selectedCandidateId }: DashboardCandidateListProps) {
   const [search, setSearch] = useState('')
+
 
   const filteredCandidates = candidates.filter((c) =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.title.toLowerCase().includes(search.toLowerCase()) ||
     c.topSkills.some((s) => s.toLowerCase().includes(search.toLowerCase()))
   )
+
 
   return (
     <Card className="h-full">
@@ -40,7 +45,8 @@ export function DashboardCandidateList({ onSelectCandidate, selectedCandidateId 
             />
           </div>
 
-          <div className="space-y-2 max-h-[400px] overflow-y-auto">
+
+          <div className="space-y-2 max-h-[700px] overflow-y-auto">
             {filteredCandidates.map((candidate) => (
               <Button
                 key={candidate.id}
@@ -66,6 +72,7 @@ export function DashboardCandidateList({ onSelectCandidate, selectedCandidateId 
             ))}
           </div>
 
+
           {filteredCandidates.length === 0 && (
             <div className="text-center py-8 text-muted-foreground">
               <p className="text-sm">No candidates found</p>
@@ -76,3 +83,6 @@ export function DashboardCandidateList({ onSelectCandidate, selectedCandidateId 
     </Card>
   )
 }
+
+
+
