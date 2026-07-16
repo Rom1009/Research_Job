@@ -9,6 +9,7 @@ import { AnalysisCharts } from "@/components/dashboard/analysis-charts"
 import { DashboardCandidateList } from "@/components/dashboard/dashboard-candidate-list"
 import { DashboardRightPanel } from "@/components/dashboard/dashboard-right-panel"
 import { CandidatesTable } from "@/components/dashboard/candidates-table"
+import { JobScraping } from '@/components/dashboard/job-scraping'
 import { AdvancedProfileIntake } from "@/components/dashboard/advanced-profile-intake"
 import { AIAnalysisReport } from "@/components/dashboard/ai-analysis-report"
 import { Candidate } from "@/lib/candidates"
@@ -70,7 +71,18 @@ export default function DashboardPage() {
               <h1 className="text-3xl font-bold">Profile Intake</h1>
               <p className="text-muted-foreground mt-1">Submit new candidate profiles</p>
             </div>
-            <AdvancedProfileIntake />
+            <ProfileIntake />
+          </div>
+        )
+      
+      case 'jobs':
+                return (
+          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="flex flex-col leading-tight">
+              <h1 className="text-3xl font-bold">Job Scraping</h1>
+              <p className="text-muted-foreground mt-1">Start Job scraping</p>
+            </div>
+            <JobScraping />
           </div>
         )
       

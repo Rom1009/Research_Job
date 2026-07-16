@@ -242,6 +242,3 @@ export const competencyRadar = [
   { dimension: "Growth", pool: 83, top: 92 },
   { dimension: "Consistency", pool: 80, top: 94 },
 ]
-
-
-

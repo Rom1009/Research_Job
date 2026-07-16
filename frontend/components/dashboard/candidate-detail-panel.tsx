@@ -294,6 +294,3 @@ export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPane
     </ScrollArea>
   )
 }
-
-
-

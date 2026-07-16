@@ -287,6 +287,3 @@ export function AIAnalysisReport() {
     </div>
   )
 }
-
-
-

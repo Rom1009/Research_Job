@@ -1,6 +1,8 @@
-from sqlmodel import Session 
+from sqlmodel import Session
 from groq import Groq
+from uuid import UUID
 import json
+
 
 from backend.src.schema.model import ScoreCV, ScoreResponse
 from backend.src.repositories.score_repositories import ScoreRepository
@@ -9,7 +11,9 @@ from backend.src.repositories.job_repositories import JobRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
 
+
 logger = setup_logger("Score Service")
+
 
 class ScoreService:
     def __init__(self, session: Session):
@@ -19,13 +23,15 @@ class ScoreService:
         self.client = Groq(
             api_key = settings.GROQ_API_KEY.get_secret_value(),
         )
-    
-    def calculate_score(self) -> ScoreResponse:
+   
+    def calculate_score(self, profile_id: UUID) -> ScoreResponse:
         logger.info("Get information")
         all_users = self.user_repository.get_all_users()
         all_jobs = self.job_repository.get_all_jobs()
 
+
         all_match = []
+
 
         for job in all_jobs:
             response = self.client.chat.completions.create(
@@ -54,6 +60,7 @@ class ScoreService:
                         "content": f"""
                         Please evaluate how well the candidate's CV with work experience, skills, education and their practical projects matches the Job Description (JD) provided below.
 
+
                         📝 [CANDIDATE CV with work experience (JSON)]
                         {all_users[0].cv_structured["work_experience"]}
                         📝 [CANDIDATE CV with skill (JSON)]
@@ -61,11 +68,14 @@ class ScoreService:
                         📝 [CANDIDATE CV with education (JSON)]
                         {all_users[0].cv_structured["education"]}
 
+
                         💻 [PRACTICAL PROJECT EVIDENCE (README)]
                         {all_users[0].github_summary}
 
+
                         🎯 [JOB DESCRIPTION (JD)]
                         {job.description}
+
 
                         ⚙️ [REQUIRED OUTPUT FORMAT]
                         You must output a single JSON object with this exact structure:
@@ -85,6 +95,7 @@ class ScoreService:
                     }
                 ],
 
+
                 response_format = {
                     "type": "json_schema",
                     "json_schema": {
@@ -94,7 +105,9 @@ class ScoreService:
                 }
             )
 
+
             content_score = ScoreCV.model_validate(json.loads(response.choices[0].message.content))
+
 
             match_content = {
                 "profile_id": all_users[0].user_id,
@@ -114,13 +127,20 @@ class ScoreService:
                 },
             }
 
+
             match_results = self.score_repository.create_match_result(match_content)
+
 
             all_match.append({
                 "match_id": match_results.match_id,
+                "job_id": match_results.job_id,          # ← thêm
+                "profile_id": match_results.profile_id,  # ← thêm
                 "total_score": match_results.total_score,
-                "ai_analysis_details": match_results.ai_analysis_details
+                "ai_analysis_details": match_results.ai_analysis_details,
             })
 
 
+
+
         return all_match
+

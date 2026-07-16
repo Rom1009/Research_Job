@@ -1,5 +1,6 @@
 "use client"
 
+
 import {
   LayoutDashboard,
   Users,
@@ -11,6 +12,7 @@ import {
   LifeBuoy,
   Briefcase,
 } from "lucide-react"
+
 
 import {
   Sidebar,
@@ -29,12 +31,15 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { ThemeToggle } from "./theme-toggle"
 import { useDashboardStore } from "@/lib/dashboard-store"
 
+
 const research = [
   { title: "Overview", icon: LayoutDashboard, tab: "overview" as const },
   { title: "Candidates", icon: Users, tab: "candidates" as const, badge: "9" },
   { title: "Profile Intake", icon: UploadCloud, tab: "intake" as const },
+  { title: 'Job Scraping', icon: Briefcase, tab: 'jobs' as const },
   { title: "AI Analysis", icon: Sparkles, tab: "analysis" as const },
 ]
+
 
 const pipelines = [
   { title: "Backend Squad", icon: Briefcase, badge: "24" },
@@ -42,13 +47,15 @@ const pipelines = [
   { title: "Frontend Guild", icon: Briefcase, badge: "11" },
 ]
 
+
 export function AppSidebar() {
   const { activeTab, setActiveTab } = useDashboardStore()
+
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <button 
+        <button
           onClick={() => setActiveTab('overview')}
           className="flex items-center gap-2 px-2 py-3 hover:opacity-80 transition-opacity w-full"
         >
@@ -64,6 +71,7 @@ export function AppSidebar() {
         </button>
       </SidebarHeader>
 
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Research Tools</SidebarGroupLabel>
@@ -71,11 +79,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {research.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <button 
+                  <button
                     onClick={() => setActiveTab(item.tab)}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
-                      activeTab === item.tab 
-                        ? 'bg-sidebar-accent text-sidebar-accent-foreground' 
+                      activeTab === item.tab
+                        ? 'bg-sidebar-accent text-sidebar-accent-foreground'
                         : 'hover:bg-sidebar-accent/50'
                     }`}
                   >
@@ -88,6 +96,7 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
 
         <SidebarGroup>
           <SidebarGroupLabel>Pipelines</SidebarGroupLabel>
@@ -105,6 +114,7 @@ export function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
 
         <SidebarGroup className="mt-auto">
           <SidebarGroupContent>
@@ -125,6 +135,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
 
       <SidebarFooter>
         <div className="flex items-center justify-between gap-2">

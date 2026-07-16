@@ -274,6 +274,3 @@ export function DashboardRightPanel({ selectedCandidate, onClose }: DashboardRig
     </div>
   )
 }
-
-
-

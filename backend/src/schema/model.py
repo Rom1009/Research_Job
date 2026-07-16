@@ -3,12 +3,15 @@ from uuid import uuid4, UUID
 from typing import Literal, Optional
 from datetime import datetime
 
+
 '''
     Models for the database tables using SQLModel.
 '''
 
+
 class UserProfile(SQLModel, table = True):
     __tablename__ = "user_profiles"
+
 
     user_id: UUID = Field(default_factory = uuid4, primary_key = True)
     cv_url: Optional[str] = Field(default = None, nullable = True)
@@ -18,8 +21,10 @@ class UserProfile(SQLModel, table = True):
     github_summary: Optional[str] = Field(default = None, nullable = True)
     created_at: datetime = Field(default_factory = datetime.utcnow, nullable = False)
 
+
 class LinkedInJobs(SQLModel, table = True):
     __tablename__ = "linkedin_jobs"
+
 
     job_id: UUID = Field(default_factory = uuid4, primary_key = True)
     title: Optional[str] = Field(default = None, nullable = True)
@@ -29,8 +34,10 @@ class LinkedInJobs(SQLModel, table = True):
     description: Optional[str] = Field(default = None, nullable = True)
     created_at: datetime = Field(default_factory = datetime.utcnow, nullable = False)
 
+
 class MatchResults(SQLModel, table = True):
     __tablename__ = "match_results"
+
 
     match_id: UUID = Field(default_factory = uuid4, primary_key = True)
     profile_id: UUID = Field(foreign_key = "user_profiles.user_id", nullable = False)
@@ -43,56 +50,69 @@ class MatchResults(SQLModel, table = True):
     ai_analysis_details : Optional[dict] = Field(default = None, sa_column = Column(JSON , nullable = True))
     created_at: datetime = Field(default_factory = datetime.utcnow, nullable = False)
 
+
 '''
     Define models for input and output data validation using Pydantic.
 '''
+
 
 class UserRequest(SQLModel):
     # user_id: UUID
     github_url: Optional[str] = Field(default = None)
     cv_url: Optional[str] = Field(default = None)
 
+
 class UserResponse(SQLModel):
     user_id: UUID
     cv_markdown: Optional[str] = Field(default = None)
     github_summary: Optional[str] = Field(default = None)
 
+
 class Validation(SQLModel):
     is_valid: bool
     syntax_errors: list[str]
+
 
 class SchemaCVResponse(SQLModel):
     skills: list[str]
     education: list[str]
     work_experience: list[str]
 
+
     additional_info: list[str]
+
 
     validation_status: Validation
 
+
 class JobRequest(SQLModel):
-    # job_id: UUID 
+    # job_id: UUID
     keywords: Optional[str] = Field(default = None)
     location_search: Optional[str] = Field(default = None)
     page_to_scrape: Optional[int] = Field(default = 1)
     filter_level: Optional[str] = Field(default = None)
 
+
 class JobResponse(SQLModel):
-    job_id: UUID 
+    job_id: UUID
     title: Optional[str] = Field(default = None)
     company: Optional[str] = Field(default = None)
     location: Optional[str] = Field(default = None)
     job_url: Optional[str] = Field(default = None)
     description: Optional[str] = Field(default = None)
 
+
 class ScoreResponse(SQLModel):
     match_id: UUID
-    total_score: Optional[float] = Field(default = None)
-    ai_analysis_details : Optional[dict] = Field(default = None)
+    job_id: UUID                # ← thêm
+    profile_id: UUID            # ← thêm (optional nếu chỉ 1 profile)
+    total_score: Optional[float] = None
+    ai_analysis_details: Optional[dict] = None
+
 
 class ScoreRequest(SQLModel):
     profile_id: UUID
-    job_id: UUID
+
 
 class ScoreCV(SQLModel):
     skill_score: int
@@ -100,11 +120,15 @@ class ScoreCV(SQLModel):
     work_experience_score: int
     project_score: int
 
+
     matched_skills: list[str]
+
 
     gap_analysis: list[str]
     actionable_advice: list[str]
     evaluation_summary: str
 
+
     project_impact: list[str]
     technical_complexity: list[str]
+
