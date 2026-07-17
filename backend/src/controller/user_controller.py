@@ -24,5 +24,8 @@ class UserController:
         user_response = user_service.process_user_data(user_data)
         return user_response
 
-    def get_user_info(self, user_id):
-        pass
+    def get_all_user_info(self, session: Session = Depends(get_session)):
+        user_service = UserService(session)
+        user_response = user_service.get_all_user()
+
+        return user_response

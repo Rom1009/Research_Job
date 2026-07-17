@@ -85,3 +85,7 @@ class UserService:
             github_summary = created_profile.github_summary
         )
 
+    def get_all_user(self):
+        all_user = self.user_repository.get_all_users()
+
+        return all_user
