@@ -1,5 +1,5 @@
 from sqlmodel import Session
-from groq import Groq
+from groq import Groq, AsyncGroq
 from uuid import UUID
 import json
 
@@ -20,11 +20,11 @@ class ScoreService:
         self.score_repository = ScoreRepository(session = session)
         self.user_repository = UserRepository(session = session)
         self.job_repository = JobRepository(session = session)
-        self.client = Groq(
+        self.client = AsyncGroq(
             api_key = settings.GROQ_API_KEY.get_secret_value(),
         )
    
-    def calculate_score(self, profile_id: UUID) -> ScoreResponse:
+    async def calculate_score(self, profile_id: UUID) -> ScoreResponse:
         logger.info(f"Get information for profile_id={profile_id}")
         all_users = self.user_repository.get_all_users()
         logger.info(f"Total users fetched: {len(all_users)}")
@@ -42,7 +42,7 @@ class ScoreService:
 
 
         for job in all_jobs:
-            response = self.client.chat.completions.create(
+            response = await self.client.chat.completions.create(
                 model = settings.MODEL_NAME,
                 temperature = 0.0,
                 messages = [
@@ -114,7 +114,7 @@ class ScoreService:
             )
 
 
-            content_score = ScoreCV.model_validate(json.loads(response.choices[0].message.content))
+            content_score = ScoreCV.model_validate(json.loads(response.choices[0].message.content or "{}"))
 
 
             match_content = {
@@ -147,9 +147,6 @@ class ScoreService:
                 "ai_analysis_details": match_results.ai_analysis_details,
             })
 
-
-
-
         return all_match
    
     def list_scores(self):
@@ -158,6 +155,4 @@ class ScoreService:
 
     def get_scores_by_profile(self, profile_id):
         return self.score_repository.get_scores_by_profile(profile_id)
-
-
-
+    

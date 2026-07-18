@@ -1,7 +1,7 @@
 import json 
 from sqlmodel import Session
 from docling.document_converter import DocumentConverter
-from groq import Groq
+from groq import Groq, AsyncGroq
 import requests
 
 from backend.src.schema.model import SchemaCVResponse, UserResponse
@@ -13,12 +13,12 @@ logger = setup_logger("User Service")
 
 class UserService:
     def __init__(self, session: Session):
-        self.client = Groq(
+        self.client = AsyncGroq(
             api_key = settings.GROQ_API_KEY.get_secret_value(),
         )
         self.user_repository = UserRepository(session = session)
 
-    def process_user_data(self, user_data) -> UserResponse:
+    async def process_user_data(self, user_data) -> UserResponse:
         logger.info(f"Processing user data: {user_data}")
 
         if self.user_repository.get_user_id(user_data.get("user_id")):
@@ -34,7 +34,7 @@ class UserService:
         # with open("/home/thomas/Desktop/AI/Research_Job/docs/data.pdf", "r", encoding = "utf-8") as f:
         #     markdown_data = f.read()
 
-        response = self.client.chat.completions.create(
+        response = await self.client.chat.completions.create(
             model = settings.MODEL_NAME,
             messages = [
                 {
@@ -55,7 +55,7 @@ class UserService:
             }
         )
 
-        cv_structured = SchemaCVResponse.model_validate(json.loads(response.choices[0].message.content))
+        cv_structured = SchemaCVResponse.model_validate(json.loads(response.choices[0].message.content or "{}"))
 
         page = requests.get(github_url)
         if page.status_code == 200:

@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Field, Column, JSON
 from uuid import uuid4, UUID
 from typing import Literal, Optional
 from datetime import datetime
-
+from pydantic import BaseModel
 
 '''
     Models for the database tables using SQLModel.

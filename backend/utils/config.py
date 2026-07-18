@@ -10,7 +10,7 @@ class EnvMode(str, Enum):
 
 class Settings(BaseSettings):
     DEBUG: bool = True
-    MODEL_NAME: str = "meta-llama/llama-4-scout-17b-16e-instruct"
+    MODEL_NAME: str = "openai/gpt-oss-120b"
     LOG_LEVEL: str = "INFO"
     ENV_MODE: EnvMode = EnvMode.DEV
     CONFIG_PATH : str = "config/input.yml"
