@@ -131,4 +131,3 @@ class ScoreCV(SQLModel):
 
     project_impact: list[str]
     technical_complexity: list[str]
-

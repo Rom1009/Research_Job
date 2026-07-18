@@ -1,44 +1,84 @@
-'use client'
+"use client";
 
 
-import { Search } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { candidates, Candidate } from '@/lib/candidates'
-import { useState } from 'react'
+import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
+import { api, type UserProfile } from "@/lib/api";
 
 
 interface DashboardCandidateListProps {
-  onSelectCandidate: (candidate: Candidate) => void
-  selectedCandidateId?: string
+  onSelectCandidate: (user: UserProfile) => void;
+  selectedCandidateId?: string;
 }
 
 
-export function DashboardCandidateList({ onSelectCandidate, selectedCandidateId }: DashboardCandidateListProps) {
-  const [search, setSearch] = useState('')
+function handleFromUrl(url?: string): string {
+  if (!url) return "—";
+  try {
+    const u = new URL(url);
+    return u.pathname.replace(/^\/+/, "").split("/")[0] || u.hostname;
+  } catch {
+    return url;
+  }
+}
 
 
-  const filteredCandidates = candidates.filter((c) =>
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.title.toLowerCase().includes(search.toLowerCase()) ||
-    c.topSkills.some((s) => s.toLowerCase().includes(search.toLowerCase()))
-  )
+export function DashboardCandidateList({
+  onSelectCandidate,
+  selectedCandidateId,
+}: DashboardCandidateListProps) {
+  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .listUsers()
+      .then((data) => !cancelled && setUsers(data))
+      .catch((e) => console.error(e))
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+
+  const filtered = users.filter((u) => {
+    if (!search.trim()) return true;
+    const q = search.toLowerCase();
+    const handle = handleFromUrl(u.github_url).toLowerCase();
+    const skills = (u.cv_structured?.skills ?? []).map((s) => s.toLowerCase());
+    return handle.includes(q) || skills.some((s) => s.includes(q));
+  });
 
 
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle>Qualified Candidates</CardTitle>
-        <CardDescription>Click to view details in the right panel</CardDescription>
+        <CardTitle>Candidates</CardTitle>
+        <CardDescription>
+          Click a candidate to view details in the right panel
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search by name or skills..."
+              placeholder="Search by github or skill…"
               className="pl-10"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -46,44 +86,71 @@ export function DashboardCandidateList({ onSelectCandidate, selectedCandidateId 
           </div>
 
 
-          <div className="space-y-2 max-h-[700px] overflow-y-auto">
-            {filteredCandidates.map((candidate) => (
-              <Button
-                key={candidate.id}
-                variant={selectedCandidateId === candidate.id ? 'default' : 'outline'}
-                className="w-full justify-start h-auto p-3 text-left cursor-pointer hover:bg-muted"
-                onClick={() => onSelectCandidate(candidate)}
-              >
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between">
-                    <p className="font-semibold text-sm truncate">{candidate.name}</p>
-                    <Badge variant="secondary" className="ml-2">{candidate.score}</Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground truncate mt-1">{candidate.title}</p>
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {candidate.topSkills.slice(0, 3).map((skill) => (
-                      <Badge key={skill} variant="outline" className="text-xs py-0">
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </Button>
-            ))}
-          </div>
-
-
-          {filteredCandidates.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              <p className="text-sm">No candidates found</p>
+          {loading ? (
+            <div className="space-y-2">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-14 w-full" />
+              ))}
             </div>
+          ) : filtered.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              {users.length === 0 ? "No candidates yet." : "No matches."}
+            </p>
+          ) : (
+            <ul className="flex flex-col gap-2">
+              {filtered.map((u) => {
+                const handle = handleFromUrl(u.github_url);
+                const skills = u.cv_structured?.skills ?? [];
+                const isSelected = u.user_id === selectedCandidateId;
+                return (
+                  <li key={u.user_id}>
+                    <button
+                      onClick={() => onSelectCandidate(u)}
+                      className={cn(
+                        "w-full rounded-lg border p-3 text-left transition-colors",
+                        isSelected
+                          ? "border-primary bg-primary/5"
+                          : "border-border bg-card hover:bg-muted/50",
+                      )}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium">
+                            {handle}
+                          </p>
+                          <p className="font-mono text-xs text-muted-foreground">
+                            {u.user_id.slice(0, 8)}…
+                          </p>
+                        </div>
+                        {u.created_at && (
+                          <span className="shrink-0 text-xs text-muted-foreground">
+                            {new Date(u.created_at).toLocaleDateString()}
+                          </span>
+                        )}
+                      </div>
+                      {skills.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1">
+                          {skills.slice(0, 4).map((s) => (
+                            <Badge key={s} variant="secondary" className="text-xs">
+                              {s}
+                            </Badge>
+                          ))}
+                          {skills.length > 4 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{skills.length - 4}
+                            </Badge>
+                          )}
+                        </div>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-
-
-
 

@@ -46,17 +46,65 @@ export type ScoreResponse = {
   total_score?: number;
   ai_analysis_details?: Record<string, unknown>;
 };
+
+
+export type UserProfile = {
+  user_id: string;
+  cv_url?: string;
+  github_url?: string;
+  cv_markdown?: string;
+  cv_structured?: {
+    skills?: string[];
+    education?: string[];
+    work_experience?: string[];
+    additional_info?: string[];
+  };
+  github_summary?: string;
+  created_at?: string;
+};
+
+
+export type MatchResult = {
+  match_id: string;
+  profile_id: string;
+  job_id: string;
+  skill_score?: number;
+  education_score?: number;
+  work_experience_score?: number;
+  project_score?: number;
+  total_score?: number;
+  ai_analysis_details?: {
+    gap_analysis?: string[];
+    actionable_advice?: string[];
+    evaluation_summary?: string;
+    project_impact?: string[];
+    technical_complexity?: string[];
+  };
+  created_at?: string;
+};
+
+
 export const api = {
   submitUser: (body: UserRequest) =>
     request<UserResponse>("/user/", {
       method: "POST",
       body: JSON.stringify(body),
     }),
+  listUsers: () => request<UserProfile[]>("/user/"),
+
+
   scrapeJobs: (body: JobRequest) =>
     request<JobResponse[]>("/job/scrape", {
       method: "POST",
       body: JSON.stringify(body),
     }),
+
+
+  listScores: () => request<MatchResult[]>("/score/"),
+  getUserScores: (profileId: string) =>
+    request<MatchResult[]>(`/score/${profileId}`),
+
+
   calcScore: (body: ScoreRequest) =>
     request<ScoreResponse[]>("/score/calculate", {
       method: "POST",

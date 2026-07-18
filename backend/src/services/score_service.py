@@ -25,9 +25,17 @@ class ScoreService:
         )
    
     def calculate_score(self, profile_id: UUID) -> ScoreResponse:
-        logger.info("Get information")
+        logger.info(f"Get information for profile_id={profile_id}")
         all_users = self.user_repository.get_all_users()
+        logger.info(f"Total users fetched: {len(all_users)}")
         all_jobs = self.job_repository.get_all_jobs()
+        logger.info(f"Total jobs fetched: {len(all_jobs)}")
+
+
+        user = self.user_repository.get_user_id(profile_id)        
+        if not user:
+            raise ValueError(f"Profile {profile_id} not found")
+        # ← lấy đúng user
 
 
         all_match = []
@@ -143,4 +151,13 @@ class ScoreService:
 
 
         return all_match
+   
+    def list_scores(self):
+        return self.score_repository.get_all_scores()
+
+
+    def get_scores_by_profile(self, profile_id):
+        return self.score_repository.get_scores_by_profile(profile_id)
+
+
 

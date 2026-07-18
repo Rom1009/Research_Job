@@ -1,8 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Search, ArrowUpDown, Filter } from "lucide-react"
-import { GithubIcon, LinkedinIcon } from "@/components/dashboard/brand-icons"
+
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { Search, ArrowUpDown, ExternalLink } from "lucide-react";
+import { GithubIcon } from "@/components/dashboard/brand-icons";
+
 
 import {
   Card,
@@ -10,7 +13,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -18,72 +21,152 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { candidates, type Candidate } from "@/lib/candidates"
-import { cn } from "@/lib/utils"
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
+import { api, type UserProfile, type MatchResult } from "@/lib/api";
 
-const MIN_SCORE = 70
 
-function scoreTone(score: number) {
-  if (score >= 90) return "bg-chart-3/15 text-chart-3 border-chart-3/30"
-  if (score >= 80) return "bg-chart-1/15 text-chart-1 border-chart-1/30"
-  return "bg-chart-4/15 text-chart-4 border-chart-4/30"
-}
+type SortKey = "created_at" | "skills" | "score";
 
-const statusTone: Record<Candidate["status"], string> = {
-  Shortlisted: "bg-chart-3/15 text-chart-3 border-chart-3/30",
-  Contacted: "bg-chart-1/15 text-chart-1 border-chart-1/30",
-  Reviewed: "bg-secondary text-secondary-foreground border-transparent",
-  New: "bg-muted text-muted-foreground border-transparent",
-}
-
-type SortKey = "score" | "skillMatch" | "experience"
 
 interface CandidatesTableProps {
-  onSelectCandidate?: (candidate: Candidate) => void
+  onSelectCandidate?: (user: UserProfile) => void;
 }
 
-export function CandidatesTable({ onSelectCandidate }: CandidatesTableProps = {}) {
-  const [query, setQuery] = React.useState("")
-  const [onlyQualified, setOnlyQualified] = React.useState(true)
-  const [sortKey, setSortKey] = React.useState<SortKey>("score")
-  const [sortDir, setSortDir] = React.useState<"asc" | "desc">("desc")
+
+function extractGithubHandle(url?: string): string {
+  if (!url) return "—";
+  try {
+    const u = new URL(url);
+    return u.pathname.replace(/^\/+/, "").split("/")[0] || u.hostname;
+  } catch {
+    return url;
+  }
+}
+
+
+function initialsFromHandle(handle: string): string {
+  const clean = handle.replace(/[-_]/g, " ").trim();
+  const parts = clean.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[1][0]).toUpperCase();
+}
+
+
+export function CandidatesTable({
+  onSelectCandidate,
+}: CandidatesTableProps = {}) {
+  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>();
+
+
+  const [query, setQuery] = useState("");
+  const [sortKey, setSortKey] = useState<SortKey>("created_at");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+
+
+  const [scores, setScores] = useState<Record<string, number>>({});
+
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    api
+      .listUsers()
+      .then(async (data) => {
+        if (cancelled) return;
+        setUsers(data);
+        // fetch scores parallel
+        const allScores = await Promise.all(
+          data.map((u) =>
+            api.getUserScores(u.user_id).catch(() => [] as MatchResult[]),
+          ),
+        );
+        if (cancelled) return;
+        const map: Record<string, number> = {};
+        allScores.forEach((list, i) => {
+          const best = list.reduce(
+            (m, s) => Math.max(m, s.total_score ?? 0),
+            0,
+          );
+          if (best > 0) map[data[i].user_id] = best;
+        });
+        setScores(map);
+      })
+      .catch((e) => {
+        if (!cancelled) setError(e instanceof Error ? e.message : "Failed");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
 
   const rows = React.useMemo(() => {
-    let out = [...candidates]
-    if (onlyQualified) out = out.filter((c) => c.score > MIN_SCORE)
+    let out = [...users];
+
+
     if (query.trim()) {
-      const q = query.toLowerCase()
-      out = out.filter(
-        (c) =>
-          c.name.toLowerCase().includes(q) ||
-          c.title.toLowerCase().includes(q) ||
-          c.topSkills.some((s) => s.toLowerCase().includes(q)),
-      )
+      const q = query.toLowerCase();
+      out = out.filter((u) => {
+        const handle = extractGithubHandle(u.github_url).toLowerCase();
+        const skills = (u.cv_structured?.skills ?? []).map((s) =>
+          s.toLowerCase(),
+        );
+        return (
+          handle.includes(q) ||
+          u.user_id.toLowerCase().includes(q) ||
+          skills.some((s) => s.includes(q))
+        );
+      });
     }
-    out.sort((a, b) =>
-      sortDir === "desc" ? b[sortKey] - a[sortKey] : a[sortKey] - b[sortKey],
-    )
-    return out
-  }, [query, onlyQualified, sortKey, sortDir])
+
+
+    out.sort((a, b) => {
+      let av = 0,
+        bv = 0;
+      if (sortKey === "skills") {
+        av = a.cv_structured?.skills?.length ?? 0;
+        bv = b.cv_structured?.skills?.length ?? 0;
+      } else if (sortKey === "score") {
+        av = scores[a.user_id] ?? -1;
+        bv = scores[b.user_id] ?? -1;
+      } else {
+        av = a.created_at ? new Date(a.created_at).getTime() : 0;
+        bv = b.created_at ? new Date(b.created_at).getTime() : 0;
+      }
+      return sortDir === "desc" ? bv - av : av - bv;
+    });
+
+
+    return out;
+  }, [users, query, sortKey, sortDir]);
+
 
   function toggleSort(key: SortKey) {
     if (key === sortKey) {
-      setSortDir((d) => (d === "desc" ? "asc" : "desc"))
+      setSortDir((d) => (d === "desc" ? "asc" : "desc"));
     } else {
-      setSortKey(key)
-      setSortDir("desc")
+      setSortKey(key);
+      setSortDir("desc");
     }
   }
+
 
   return (
     <Card>
@@ -92,166 +175,249 @@ export function CandidatesTable({ onSelectCandidate }: CandidatesTableProps = {}
           <div className="flex flex-col gap-1.5">
             <CardTitle>Candidate Rankings</CardTitle>
             <CardDescription>
-              AI-scored profiles from resume, Git, and LinkedIn signals.
+              Profiles ingested from CV uploads and GitHub summaries.
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
             <div className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                placeholder="Search name, role, skill…"
+                placeholder="Search github or skill…"
                 className="w-full pl-9 sm:w-56"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />
             </div>
-            <Button
-              variant={onlyQualified ? "default" : "outline"}
-              onClick={() => setOnlyQualified((v) => !v)}
-            >
-              <Filter data-icon="inline-start" />
-              {"Score > 70"}
-            </Button>
           </div>
         </div>
       </CardHeader>
+
+
       <CardContent>
-        <div className="overflow-x-auto rounded-lg border border-border">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead>Candidate</TableHead>
-                <TableHead className="hidden md:table-cell">Skills</TableHead>
-                <TableHead>
-                  <SortButton
-                    label="Match"
-                    active={sortKey === "skillMatch"}
-                    dir={sortDir}
-                    onClick={() => toggleSort("skillMatch")}
-                  />
-                </TableHead>
-                <TableHead className="hidden sm:table-cell">
-                  <SortButton
-                    label="Exp."
-                    active={sortKey === "experience"}
-                    dir={sortDir}
-                    onClick={() => toggleSort("experience")}
-                  />
-                </TableHead>
-                <TableHead>
-                  <SortButton
-                    label="AI Score"
-                    active={sortKey === "score"}
-                    dir={sortDir}
-                    onClick={() => toggleSort("score")}
-                  />
-                </TableHead>
-                <TableHead className="hidden lg:table-cell">Status</TableHead>
-                <TableHead className="text-right">Links</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.map((c) => (
-                <TableRow key={c.id} className="cursor-pointer hover:bg-muted/50 transition-colors" onClick={() => onSelectCandidate?.(c)}>
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      <Avatar className="size-9">
-                        <AvatarFallback className="bg-secondary text-xs">
-                          {c.avatarInitials}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col leading-tight">
-                        <span className="font-medium">{c.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {c.title} · {c.location}
-                        </span>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <div className="flex flex-wrap gap-1">
-                      {c.topSkills.slice(0, 3).map((s) => (
-                        <Badge key={s} variant="secondary">
-                          {s}
-                        </Badge>
-                      ))}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <span className="font-mono tabular-nums">
-                      {c.skillMatch}%
-                    </span>
-                  </TableCell>
-                  <TableCell className="hidden sm:table-cell">
-                    <span className="text-muted-foreground">
-                      {c.experience} yrs
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span
-                      className={cn(
-                        "inline-flex items-center rounded-md border px-2 py-0.5 font-mono text-sm font-semibold tabular-nums",
-                        scoreTone(c.score),
-                      )}
-                    >
-                      {c.score}
-                    </span>
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    <Badge
-                      variant="outline"
-                      className={cn(statusTone[c.status])}
-                    >
-                      {c.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center justify-end gap-1">
-                      <Tooltip>
-                        <TooltipTrigger
-                          render={
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              aria-label={`${c.name} GitHub`}
+        {error && (
+          <div className="mb-3 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+
+
+        {loading ? (
+          <div className="flex flex-col gap-2">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Skeleton key={i} className="h-12 w-full" />
+            ))}
+          </div>
+        ) : users.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border bg-muted/20 p-8 text-center text-sm text-muted-foreground">
+            No candidates yet. Upload a CV to ingest the first profile.
+          </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto rounded-lg border border-border">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-muted/40 hover:bg-muted/40">
+                    <TableHead>Candidate</TableHead>
+                    <TableHead className="hidden md:table-cell">
+                      <SortButton
+                        label="Skills"
+                        active={sortKey === "skills"}
+                        dir={sortDir}
+                        onClick={() => toggleSort("skills")}
+                      />
+                    </TableHead>
+                    <TableHead className="hidden sm:table-cell">
+                      Education
+                    </TableHead>
+                    <TableHead className="hidden lg:table-cell">
+                      Experience
+                    </TableHead>
+                    <TableHead>
+                      <SortButton
+                        label="Created"
+                        active={sortKey === "created_at"}
+                        dir={sortDir}
+                        onClick={() => toggleSort("created_at")}
+                      />
+                    </TableHead>
+                    <TableHead className="text-right">Links</TableHead>
+                    <TableHead>
+                      <SortButton
+                        label="AI Score"
+                        active={sortKey === "score"}
+                        dir={sortDir}
+                        onClick={() => toggleSort("score")}
+                      />
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+
+
+                <TableBody>
+                  {rows.map((u) => {
+                    const handle = extractGithubHandle(u.github_url);
+                    const initials = initialsFromHandle(handle);
+                    const skills = u.cv_structured?.skills ?? [];
+                    const education = u.cv_structured?.education ?? [];
+                    const work = u.cv_structured?.work_experience ?? [];
+
+
+                    return (
+                      <TableRow
+                        key={u.user_id}
+                        className="cursor-pointer transition-colors hover:bg-muted/50"
+                        onClick={() => onSelectCandidate?.(u)}
+                      >
+                        <TableCell>
+                          <div className="flex items-center gap-3">
+                            <Avatar className="size-9">
+                              <AvatarFallback className="bg-secondary text-xs">
+                                {initials}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex flex-col leading-tight">
+                              <span className="font-medium">{handle}</span>
+                              <span className="font-mono text-xs text-muted-foreground">
+                                {u.user_id.slice(0, 8)}…
+                              </span>
+                            </div>
+                          </div>
+                        </TableCell>
+
+
+                        <TableCell className="hidden md:table-cell">
+                          <div className="flex flex-wrap gap-1">
+                            {skills.slice(0, 3).map((s) => (
+                              <Badge key={s} variant="secondary">
+                                {s}
+                              </Badge>
+                            ))}
+                            {skills.length > 3 && (
+                              <Badge variant="outline">
+                                +{skills.length - 3}
+                              </Badge>
+                            )}
+                            {skills.length === 0 && (
+                              <span className="text-xs text-muted-foreground">
+                                —
+                              </span>
+                            )}
+                          </div>
+                        </TableCell>
+
+
+                        <TableCell className="hidden sm:table-cell">
+                          <span className="text-xs text-muted-foreground">
+                            {education.length > 0
+                              ? `${education.length} entr${education.length === 1 ? "y" : "ies"}`
+                              : "—"}
+                          </span>
+                        </TableCell>
+
+
+                        <TableCell className="hidden lg:table-cell">
+                          <span className="text-xs text-muted-foreground">
+                            {work.length > 0
+                              ? `${work.length} role${work.length === 1 ? "" : "s"}`
+                              : "—"}
+                          </span>
+                        </TableCell>
+
+
+                        <TableCell>
+                          {scores[u.user_id] != null ? (
+                            <span
+                              className={cn(
+                                "inline-flex items-center rounded-md border px-2 py-0.5 font-mono text-sm font-semibold tabular-nums",
+                                scores[u.user_id] >= 80 &&
+                                  "bg-emerald-500/15 text-emerald-500 border-emerald-500/30",
+                                scores[u.user_id] >= 60 &&
+                                  scores[u.user_id] < 80 &&
+                                  "bg-amber-500/15 text-amber-500 border-amber-500/30",
+                                scores[u.user_id] < 60 &&
+                                  "bg-muted text-muted-foreground border-transparent",
+                              )}
                             >
-                              <GithubIcon />
-                            </Button>
-                          }
-                        />
-                        <TooltipContent>github.com/{c.github}</TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger
-                          render={
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              aria-label={`${c.name} LinkedIn`}
-                            >
-                              <LinkedinIcon />
-                            </Button>
-                          }
-                        />
-                        <TooltipContent>
-                          linkedin.com/in/{c.linkedin}
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-        <p className="mt-3 text-xs text-muted-foreground">
-          Showing {rows.length} of {candidates.length} candidates
-          {onlyQualified ? " · filtered to AI score above 70" : ""}
-        </p>
+                              {Math.round(scores[u.user_id])}
+                            </span>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">
+                              —
+                            </span>
+                          )}
+                        </TableCell>
+
+
+                        <TableCell>
+                          <span className="text-xs text-muted-foreground">
+                            {u.created_at
+                              ? new Date(u.created_at).toLocaleDateString()
+                              : "—"}
+                          </span>
+                        </TableCell>
+
+
+                        <TableCell>
+                          <div
+                            className="flex items-center justify-end gap-1"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {u.github_url && (
+                              <Tooltip>
+                                <TooltipTrigger
+                                  render={
+                                    <a
+                                      href={u.github_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      aria-label={`GitHub of ${handle}`}
+                                      className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                                    >
+                                      <GithubIcon />
+                                    </a>
+                                  }
+                                />
+                                <TooltipContent>{u.github_url}</TooltipContent>
+                              </Tooltip>
+                            )}
+                            {u.cv_url && (
+                              <Tooltip>
+                                <TooltipTrigger
+                                  render={
+                                    <a
+                                      href={u.cv_url}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      aria-label="Open CV"
+                                      className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+                                    >
+                                      <ExternalLink className="size-4" />
+                                    </a>
+                                  }
+                                />
+                                <TooltipContent>Open CV source</TooltipContent>
+                              </Tooltip>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+
+
+            <p className="mt-3 text-xs text-muted-foreground">
+              Showing {rows.length} of {users.length} candidates
+            </p>
+          </>
+        )}
       </CardContent>
     </Card>
-  )
+  );
 }
+
 
 function SortButton({
   label,
@@ -259,10 +425,10 @@ function SortButton({
   dir,
   onClick,
 }: {
-  label: string
-  active: boolean
-  dir: "asc" | "desc"
-  onClick: () => void
+  label: string;
+  active: boolean;
+  dir: "asc" | "desc";
+  onClick: () => void;
 }) {
   return (
     <button
@@ -278,5 +444,8 @@ function SortButton({
         className={cn("size-3", active && dir === "asc" && "rotate-180")}
       />
     </button>
-  )
+  );
 }
+
+
+

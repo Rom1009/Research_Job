@@ -21,4 +21,3 @@ export const useDashboardStore = create<DashboardStore>((set) => ({
   activeProfileId: undefined,
   setActiveProfileId: (id) => set({ activeProfileId: id }),
 }))
-

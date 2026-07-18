@@ -1,12 +1,15 @@
 'use client'
 
+
 import { Search, Settings, LifeBuoy, Briefcase, LayoutDashboard, Users, UploadCloud, Sparkles } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { ThemeToggle } from './theme-toggle'
 import { useDashboardStore } from '@/lib/dashboard-store'
 
+
 export function CustomSidebar() {
   const { activeTab, setActiveTab } = useDashboardStore()
+
 
   const research = [
     { title: 'Overview', icon: LayoutDashboard, tab: 'overview' as const },
@@ -15,11 +18,13 @@ export function CustomSidebar() {
     { title: 'AI Analysis', icon: Sparkles, tab: 'analysis' as const },
   ]
 
+
   const pipelines = [
     { title: 'Backend Squad', icon: Briefcase, badge: '24' },
     { title: 'ML Platform', icon: Briefcase, badge: '16' },
     { title: 'Frontend Guild', icon: Briefcase, badge: '11' },
   ]
+
 
   return (
     <aside className="w-64 border-r border-border bg-sidebar flex flex-col h-screen overflow-y-auto">
@@ -38,6 +43,7 @@ export function CustomSidebar() {
           </div>
         </button>
       </div>
+
 
       {/* Research Tools */}
       <div className="flex-1 overflow-y-auto px-3 py-4">
@@ -66,6 +72,7 @@ export function CustomSidebar() {
           </div>
         </div>
 
+
         {/* Pipelines */}
         <div>
           <h3 className="text-xs font-semibold text-muted-foreground mb-3 px-2">Pipelines</h3>
@@ -86,6 +93,7 @@ export function CustomSidebar() {
         </div>
       </div>
 
+
       {/* Footer */}
       <div className="border-t border-sidebar-border p-3 space-y-3">
         {/* Settings & Support */}
@@ -100,6 +108,7 @@ export function CustomSidebar() {
           </button>
         </div>
 
+
         {/* User Profile */}
         <div className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-sidebar-accent/50 transition-colors cursor-pointer">
           <Avatar className="size-8 flex-shrink-0">
@@ -113,6 +122,7 @@ export function CustomSidebar() {
           </div>
         </div>
 
+
         {/* Theme Toggle */}
         <div className="flex items-center justify-center">
           <ThemeToggle />
@@ -121,3 +131,6 @@ export function CustomSidebar() {
     </aside>
   )
 }
+
+
+
