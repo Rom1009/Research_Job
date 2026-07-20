@@ -48,6 +48,25 @@ export type ScoreResponse = {
 };
 
 
+export type EducationItem = {
+  institution?: string;
+  degree?: string;
+  location?: string;
+  period?: string;
+  coursework?: string;
+  gpa?: string;
+};
+
+
+export type WorkExperienceItem = {
+  company?: string;
+  title?: string;
+  location?: string;
+  period?: string;
+  achievements?: string[];
+};
+
+
 export type UserProfile = {
   user_id: string;
   cv_url?: string;
@@ -55,8 +74,8 @@ export type UserProfile = {
   cv_markdown?: string;
   cv_structured?: {
     skills?: string[];
-    education?: string[];
-    work_experience?: string[];
+    education?: EducationItem[];
+    work_experience?: WorkExperienceItem[];
     additional_info?: string[];
   };
   github_summary?: string;
@@ -74,12 +93,16 @@ export type MatchResult = {
   project_score?: number;
   total_score?: number;
   ai_analysis_details?: {
+    matched_skills?: string[];
     gap_analysis?: string[];
     actionable_advice?: string[];
     evaluation_summary?: string;
     project_impact?: string[];
     technical_complexity?: string[];
   };
+  job_title?: string;
+  job_company?: string;
+  job_location?: string;
   created_at?: string;
 };
 
@@ -111,3 +134,6 @@ export const api = {
       body: JSON.stringify(body),
     }),
 };
+
+
+

@@ -1,44 +1,123 @@
-import { Users, Target, TrendingUp, CheckCircle2 } from "lucide-react"
+"use client";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { candidates } from "@/lib/candidates"
+
+import { useEffect, useState } from "react";
+import { Users, Target, TrendingUp, Briefcase } from "lucide-react";
+
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { api, type UserProfile, type MatchResult } from "@/lib/api";
+
 
 export function StatCards() {
-  const total = candidates.length
-  const qualified = candidates.filter((c) => c.score > 70).length
-  const avg = Math.round(
-    candidates.reduce((s, c) => s + c.score, 0) / total,
-  )
-  const shortlisted = candidates.filter(
-    (c) => c.status === "Shortlisted" || c.status === "Contacted",
-  ).length
+  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [scores, setScores] = useState<MatchResult[]>([]);
+  const [loading, setLoading] = useState(true);
+
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    Promise.all([api.listUsers(), api.listScores()])
+      .then(([u, s]) => {
+        if (cancelled) return;
+        setUsers(u);
+        setScores(s);
+      })
+      .catch(console.error)
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Skeleton key={i} className="h-28 w-full" />
+        ))}
+      </div>
+    );
+  }
+
+
+  const totalProfiles = users.length;
+
+
+  // Best score per profile
+  const bestByProfile = new Map<string, number>();
+  for (const s of scores) {
+    const cur = bestByProfile.get(s.profile_id) ?? 0;
+    bestByProfile.set(s.profile_id, Math.max(cur, s.total_score ?? 0));
+  }
+
+
+  const qualified = Array.from(bestByProfile.values()).filter(
+    (v) => v >= 70,
+  ).length;
+
+
+  const avgAllScores =
+    scores.length > 0
+      ? Math.round(
+          scores.reduce((sum, s) => sum + (s.total_score ?? 0), 0) /
+            scores.length,
+        )
+      : 0;
+
+
+  const totalMatches = scores.length;
+
+
+  // Profiles ingested trong 7 ngày gần nhất
+  const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const recentProfiles = users.filter(
+    (u) => u.created_at && new Date(u.created_at).getTime() >= oneWeekAgo,
+  ).length;
+
 
   const stats = [
     {
       label: "Profiles researched",
-      value: String(total),
-      delta: "+3 this week",
+      value: String(totalProfiles),
+      delta:
+        recentProfiles > 0
+          ? `+${recentProfiles} this week`
+          : "no new this week",
       icon: Users,
     },
     {
       label: "Qualified (>70)",
       value: String(qualified),
-      delta: `${Math.round((qualified / total) * 100)}% of pool`,
+      delta:
+        totalProfiles > 0
+          ? `${Math.round((qualified / totalProfiles) * 100)}% of pool`
+          : "—",
       icon: Target,
     },
     {
       label: "Average AI score",
-      value: String(avg),
-      delta: "+6 vs last month",
+      value: String(avgAllScores),
+      delta:
+        totalMatches > 0
+          ? `across ${totalMatches} match${totalMatches === 1 ? "" : "es"}`
+          : "no scores yet",
       icon: TrendingUp,
     },
     {
-      label: "In outreach",
-      value: String(shortlisted),
-      delta: "2 awaiting reply",
-      icon: CheckCircle2,
+      label: "Jobs scored",
+      value: String(totalMatches),
+      delta:
+        totalProfiles > 0
+          ? `~${Math.round(totalMatches / Math.max(totalProfiles, 1))} per profile`
+          : "—",
+      icon: Briefcase,
     },
-  ]
+  ];
+
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -59,5 +138,6 @@ export function StatCards() {
         </Card>
       ))}
     </div>
-  )
+  );
 }
+

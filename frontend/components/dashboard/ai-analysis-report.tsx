@@ -16,6 +16,7 @@ import {
   CartesianGrid,
   ResponsiveContainer,
   Tooltip,
+  LabelList,
 } from "recharts";
 import {
   AlertCircle,
@@ -193,10 +194,16 @@ export function AIAnalysisReport() {
     scores.forEach((s) => {
       const v = s.total_score ?? 0;
       const b =
-        v >= 85 ? buckets[0] : v >= 70 ? buckets[1] : v >= 50 ? buckets[2] : buckets[3];
+        v >= 85
+          ? buckets[0]
+          : v >= 70
+            ? buckets[1]
+            : v >= 50
+              ? buckets[2]
+              : buckets[3];
       b.count++;
     });
-    return buckets;
+    return buckets.map((b, i) => ({ ...b, fill: `url(#barFill-${i})` }));
   }, [scores]);
 
 
@@ -343,35 +350,68 @@ export function AIAnalysisReport() {
         <>
           {/* Radar + Distribution */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <Card>
+            <Card className="border-border/80 shadow-sm ring-1 ring-white/5">
               <CardHeader>
                 <CardTitle className="text-base">Competency Radar</CardTitle>
-                <CardDescription>Average scores across dimensions</CardDescription>
+                <CardDescription>
+                  Average scores across dimensions
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={280}>
-                  <RadarChart data={radarData}>
-                    <PolarGrid stroke="var(--border)" />
+                <ResponsiveContainer width="100%" height={300}>
+                  <RadarChart data={radarData} outerRadius="75%">
+                    <defs>
+                      <radialGradient id="radarFill" cx="50%" cy="50%" r="50%">
+                        <stop
+                          offset="0%"
+                          stopColor="var(--primary)"
+                          stopOpacity={0.6}
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="var(--primary)"
+                          stopOpacity={0.15}
+                        />
+                      </radialGradient>
+                    </defs>
+                    <PolarGrid stroke="var(--border)" strokeDasharray="2 4" />
                     <PolarAngleAxis
                       dataKey="dim"
-                      tick={{ fill: "var(--muted-foreground)", fontSize: 12 }}
+                      tick={{
+                        fill: "var(--foreground)",
+                        fontSize: 12,
+                        fontWeight: 500,
+                      }}
                     />
                     <PolarRadiusAxis
                       domain={[0, 100]}
-                      tick={{ fill: "var(--muted-foreground)", fontSize: 10 }}
+                      tick={{
+                        fill: "var(--muted-foreground)",
+                        fontSize: 9,
+                        opacity: 0.4,
+                      }}
+                      axisLine={false}
+                      tickLine={false}
+                      tickCount={3}
+                      angle={90}
                     />
                     <Radar
                       dataKey="value"
                       stroke="var(--primary)"
-                      fill="var(--primary)"
-                      fillOpacity={0.3}
+                      strokeWidth={2}
+                      fill="url(#radarFill)"
+                      dot={{ r: 4, fill: "var(--primary)", strokeWidth: 0 }}
+                      activeDot={{ r: 6, fill: "var(--primary)" }}
+                      isAnimationActive
                     />
                     <Tooltip
                       contentStyle={{
                         background: "var(--popover)",
                         border: "1px solid var(--border)",
                         borderRadius: 8,
+                        fontSize: 12,
                       }}
+                      formatter={(v: any) => [`${v}/100`, "Score"]}
                     />
                   </RadarChart>
                 </ResponsiveContainer>
@@ -382,35 +422,84 @@ export function AIAnalysisReport() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Score Distribution</CardTitle>
-                <CardDescription>How this candidate ranks per job</CardDescription>
+                <CardDescription>
+                  How this candidate ranks per job
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={280}>
-                  <BarChart data={distribution}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    data={distribution}
+                    margin={{ top: 20, right: 10, left: -10, bottom: 30 }}
+                  >
+                    <defs>
+                      {distribution.map((d, i) => (
+                        <linearGradient
+                          key={i}
+                          id={`barFill-${i}`}
+                          x1="0"
+                          y1="0"
+                          x2="0"
+                          y2="1"
+                        >
+                          <stop
+                            offset="0%"
+                            stopColor={d.color}
+                            stopOpacity={0.95}
+                          />
+                          <stop
+                            offset="100%"
+                            stopColor={d.color}
+                            stopOpacity={0.55}
+                          />
+                        </linearGradient>
+                      ))}
+                    </defs>
+
+
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="var(--border)"
+                      vertical={false}
+                    />
                     <XAxis
                       dataKey="name"
                       tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
                       interval={0}
-                      angle={-15}
+                      angle={-12}
                       textAnchor="end"
                       height={60}
+                      axisLine={false}
+                      tickLine={false}
                     />
                     <YAxis
                       tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
                       allowDecimals={false}
+                      axisLine={false}
+                      tickLine={false}
                     />
                     <Tooltip
+                      cursor={{ fill: "var(--muted)", opacity: 0.3 }}
                       contentStyle={{
                         background: "var(--popover)",
                         border: "1px solid var(--border)",
                         borderRadius: 8,
+                        fontSize: 12,
                       }}
+                      formatter={(v: any) => [
+                        `${v} job${v === 1 ? "" : "s"}`,
+                        "Count",
+                      ]}
                     />
-                    <Bar dataKey="count" radius={[6, 6, 0, 0]}>
-                      {distribution.map((d, i) => (
-                        <rect key={i} fill={d.color} />
-                      ))}
+                    <Bar dataKey="count" radius={[8, 8, 0, 0]} maxBarSize={70}>
+                      <LabelList
+                        dataKey="count"
+                        position="top"
+                        fill="var(--foreground)"
+                        fontSize={12}
+                        fontWeight={600}
+                        formatter={(v: any) => (v > 0 ? v : "")}
+                      />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
@@ -423,43 +512,56 @@ export function AIAnalysisReport() {
           <Card>
             <CardHeader>
               <CardTitle className="text-base">Top 5 Matches</CardTitle>
-              <CardDescription>Highest-scoring jobs for this profile</CardDescription>
+              <CardDescription>
+                Highest-scoring jobs for this profile
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <ul className="flex flex-col divide-y divide-border">
-                {topMatches.map((m, i) => (
-                  <li
-                    key={m.match_id}
-                    className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
-                  >
-                    <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted font-mono text-xs font-semibold">
-                      {i + 1}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-mono text-xs text-muted-foreground">
-                        job {m.job_id.slice(0, 8)}…
-                      </p>
-                      <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>Skill {Math.round(m.skill_score ?? 0)}</span>
-                        <span>·</span>
-                        <span>Edu {Math.round(m.education_score ?? 0)}</span>
-                        <span>·</span>
-                        <span>Work {Math.round(m.work_experience_score ?? 0)}</span>
-                        <span>·</span>
-                        <span>Proj {Math.round(m.project_score ?? 0)}</span>
-                      </div>
-                    </div>
-                    <span
-                      className={cn(
-                        "inline-flex items-center rounded-md border px-2 py-1 font-mono text-sm font-semibold tabular-nums",
-                        scoreBg(m.total_score ?? 0),
-                        scoreTone(m.total_score ?? 0),
-                      )}
+                {topMatches.map((m, i) => {
+                  const title = m.job_title?.trim() || "Untitled role";
+                  const meta = [m.job_company, m.job_location]
+                    .filter(Boolean)
+                    .join(" · ");
+                  return (
+                    <li
+                      key={m.match_id}
+                      className="flex items-center gap-3 py-3 first:pt-0 last:pb-0"
                     >
-                      {Math.round(m.total_score ?? 0)}
-                    </span>
-                  </li>
-                ))}
+                      <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted font-mono text-xs font-semibold">
+                        {i + 1}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-medium">{title}</p>
+                        {meta && (
+                          <p className="truncate text-xs text-muted-foreground">
+                            {meta}
+                          </p>
+                        )}
+                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+                          <span>Skill {Math.round(m.skill_score ?? 0)}</span>
+                          <span>·</span>
+                          <span>Edu {Math.round(m.education_score ?? 0)}</span>
+                          <span>·</span>
+                          <span>
+                            Work {Math.round(m.work_experience_score ?? 0)}
+                          </span>
+                          <span>·</span>
+                          <span>Proj {Math.round(m.project_score ?? 0)}</span>
+                        </div>
+                      </div>
+                      <span
+                        className={cn(
+                          "inline-flex items-center rounded-md border px-2 py-1 font-mono text-sm font-semibold tabular-nums",
+                          scoreBg(m.total_score ?? 0),
+                          scoreTone(m.total_score ?? 0),
+                        )}
+                      >
+                        {Math.round(m.total_score ?? 0)}
+                      </span>
+                    </li>
+                  );
+                })}
               </ul>
             </CardContent>
           </Card>
@@ -475,7 +577,9 @@ export function AIAnalysisReport() {
                       <Sparkles className="size-4 text-primary" />
                       Evaluation Summary
                     </CardTitle>
-                    <CardDescription>Recruiter perspective from best match</CardDescription>
+                    <CardDescription>
+                      Recruiter perspective from best match
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm leading-relaxed text-foreground/90">
@@ -519,15 +623,16 @@ export function AIAnalysisReport() {
               )}
 
 
-              {ai.technical_complexity && ai.technical_complexity.length > 0 && (
-                <NarrativeCard
-                  title="Technical Complexity"
-                  description="Depth of engineering work"
-                  icon={Target}
-                  tone="purple"
-                  items={ai.technical_complexity}
-                />
-              )}
+              {ai.technical_complexity &&
+                ai.technical_complexity.length > 0 && (
+                  <NarrativeCard
+                    title="Technical Complexity"
+                    description="Depth of engineering work"
+                    icon={Target}
+                    tone="purple"
+                    items={ai.technical_complexity}
+                  />
+                )}
             </div>
           )}
         </>
@@ -558,7 +663,12 @@ function MetricCard({
       <CardContent className="flex items-start justify-between gap-3 pt-6">
         <div className="flex flex-col gap-1">
           <span className="text-xs text-muted-foreground">{label}</span>
-          <span className={cn("font-mono text-3xl font-semibold tabular-nums", tone)}>
+          <span
+            className={cn(
+              "font-mono text-3xl font-semibold tabular-nums",
+              tone,
+            )}
+          >
             {value}
           </span>
           <span className="text-xs text-muted-foreground">{hint}</span>
@@ -625,4 +735,8 @@ function NarrativeCard({
     </Card>
   );
 }
+
+
+
+
 

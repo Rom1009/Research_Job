@@ -2,8 +2,7 @@ from sqlmodel import SQLModel, Field, Column, JSON
 from uuid import uuid4, UUID
 from typing import Literal, Optional
 from datetime import datetime
-from pydantic import BaseModel
-
+from pydantic import Field as PydField
 '''
     Models for the database tables using SQLModel.
 '''
@@ -70,19 +69,32 @@ class UserResponse(SQLModel):
 
 class Validation(SQLModel):
     is_valid: bool
-    syntax_errors: list[str]
+    syntax_errors: list[str] = []
+
+
+class EducationItem(SQLModel):
+    institution: Optional[str] = None
+    degree: Optional[str] = None
+    location: Optional[str] = None
+    period: Optional[str] = None
+    coursework: Optional[str] = None
+    gpa: Optional[str] = None
+
+
+class WorkExperienceItem(SQLModel):
+    company: Optional[str] = None
+    title: Optional[str] = None
+    location: Optional[str] = None
+    period: Optional[str] = None
+    achievements: list[str] = []
 
 
 class SchemaCVResponse(SQLModel):
-    skills: list[str]
-    education: list[str]
-    work_experience: list[str]
-
-
-    additional_info: list[str]
-
-
-    validation_status: Validation
+    skills: list[str] = []
+    education: list[EducationItem] = []
+    work_experience: list[WorkExperienceItem] = []
+    additional_info: list[str] = []
+    validation_status: Optional[Validation] = None
 
 
 class JobRequest(SQLModel):
@@ -104,10 +116,18 @@ class JobResponse(SQLModel):
 
 class ScoreResponse(SQLModel):
     match_id: UUID
-    job_id: UUID                # ← thêm
-    profile_id: UUID            # ← thêm (optional nếu chỉ 1 profile)
+    job_id: UUID
+    profile_id: UUID
+    skill_score: Optional[float] = None
+    education_score: Optional[float] = None
+    work_experience_score: Optional[float] = None
+    project_score: Optional[float] = None
     total_score: Optional[float] = None
     ai_analysis_details: Optional[dict] = None
+    # Thông tin job đính kèm để frontend không cần join thêm
+    job_title: Optional[str] = None
+    job_company: Optional[str] = None
+    job_location: Optional[str] = None
 
 
 class ScoreRequest(SQLModel):
@@ -121,13 +141,12 @@ class ScoreCV(SQLModel):
     project_score: int
 
 
-    matched_skills: list[str]
+    matched_skills: list[str] = PydField(min_length=3)
+    gap_analysis: list[str] = PydField(min_length=2)
+    actionable_advice: list[str] = PydField(min_length=3)
+    evaluation_summary: str = PydField(min_length=1)
+    project_impact: list[str] = PydField(min_length=2)
+    technical_complexity: list[str] = PydField(min_length=2)
 
 
-    gap_analysis: list[str]
-    actionable_advice: list[str]
-    evaluation_summary: str
 
-
-    project_impact: list[str]
-    technical_complexity: list[str]

@@ -12,7 +12,7 @@ logger = setup_logger("User Controller")
 
 
 class UserController:
-    async def process_user_data(self, user_request: UserRequest, session: Session = Depends(get_session)) -> UserResponse:
+    def process_user_data(self, user_request: UserRequest, session: Session = Depends(get_session)) -> UserResponse:
         if not user_request.github_url or not user_request.cv_url:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -27,12 +27,12 @@ class UserController:
         user_service = UserService(session)
 
 
-        user_response = await user_service.process_user_data(user_data)
+        user_response = user_service.process_user_data(user_data)
         return user_response
 
 
     def get_all_user_info(self, session: Session = Depends(get_session)):
         user_service = UserService(session)
-        all_user_info = user_service.get_all_user()
+        all_user_info = user_service.get_all_user_info()
         return all_user_info
 

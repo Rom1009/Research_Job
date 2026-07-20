@@ -41,6 +41,17 @@ export function DashboardCandidateList({
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+
+  function toggleExpanded(userId: string) {
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(userId)) next.delete(userId);
+      else next.add(userId);
+      return next;
+    });
+  }
 
 
   useEffect(() => {
@@ -102,6 +113,10 @@ export function DashboardCandidateList({
                 const handle = handleFromUrl(u.github_url);
                 const skills = u.cv_structured?.skills ?? [];
                 const isSelected = u.user_id === selectedCandidateId;
+                const isExpanded = expanded.has(u.user_id);
+                const visibleSkills = isExpanded ? skills : skills.slice(0, 2);
+
+
                 return (
                   <li key={u.user_id}>
                     <button
@@ -114,30 +129,39 @@ export function DashboardCandidateList({
                       )}
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-medium">
-                            {handle}
-                          </p>
-                          <p className="font-mono text-xs text-muted-foreground">
-                            {u.user_id.slice(0, 8)}…
-                          </p>
-                        </div>
+                        <p className="truncate text-sm font-medium">{handle}</p>
                         {u.created_at && (
                           <span className="shrink-0 text-xs text-muted-foreground">
                             {new Date(u.created_at).toLocaleDateString()}
                           </span>
                         )}
                       </div>
+
+
                       {skills.length > 0 && (
-                        <div className="mt-2 flex flex-wrap gap-1">
-                          {skills.slice(0, 4).map((s) => (
-                            <Badge key={s} variant="secondary" className="text-xs">
+                        <div className="mt-2 flex flex-wrap items-center gap-1">
+                          {visibleSkills.map((s) => (
+                            <Badge
+                              key={s}
+                              variant="secondary"
+                              className="max-w-[220px] truncate text-xs"
+                              title={s}
+                            >
                               {s}
                             </Badge>
                           ))}
-                          {skills.length > 4 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{skills.length - 4}
+                          {skills.length > 2 && (
+                            <Badge
+                              variant="outline"
+                              className="cursor-pointer text-xs hover:bg-muted"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toggleExpanded(u.user_id);
+                              }}
+                            >
+                              {isExpanded
+                                ? "Show less"
+                                : `+${skills.length - 2} more`}
                             </Badge>
                           )}
                         </div>
@@ -153,4 +177,6 @@ export function DashboardCandidateList({
     </Card>
   );
 }
+
+
 

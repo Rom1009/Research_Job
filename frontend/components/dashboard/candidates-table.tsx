@@ -78,6 +78,17 @@ export function CandidatesTable({
 
 
   const [scores, setScores] = useState<Record<string, number>>({});
+  const [expandedSkills, setExpandedSkills] = useState<Set<string>>(new Set());
+
+
+  function toggleSkillsExpanded(userId: string) {
+    setExpandedSkills((prev) => {
+      const next = new Set(prev);
+      if (next.has(userId)) next.delete(userId);
+      else next.add(userId);
+      return next;
+    });
+  }
 
 
   useEffect(() => {
@@ -260,6 +271,10 @@ export function CandidatesTable({
                     const skills = u.cv_structured?.skills ?? [];
                     const education = u.cv_structured?.education ?? [];
                     const work = u.cv_structured?.work_experience ?? [];
+                    const isExpanded = expandedSkills.has(u.user_id);
+                    const visibleSkills = isExpanded
+                      ? skills
+                      : skills.slice(0, 2);
 
 
                     return (
@@ -268,6 +283,7 @@ export function CandidatesTable({
                         className="cursor-pointer transition-colors hover:bg-muted/50"
                         onClick={() => onSelectCandidate?.(u)}
                       >
+                        {/* ── Candidate ── */}
                         <TableCell>
                           <div className="flex items-center gap-3">
                             <Avatar className="size-9">
@@ -275,55 +291,161 @@ export function CandidatesTable({
                                 {initials}
                               </AvatarFallback>
                             </Avatar>
-                            <div className="flex flex-col leading-tight">
-                              <span className="font-medium">{handle}</span>
-                              <span className="font-mono text-xs text-muted-foreground">
-                                {u.user_id.slice(0, 8)}…
-                              </span>
+                            <span className="font-medium">{handle}</span>
+                          </div>
+                        </TableCell>
+
+
+                        {/* ── Skills (ngắn + expand) ── */}
+                        <TableCell className="hidden md:table-cell max-w-[260px]">
+                          {skills.length === 0 ? (
+                            <span className="text-xs text-muted-foreground">
+                              —
+                            </span>
+                          ) : (
+                            <div className="flex flex-wrap items-center gap-1">
+                              {visibleSkills.map((s) => (
+                                <Badge
+                                  key={s}
+                                  variant="secondary"
+                                  className="max-w-[220px] truncate"
+                                  title={s}
+                                >
+                                  {s}
+                                </Badge>
+                              ))}
+                              {skills.length > 2 && (
+                                <Badge
+                                  variant="outline"
+                                  className="cursor-pointer hover:bg-muted"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleSkillsExpanded(u.user_id);
+                                  }}
+                                >
+                                  {isExpanded
+                                    ? "Show less"
+                                    : `+${skills.length - 2} more`}
+                                </Badge>
+                              )}
                             </div>
-                          </div>
+                          )}
                         </TableCell>
 
 
-                        <TableCell className="hidden md:table-cell">
-                          <div className="flex flex-wrap gap-1">
-                            {skills.slice(0, 3).map((s) => (
-                              <Badge key={s} variant="secondary">
-                                {s}
-                              </Badge>
-                            ))}
-                            {skills.length > 3 && (
-                              <Badge variant="outline">
-                                +{skills.length - 3}
-                              </Badge>
-                            )}
-                            {skills.length === 0 && (
-                              <span className="text-xs text-muted-foreground">
-                                —
-                              </span>
-                            )}
-                          </div>
+                        {/* ── Education ── */}
+                        <TableCell className="hidden sm:table-cell max-w-[220px]">
+                          {education.length === 0 ? (
+                            <span className="text-xs text-muted-foreground">
+                              —
+                            </span>
+                          ) : (
+                            <Tooltip>
+                              <TooltipTrigger
+                                render={
+                                  <span className="block truncate text-xs text-foreground/90" />
+                                }
+                              >
+                                {[
+                                  education[0]?.degree,
+                                  education[0]?.institution,
+                                ]
+                                  .filter(Boolean)
+                                  .join(" @ ")}
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-sm">
+                                <ul className="list-disc pl-4 text-xs">
+                                  {education.map((e, i) => (
+                                    <li key={i}>
+                                      {[e.degree, e.institution, e.period]
+                                        .filter(Boolean)
+                                        .join(" · ")}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
                         </TableCell>
 
 
-                        <TableCell className="hidden sm:table-cell">
+                        {/* ── Experience ── */}
+                        <TableCell className="hidden lg:table-cell max-w-[240px]">
+                          {work.length === 0 ? (
+                            <span className="text-xs text-muted-foreground">
+                              —
+                            </span>
+                          ) : (
+                            <Tooltip>
+                              <TooltipTrigger
+                                render={
+                                  <span className="block truncate text-xs text-foreground/90" />
+                                }
+                              >
+                                {[work[0]?.title, work[0]?.company]
+                                  .filter(Boolean)
+                                  .join(" @ ")}
+                              </TooltipTrigger>
+                              <TooltipContent className="max-w-sm">
+                                <ul className="list-disc pl-4 text-xs">
+                                  {work.map((w, i) => (
+                                    <li key={i}>
+                                      {[w.title, w.company, w.period]
+                                        .filter(Boolean)
+                                        .join(" · ")}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
+                        </TableCell>
+
+
+                        {/* ── Created ── */}
+                        <TableCell>
                           <span className="text-xs text-muted-foreground">
-                            {education.length > 0
-                              ? `${education.length} entr${education.length === 1 ? "y" : "ies"}`
+                            {u.created_at
+                              ? new Date(u.created_at).toLocaleDateString()
                               : "—"}
                           </span>
                         </TableCell>
 
 
-                        <TableCell className="hidden lg:table-cell">
-                          <span className="text-xs text-muted-foreground">
-                            {work.length > 0
-                              ? `${work.length} role${work.length === 1 ? "" : "s"}`
-                              : "—"}
-                          </span>
+                        {/* ── Links ── */}
+                        <TableCell className="text-right">
+                          {u.github_url ? (
+                            <a
+                              href={u.github_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                              aria-label="Open GitHub"
+                            >
+                              <GithubIcon className="size-4" />
+                            </a>
+                          ) : (
+                            <span className="text-xs text-muted-foreground">
+                              —
+                            </span>
+                          )}
+                          {u.cv_url && (
+                            <a
+                              href={u.cv_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              onClick={(e) => e.stopPropagation()}
+                              className="ml-1 inline-flex size-8 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                              aria-label="Open CV"
+                            >
+                              <ExternalLink className="size-4" />
+                            </a>
+                          )}
                         </TableCell>
 
 
+                        {/* ── AI Score ── */}
                         <TableCell>
                           {scores[u.user_id] != null ? (
                             <span
@@ -345,60 +467,6 @@ export function CandidatesTable({
                               —
                             </span>
                           )}
-                        </TableCell>
-
-
-                        <TableCell>
-                          <span className="text-xs text-muted-foreground">
-                            {u.created_at
-                              ? new Date(u.created_at).toLocaleDateString()
-                              : "—"}
-                          </span>
-                        </TableCell>
-
-
-                        <TableCell>
-                          <div
-                            className="flex items-center justify-end gap-1"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {u.github_url && (
-                              <Tooltip>
-                                <TooltipTrigger
-                                  render={
-                                    <a
-                                      href={u.github_url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      aria-label={`GitHub of ${handle}`}
-                                      className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                                    >
-                                      <GithubIcon />
-                                    </a>
-                                  }
-                                />
-                                <TooltipContent>{u.github_url}</TooltipContent>
-                              </Tooltip>
-                            )}
-                            {u.cv_url && (
-                              <Tooltip>
-                                <TooltipTrigger
-                                  render={
-                                    <a
-                                      href={u.cv_url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      aria-label="Open CV"
-                                      className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-                                    >
-                                      <ExternalLink className="size-4" />
-                                    </a>
-                                  }
-                                />
-                                <TooltipContent>Open CV source</TooltipContent>
-                              </Tooltip>
-                            )}
-                          </div>
                         </TableCell>
                       </TableRow>
                     );
@@ -446,6 +514,8 @@ function SortButton({
     </button>
   );
 }
+
+
 
 
 
