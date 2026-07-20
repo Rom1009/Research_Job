@@ -8,6 +8,7 @@ from backend.src.schema.model import SchemaCVResponse, UserResponse
 from backend.src.repositories.user_repositories import UserRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
+from ollama import chat
 
 logger = setup_logger("User Service")
 
@@ -16,6 +17,7 @@ class UserService:
         self.client = AsyncGroq(
             api_key = settings.GROQ_API_KEY.get_secret_value(),
         )
+        
         self.user_repository = UserRepository(session = session)
 
     async def process_user_data(self, user_data) -> UserResponse:
@@ -55,7 +57,24 @@ class UserService:
             }
         )
 
-        cv_structured = SchemaCVResponse.model_validate(json.loads(response.choices[0].message.content or "{}"))
+        # response = chat(
+        #     model = settings.MODEL_NAME, 
+        #     messages = [
+        #         {
+        #         "role": "system",
+        #         "content": "You are a CV checker expert. Validate the CV carefully and syntax validation and metadata."
+        #         },
+        #         {
+        #             "role": "user",
+        #             "content": f"Base on the {markdown_data}. Extract the skills, educations, work_experience, additional_info and validate syntax of format"
+        #         }
+        #     ],
+        #     format = SchemaCVResponse.model_json_schema(),
+        #     options = {"temperature": 0}
+        # )
+
+        # cv_structured = SchemaCVResponse.model_validate(json.loads(response.choices[0].message.content or "{}"))
+        cv_structured = SchemaCVResponse.model_validate_json(response.message.content)
 
         page = requests.get(github_url)
         if page.status_code == 200:
