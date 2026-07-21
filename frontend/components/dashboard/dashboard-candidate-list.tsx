@@ -177,6 +177,3 @@ export function DashboardCandidateList({
     </Card>
   );
 }
-
-
-

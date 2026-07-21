@@ -13,8 +13,10 @@ class UserProfile(SQLModel, table = True):
 
 
     user_id: UUID = Field(default_factory = uuid4, primary_key = True)
-    cv_url: Optional[str] = Field(default = None, nullable = True)
     github_url: Optional[str] = Field(default = None, nullable = True)
+    cv_url: Optional[str] = Field(default = None, nullable = True)
+    cv_hash: Optional[str] = Field(default=None, index=True, nullable=True)  # ← THÊM
+    version: int = Field(default = 1)
     cv_markdown: Optional[str] = Field(default = None, nullable = True)
     cv_structured: Optional[dict] = Field(default = None, sa_column = Column(JSON , nullable = True))
     github_summary: Optional[str] = Field(default = None, nullable = True)
@@ -60,7 +62,6 @@ class UserRequest(SQLModel):
     github_url: Optional[str] = Field(default = None)
     cv_url: Optional[str] = Field(default = None)
 
-
 class UserResponse(SQLModel):
     user_id: UUID
     cv_markdown: Optional[str] = Field(default = None)
@@ -80,7 +81,6 @@ class EducationItem(SQLModel):
     coursework: Optional[str] = None
     gpa: Optional[str] = None
 
-
 class WorkExperienceItem(SQLModel):
     company: Optional[str] = None
     title: Optional[str] = None
@@ -88,11 +88,18 @@ class WorkExperienceItem(SQLModel):
     period: Optional[str] = None
     achievements: list[str] = []
 
+class ProjectItem(SQLModel):
+    name: Optional[str] = None
+    technologies: list[str] = []
+    period: Optional[str] = None
+    descriptions: list[str] = []
+
 
 class SchemaCVResponse(SQLModel):
     skills: list[str] = []
     education: list[EducationItem] = []
     work_experience: list[WorkExperienceItem] = []
+    project: list[ProjectItem] = []
     additional_info: list[str] = []
     validation_status: Optional[Validation] = None
 
@@ -147,6 +154,3 @@ class ScoreCV(SQLModel):
     evaluation_summary: str = PydField(min_length=1)
     project_impact: list[str] = PydField(min_length=2)
     technical_complexity: list[str] = PydField(min_length=2)
-
-
-

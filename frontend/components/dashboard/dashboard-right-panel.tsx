@@ -1,29 +1,20 @@
 "use client";
-
-
-import * as React from "react";
-import { useEffect, useState } from "react";
 import {
   X,
   Award,
   Briefcase,
-  BarChart3,
-  FileText,
   ExternalLink,
   Sparkles,
   Trophy,
-  Lightbulb,
-  TriangleAlert,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { api, type UserProfile, type MatchResult } from "@/lib/api";
+import { type UserProfile } from "@/lib/api";
 import { GithubIcon } from "@/components/dashboard/brand-icons";
+import Link from "next/link";
 
 
 interface DashboardRightPanelProps {
@@ -59,21 +50,6 @@ export function DashboardRightPanel({
   selectedCandidate,
   onClose,
 }: DashboardRightPanelProps) {
-  const [scores, setScores] = useState<MatchResult[]>([]);
-  const [loading, setLoading] = useState(false);
-
-
-  useEffect(() => {
-    if (!selectedCandidate) return;
-    setLoading(true);
-    api
-      .getUserScores(selectedCandidate.user_id)
-      .then(setScores)
-      .catch((e) => console.error("Load scores failed:", e))
-      .finally(() => setLoading(false));
-  }, [selectedCandidate?.user_id]);
-
-
   if (!selectedCandidate) return null;
 
 
@@ -82,34 +58,8 @@ export function DashboardRightPanel({
   const skills = u.cv_structured?.skills ?? [];
   const education = u.cv_structured?.education ?? [];
   const work = u.cv_structured?.work_experience ?? [];
+  const project = u.cv_structured?.project ?? [];
   const additional = u.cv_structured?.additional_info ?? [];
-
-
-  const bestScore = scores.reduce(
-    (max, s) => Math.max(max, s.total_score ?? 0),
-    0,
-  );
-  const avgScore =
-    scores.length > 0
-      ? scores.reduce((sum, s) => sum + (s.total_score ?? 0), 0) / scores.length
-      : 0;
-
-
-  // Breakdown lấy từ score có total cao nhất
-  const topMatch = scores.reduce<MatchResult | undefined>(
-    (best, s) => ((s.total_score ?? 0) > (best?.total_score ?? 0) ? s : best),
-    undefined,
-  );
-
-
-  const breakdown = topMatch
-    ? {
-        skill: topMatch.skill_score ?? 0,
-        education: topMatch.education_score ?? 0,
-        work_experience: topMatch.work_experience_score ?? 0,
-        project: topMatch.project_score ?? 0,
-      }
-    : null;
 
 
   return (
@@ -132,20 +82,17 @@ export function DashboardRightPanel({
         defaultValue="profile"
         className="flex flex-1 flex-col overflow-hidden"
       >
-        <TabsList className="mx-4 mt-4 grid grid-cols-3">
+        <TabsList className="mx-4 mt-4 grid grid-cols-2">
           <TabsTrigger value="profile" className="text-xs">
             Profile
           </TabsTrigger>
           <TabsTrigger value="experience" className="text-xs">
             Experience
           </TabsTrigger>
-          <TabsTrigger value="analysis" className="text-xs">
-            Analysis
-          </TabsTrigger>
         </TabsList>
 
 
-        {/* PROFILE */}
+        {/* ══════════════════ PROFILE ══════════════════ */}
         <TabsContent value="profile" className="flex-1 overflow-hidden">
           <ScrollArea className="h-full">
             <div className="space-y-4 p-4">
@@ -223,15 +170,39 @@ export function DashboardRightPanel({
                   </p>
                 </div>
               )}
+
+
+              {/* CTA — hướng dẫn tới trang AI Analysis đúng nghĩa */}
+              <div className="rounded-xl border border-primary/30 bg-primary/[0.04] p-3">
+                <div className="flex items-start gap-2.5">
+                  <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" />
+                  <div className="flex-1 space-y-2">
+                    <div>
+                      <p className="text-sm font-medium">
+                        Looking for per-job AI analysis?
+                      </p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        Match scoring, gaps, and advice are computed per job.
+                      </p>
+                    </div>
+                    <Link href="/dashboard/ai-analysis" onClick={onClose}>
+                      <Button size="sm" variant="outline">
+                        Open AI Analysis →
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </ScrollArea>
         </TabsContent>
 
 
-        {/* EXPERIENCE */}
+        {/* ══════════════════ EXPERIENCE ══════════════════ */}
         <TabsContent value="experience" className="flex-1 overflow-hidden">
           <ScrollArea className="h-full">
             <div className="space-y-4 p-4">
+              
               <section>
                 <h4 className="mb-3 flex items-center gap-2 font-semibold">
                   <Award className="h-4 w-4" />
@@ -246,7 +217,7 @@ export function DashboardRightPanel({
                   {education.map((e, i) => (
                     <div
                       key={i}
-                      className="rounded-md border p-3 text-sm space-y-1"
+                      className="space-y-1 rounded-md border p-3 text-sm"
                     >
                       <p className="font-medium">
                         {[e.degree, e.institution]
@@ -284,11 +255,10 @@ export function DashboardRightPanel({
                       No work experience.
                     </p>
                   )}
-                  {/* Work Experience */}
                   {work.map((w, i) => (
                     <div
                       key={i}
-                      className="rounded-md border p-3 text-sm space-y-1"
+                      className="space-y-1 rounded-md border p-3 text-sm"
                     >
                       <p className="font-medium">
                         {[w.title, w.company].filter(Boolean).join(" @ ") ||
@@ -300,6 +270,48 @@ export function DashboardRightPanel({
                       {w.achievements && w.achievements.length > 0 && (
                         <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs text-foreground/80">
                           {w.achievements.map((a, j) => (
+                            <li key={j}>{a}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              <section>
+                <h4 className="mb-3 flex items-center gap-2 font-semibold">
+                  <Briefcase className="h-4 w-4" />
+                  Projects ({project.length})
+                </h4>
+                <div className="space-y-2">
+                  {project.length === 0 && (
+                    <p className="text-xs text-muted-foreground">
+                      No projects.
+                    </p>
+                  )}
+                  {project.map((p, i) => (
+                    <div
+                      key={i}
+                      className="space-y-1 rounded-md border p-3 text-sm"
+                    >
+                      <p className="font-medium">
+                        {[p.name].filter(Boolean).join(" @ ") ||
+                          "Untitled role"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {[p.period].filter(Boolean).join(" · ")}
+                      </p>
+                      {p.technologies && p.technologies.length > 0 && (
+                        <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs text-foreground/80">
+                          {p.technologies.map((a, j) => (
+                            <li key={j}>{a}</li>
+                          ))}
+                        </ul>
+                      )}
+                      {p.description && p.description.length > 0 && (
+                        <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs text-foreground/80">
+                          {p.description.map((a, j) => (
                             <li key={j}>{a}</li>
                           ))}
                         </ul>
@@ -335,178 +347,10 @@ export function DashboardRightPanel({
             </div>
           </ScrollArea>
         </TabsContent>
-
-
-        {/* ANALYSIS */}
-        <TabsContent value="analysis" className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="space-y-4 p-4">
-              {loading ? (
-                <div className="space-y-2">
-                  <Skeleton className="h-20 w-full" />
-                  <Skeleton className="h-32 w-full" />
-                </div>
-              ) : scores.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-border bg-muted/20 p-6 text-center text-xs text-muted-foreground">
-                  No scores yet. Run scoring from the Jobs page.
-                </div>
-              ) : (
-                <>
-                  <div className="grid grid-cols-2 gap-3">
-                    <Card>
-                      <CardContent className="pt-4">
-                        <p className="mb-1 text-xs text-muted-foreground">
-                          Best match
-                        </p>
-                        <p className="text-2xl font-bold text-primary">
-                          {Math.round(bestScore)}
-                        </p>
-                      </CardContent>
-                    </Card>
-                    <Card>
-                      <CardContent className="pt-4">
-                        <p className="mb-1 text-xs text-muted-foreground">
-                          Avg ({scores.length})
-                        </p>
-                        <p className="text-2xl font-bold text-blue-500">
-                          {Math.round(avgScore)}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-
-                  {breakdown && (
-                    <div>
-                      <h4 className="mb-3 flex items-center gap-2 font-semibold">
-                        <BarChart3 className="h-4 w-4" />
-                        Top match breakdown
-                      </h4>
-                      <div className="space-y-3">
-                        {Object.entries(breakdown).map(([key, value]) => (
-                          <div key={key}>
-                            <div className="mb-1 flex items-center justify-between">
-                              <p className="text-sm font-medium capitalize">
-                                {key.replace("_", " ")}
-                              </p>
-                              <p className="text-sm font-semibold">
-                                {Math.round(value)}
-                              </p>
-                            </div>
-                            <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-                              <div
-                                className="h-full bg-gradient-to-r from-primary to-blue-400 transition-all"
-                                style={{ width: `${value}%` }}
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-
-                  {topMatch?.ai_analysis_details && (
-                    <>
-                      <Separator />
-                      {/* Evaluation Summary */}
-                      {topMatch.ai_analysis_details.evaluation_summary && (
-                        <section>
-                          <h4 className="mb-2 flex items-center gap-2 font-semibold">
-                            <Sparkles className="h-4 w-4 text-primary" />
-                            Evaluation
-                          </h4>
-                          <div className="relative rounded-xl border border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-blue-500/5 p-4">
-                            <div className="absolute left-0 top-0 h-full w-1 rounded-l-xl bg-gradient-to-b from-primary to-blue-500" />
-                            <p className="pl-2 text-sm leading-relaxed text-foreground/90">
-                              {topMatch.ai_analysis_details.evaluation_summary}
-                            </p>
-                          </div>
-                        </section>
-                      )}
-
-
-                      {/* Gap Analysis */}
-                      {topMatch.ai_analysis_details.gap_analysis &&
-                        topMatch.ai_analysis_details.gap_analysis.length >
-                          0 && (
-                          <section>
-                            <h4 className="mb-2 flex items-center gap-2 font-semibold">
-                              <TriangleAlert className="h-4 w-4 text-amber-500" />
-                              Gap Analysis
-                              <span className="ml-1 rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-medium text-amber-600 dark:text-amber-400">
-                                {
-                                  topMatch.ai_analysis_details.gap_analysis
-                                    .length
-                                }
-                              </span>
-                            </h4>
-                            <ul className="space-y-2">
-                              {topMatch.ai_analysis_details.gap_analysis.map(
-                                (g, i) => (
-                                  <li
-                                    key={i}
-                                    className="flex items-start gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 p-2.5 text-xs leading-relaxed"
-                                  >
-                                    <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-amber-500/20 text-[10px] font-bold text-amber-600 dark:text-amber-400">
-                                      {i + 1}
-                                    </span>
-                                    <span className="text-foreground/90">
-                                      {g}
-                                    </span>
-                                  </li>
-                                ),
-                              )}
-                            </ul>
-                          </section>
-                        )}
-
-
-                      {/* Actionable Advice */}
-                      {topMatch.ai_analysis_details.actionable_advice &&
-                        topMatch.ai_analysis_details.actionable_advice.length >
-                          0 && (
-                          <section>
-                            <h4 className="mb-2 flex items-center gap-2 font-semibold">
-                              <Lightbulb className="h-4 w-4 text-emerald-500" />
-                              Actionable Advice
-                              <span className="ml-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                                {
-                                  topMatch.ai_analysis_details.actionable_advice
-                                    .length
-                                }
-                              </span>
-                            </h4>
-                            <ul className="space-y-2">
-                              {topMatch.ai_analysis_details.actionable_advice.map(
-                                (a, i) => (
-                                  <li
-                                    key={i}
-                                    className="flex items-start gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-2.5 text-xs leading-relaxed"
-                                  >
-                                    <Lightbulb className="mt-0.5 size-3.5 shrink-0 text-emerald-500" />
-                                    <span className="text-foreground/90">
-                                      {a}
-                                    </span>
-                                  </li>
-                                ),
-                              )}
-                            </ul>
-                          </section>
-                        )}
-                    </>
-                  )}
-                </>
-              )}
-            </div>
-          </ScrollArea>
-        </TabsContent>
       </Tabs>
     </div>
   );
 }
-
-
 
 
 

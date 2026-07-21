@@ -1,6 +1,6 @@
 from sqlmodel import Session
 from fastapi import Depends, HTTPException, status
-
+from fastapi import UploadFile, File, Form
 
 from backend.src.schema.model import UserRequest, UserResponse
 from backend.db.db import get_session
@@ -12,6 +12,18 @@ logger = setup_logger("User Controller")
 
 
 class UserController:
+
+
+    async def upload_cv(
+        self,
+        cv_file: UploadFile = File(...),
+        github_url: str | None = Form(None),
+        session: Session = Depends(get_session),
+    ) -> UserResponse:
+        logger.info(f"Upload CV: {cv_file.filename}, github={github_url}")
+        service = UserService(session)
+        return await service.process_user_data(cv_file, github_url)
+
     def process_user_data(self, user_request: UserRequest, session: Session = Depends(get_session)) -> UserResponse:
         if not user_request.github_url or not user_request.cv_url:
             raise HTTPException(
@@ -35,4 +47,3 @@ class UserController:
         user_service = UserService(session)
         all_user_info = user_service.get_all_user_info()
         return all_user_info
-

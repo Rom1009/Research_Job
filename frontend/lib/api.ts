@@ -66,6 +66,13 @@ export type WorkExperienceItem = {
   achievements?: string[];
 };
 
+export type ProjectItem = {
+  name?: string;
+  technologies?: string[];
+  period?: string;
+  description?: string[];
+};
+
 
 export type UserProfile = {
   user_id: string;
@@ -76,6 +83,7 @@ export type UserProfile = {
     skills?: string[];
     education?: EducationItem[];
     work_experience?: WorkExperienceItem[];
+    project?: ProjectItem[];
     additional_info?: string[];
   };
   github_summary?: string;
@@ -133,7 +141,24 @@ export const api = {
       method: "POST",
       body: JSON.stringify(body),
     }),
+
+
+  uploadCV: (file: File, github_url?: string): Promise<UserResponse> => {
+    const form = new FormData();
+    form.append("cv_file", file);
+    if (github_url) form.append("github_url", github_url);
+
+
+    return fetch(`${BASE_URL}/user/upload-cv`, {
+      method: "POST",
+      body: form,
+      // ⚠️ KHÔNG set Content-Type — browser tự set với boundary
+    }).then(async (r) => {
+      if (!r.ok) {
+        const text = await r.text();
+        throw new Error(`Upload ${r.status}: ${text}`);
+      }
+      return r.json();
+    });
+  },
 };
-
-
-

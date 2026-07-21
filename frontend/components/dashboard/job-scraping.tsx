@@ -7,10 +7,8 @@ import {
   Check,
   Search,
   MapPin,
-  Filter,
   Sparkles,
   Briefcase,
-  Building2,
   ExternalLink,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -69,7 +67,7 @@ export function JobScraping() {
   const [source, setSource] = useState<Source>("linkedin");
   const [keywords, setKeywords] = useState("");
   const [location, setLocation] = useState("");
-  const [levels, setLevels] = useState<string[]>([]); // thay cho `level`
+  const [levels, setLevels] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [jobs, setJobs] = useState<JobResponse[]>([]);
   const [loading, setLoading] = useState(false);
@@ -112,14 +110,6 @@ export function JobScraping() {
   }
 
 
-  const sortedJobs = React.useMemo(() => {
-    if (Object.keys(scores).length === 0) return jobs;
-    return [...jobs].sort(
-      (a, b) => (scores[b.job_id] ?? -1) - (scores[a.job_id] ?? -1),
-    );
-  }, [jobs, scores]);
-
-
   async function onScrape() {
     if (!keywords.trim()) {
       toast.error("Please enter a keyword to search.");
@@ -149,136 +139,138 @@ export function JobScraping() {
   return (
     <Card className="overflow-hidden">
       <CardHeader>
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <CardTitle className="flex items-center gap-2">
-              <Briefcase className="size-5 text-primary" />
-              Job Scraping
-            </CardTitle>
-            <CardDescription>
-              Collect open positions from job boards to match against candidate
-              profiles.
-            </CardDescription>
-          </div>
-
-
-          {activeProfileId && (
-            <Badge variant="secondary" className="shrink-0 font-mono text-xs">
-              For profile: {activeProfileId.slice(0, 8)}…
-            </Badge>
-          )}
-        </div>
+        <CardTitle className="flex items-center gap-2">
+          <Briefcase className="size-5 text-primary" />
+          Job Scraping
+        </CardTitle>
+        <CardDescription>
+          Collect open positions from job boards to match against candidate
+          profiles.
+        </CardDescription>
       </CardHeader>
 
 
       <CardContent className="flex flex-col gap-5">
-        {/* Source selector */}
-        <Field>
-          <FieldLabel htmlFor="source">Source</FieldLabel>
-          <Select
-            value={source}
-            onValueChange={(v) => v && setSource(v as Source)}
-          >
-            <SelectTrigger id="source" className="w-full">
-              <div className="flex items-center gap-2">
-                <LinkedinIcon className="size-4 text-muted-foreground" />
-                <SelectValue />
-              </div>
-            </SelectTrigger>
-            <SelectContent>
-              {SOURCES.map((s) => (
-                <SelectItem key={s.value} value={s.value} disabled={s.disabled}>
-                  {s.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <FieldDescription>
-            More sources (Glassdoor, Indeed) will be added later.
-          </FieldDescription>
-        </Field>
-
-
-        <FieldGroup>
-          {/* Keywords */}
+        {/* ═══════ Form (khoá khi đang scrape) ═══════ */}
+        <fieldset
+          disabled={loading}
+          className="flex flex-col gap-5 disabled:pointer-events-none disabled:opacity-60"
+        >
+          {/* Source */}
           <Field>
-            <FieldLabel htmlFor="keywords">Keywords</FieldLabel>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="keywords"
-                placeholder="e.g. Senior Backend Engineer, Go, Kubernetes"
-                className="pl-9"
-                value={keywords}
-                onChange={(e) => setKeywords(e.target.value)}
-              />
-            </div>
+            <FieldLabel htmlFor="source">Source</FieldLabel>
+            <Select
+              value={source}
+              onValueChange={(v) => v && setSource(v as Source)}
+              disabled={loading}
+            >
+              <SelectTrigger id="source" className="w-full">
+                <div className="flex items-center gap-2">
+                  <LinkedinIcon className="size-4 text-muted-foreground" />
+                  <SelectValue />
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                {SOURCES.map((s) => (
+                  <SelectItem
+                    key={s.value}
+                    value={s.value}
+                    disabled={s.disabled}
+                  >
+                    {s.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <FieldDescription>
+              More sources (Glassdoor, Indeed) will be added later.
+            </FieldDescription>
           </Field>
 
 
-          {/* Location */}
-          <Field>
-            <FieldLabel htmlFor="location">Location</FieldLabel>
-            <div className="relative">
-              <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                id="location"
-                placeholder="Vietnam, Remote, Singapore…"
-                className="pl-9"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </div>
-          </Field>
-
-
-          {/* Filters grid */}
-          <div className="grid grid-cols-2 gap-3">
+          <FieldGroup>
+            {/* Keywords */}
             <Field>
-              <FieldLabel>Experience level</FieldLabel>
-              <div className="flex flex-wrap gap-2">
-                {LEVELS.map((l) => {
-                  const active = levels.includes(l.value);
-                  return (
-                    <button
-                      key={l.value}
-                      type="button"
-                      onClick={() => toggleLevel(l.value)}
-                      className={cn(
-                        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
-                        active
-                          ? "border-primary bg-primary/15 text-primary"
-                          : "border-border bg-muted/30 text-muted-foreground hover:bg-muted/60",
-                      )}
-                    >
-                      {active && <Check className="size-3" />}
-                      {l.label}
-                    </button>
-                  );
-                })}
+              <FieldLabel htmlFor="keywords">Keywords</FieldLabel>
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="keywords"
+                  placeholder="e.g. Senior Backend Engineer, Go, Kubernetes"
+                  className="pl-9"
+                  value={keywords}
+                  onChange={(e) => setKeywords(e.target.value)}
+                />
               </div>
-              <FieldDescription>
-                Leave empty for any level. Multiple selections allowed.
-              </FieldDescription>
             </Field>
 
 
+            {/* Location */}
             <Field>
-              <FieldLabel htmlFor="page">Pages to scrape</FieldLabel>
-              <Input
-                id="page"
-                type="number"
-                min={1}
-                max={10}
-                value={page}
-                onChange={(e) => setPage(Number(e.target.value) || 1)}
-              />
+              <FieldLabel htmlFor="location">Location</FieldLabel>
+              <div className="relative">
+                <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  id="location"
+                  placeholder="Vietnam, Remote, Singapore…"
+                  className="pl-9"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </div>
             </Field>
-          </div>
-        </FieldGroup>
 
 
-        {/* Action button */}
+            {/* Filters grid */}
+            <div className="grid grid-cols-2 gap-3">
+              <Field>
+                <FieldLabel>Experience level</FieldLabel>
+                <div className="flex flex-wrap gap-2">
+                  {LEVELS.map((l) => {
+                    const active = levels.includes(l.value);
+                    return (
+                      <button
+                        key={l.value}
+                        type="button"
+                        onClick={() => toggleLevel(l.value)}
+                        disabled={loading}
+                        className={cn(
+                          "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors",
+                          active
+                            ? "border-primary bg-primary/15 text-primary"
+                            : "border-border bg-muted/30 text-muted-foreground hover:bg-muted/60",
+                          "disabled:cursor-not-allowed disabled:opacity-60",
+                        )}
+                      >
+                        {active && <Check className="size-3" />}
+                        {l.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <FieldDescription>
+                  Leave empty for any level. Multiple selections allowed.
+                </FieldDescription>
+              </Field>
+
+
+              <Field>
+                <FieldLabel htmlFor="page">Pages to scrape</FieldLabel>
+                <Input
+                  id="page"
+                  type="number"
+                  min={1}
+                  max={10}
+                  value={page}
+                  onChange={(e) => setPage(Number(e.target.value) || 1)}
+                />
+              </Field>
+            </div>
+          </FieldGroup>
+        </fieldset>
+
+
+        {/* ═══════ Action ═══════ */}
         <Button
           onClick={onScrape}
           disabled={loading || !keywords.trim()}
@@ -289,13 +281,13 @@ export function JobScraping() {
         </Button>
 
 
-        {/* Results */}
+        {/* ═══════ Results ═══════ */}
         {jobs.length > 0 && (
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between gap-2">
               <div className="text-sm font-medium">
                 Results{" "}
-                <span className="text-muted-foreground font-normal">
+                <span className="font-normal text-muted-foreground">
                   ({jobs.length})
                 </span>
               </div>
@@ -327,9 +319,7 @@ export function JobScraping() {
                 {jobs.map((job) => (
                   <li
                     key={job.job_id}
-                    className={cn(
-                      "flex flex-col gap-1 p-3 transition-colors hover:bg-muted/40",
-                    )}
+                    className="flex flex-col gap-1 p-3 transition-colors hover:bg-muted/40"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -362,7 +352,7 @@ export function JobScraping() {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label="Open job"
-                          className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                          className="inline-flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                         >
                           <ExternalLink className="size-4" />
                         </a>
@@ -392,6 +382,4 @@ export function JobScraping() {
     </Card>
   );
 }
-
-
 

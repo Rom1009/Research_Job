@@ -26,9 +26,13 @@ import {
 } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
+import Link from "next/link";
 
 
 export function ProfileIntake() {
+  const router = useRouter();
+
+
   const setActiveTab = useDashboardStore((s) => s.setActiveTab);
   const setActiveProfileId = useDashboardStore((s) => s.setActiveProfileId);
   const [file, setFile] = useState<File | null>(null);
@@ -39,22 +43,37 @@ export function ProfileIntake() {
   const [result, setResult] = useState<string>();
 
 
-  async function handleSubmit(github: string, cv: string) {
+  async function handleSubmit() {
+    if (!file) {
+      toast.error("Please select a CV file first.");
+      return;
+    }
     try {
       setLoading(true);
-      const data = await api.submitUser({ github_url: github, cv_url: cv });
+      const data = await api.uploadCV(file, gitUrl || undefined);
       setResult(data.user_id);
+      setActiveProfileId(data.user_id);
       toast.success("Profile saved.", {
         description: `User ID: ${data.user_id}`,
       });
+      router.push("/dashboard/jobs");
     } catch (e) {
       console.error(e);
-      toast.error("Failed to process profile.", {
+      toast.error("Failed to upload CV.", {
         description: e instanceof Error ? e.message : "Unknown error",
       });
     } finally {
       setLoading(false);
     }
+  }
+
+
+  function onStart() {
+    if (!file) {
+      toast.error("Please upload a CV file.");
+      return;
+    }
+    handleSubmit(); // ← không truyền URL fake nữa
   }
 
 
@@ -66,15 +85,6 @@ export function ProfileIntake() {
       return;
     }
     setFile(f);
-  }
-
-
-  function onStart() {
-    if (!gitUrl) {
-      toast.error("Add a GitHub link to start.");
-      return;
-    }
-    handleSubmit(gitUrl, "https://placeholder.local/cv.pdf");
   }
 
 
@@ -185,14 +195,16 @@ export function ProfileIntake() {
         </FieldGroup>
 
 
-        <Button
-          onClick={onStart}
-          disabled={loading || (!file && !gitUrl)}
-          className="w-full"
-        >
-          {loading ? <Spinner /> : <Sparkles data-icon="inline-start" />}
-          {loading ? "Processing…" : "Start research"}
-        </Button>
+        <Link href="/dashboard/jobs" className="block w-full">
+          <Button
+            onClick={onStart}
+            disabled={loading || !file} // ← chỉ cần file, github là optional
+            className="w-full"
+          >
+            {loading ? <Spinner /> : <Sparkles data-icon="inline-start" />}
+            {loading ? "Uploading & parsing…" : "Start research"}
+          </Button>
+        </Link>
 
 
         {result && (

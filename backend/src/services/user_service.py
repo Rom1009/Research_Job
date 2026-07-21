@@ -3,6 +3,9 @@ from sqlmodel import Session
 from docling.document_converter import DocumentConverter
 from groq import Groq, BadRequestError
 import requests
+from fastapi import UploadFile
+from backend.utils.utils import _sha256_of
+from backend.utils.storage import save_uploaded_file
 
 
 from backend.src.schema.model import SchemaCVResponse, UserResponse
@@ -12,8 +15,6 @@ from backend.utils.config import settings
 
 
 logger = setup_logger("User Service")
-
-
 
 
 class UserService:
@@ -67,14 +68,19 @@ class UserService:
             "   - period: full period (e.g. 'Aug 2024 - Nov 2024')\n"
             "   - achievements: list of concrete bullet-point strings, one bullet "
             "     per string. Do NOT include company/title/period inside achievements.\n"
-            "4. `additional_info`: self-contained one-line facts (awards, "
+            "4. `project`: one object PER project. Each object must separate:\n"
+            "   - name: project name only\n"
+            "   - technologies: list of tools, languages, or frameworks used\n"
+            "   - period: period or date range (e.g. 'Jan 2024 - Mar 2024')\n"
+            "   - description: list of concrete bullet-point strings describing the project, key features, or outcomes. Do NOT include name or technologies inside description.\n"
+            "5. `additional_info`: self-contained one-line facts (awards, "
             "   certifications, side projects, language scores). Combine related "
             "   fragments — e.g. 'IELTS 5.5 (Sep 2024 - Sep 2026)' as ONE item.\n"
-            "5. Use plain characters. Never emit HTML entities like `&amp;` — "
+            "6. Use plain characters. Never emit HTML entities like `&amp;` — "
             "   use `&` directly.\n"
-            "6. Discard fragments shorter than 3 characters or containing no "
+            "7. Discard fragments shorter than 3 characters or containing no "
             "   letters/digits.\n"
-            "7. ALL fields in the schema are required — if truly unknown, use "
+            "8. ALL fields in the schema are required — if truly unknown, use "
             "   null for scalars or empty list [] for arrays."
         )
 
@@ -116,7 +122,6 @@ class UserService:
                 arguments = tool_calls[0].function.arguments
                 return SchemaCVResponse.model_validate(json.loads(arguments))
 
-
             except (BadRequestError, ValueError, KeyError, json.JSONDecodeError) as e:
                 last_err = e
                 logger.warning(
@@ -132,70 +137,75 @@ class UserService:
     # ─────────────────────────────────────────────────────────────
     #  Endpoint chính
     # ─────────────────────────────────────────────────────────────
-    def process_user_data(self, user_data) -> UserResponse:
-        logger.info(f"Processing user data: {user_data}")
+    async def process_user_data(self, cv_file: UploadFile, github_url: str | None) -> UserResponse:
+        save_path = await save_uploaded_file(cv_file, subdir="cv")
+        logger.info(f"Uploaded CV saved to: {save_path}")
 
 
-        if self.user_repository.get_user_id(user_data.get("user_id")):
-            logger.info(
-                f"User profile already exists for user_id: {user_data.get('user_id')}"
-            )
-
-
-        cv_url = user_data.get("cv_url")
-        github_url = user_data.get("github_url")
-
-
-        # converter = DocumentConverter()
-        # doc = converter.convert("/home/thomas/Desktop/AI/Research_Job/docs/data.pdf")
-        # markdown_data = doc.document.export_to_markdown()
-        with open("docs/data.md", "r", encoding="utf-8") as f:
-            markdown_data = f.read()
-
-
-        # Parse CV với retry
-        cv_structured = self._parse_cv(markdown_data)
-
-
-        # Fetch GitHub page
-        github_summary = None
-        if github_url:
+        ext = save_path.suffix.lower()
+        if ext in {".md", ".txt"}:
+            markdown_data = save_path.read_text(encoding="utf-8")
+        else:
             try:
-                page = requests.get(github_url, timeout=15)
-                if page.status_code == 200:
-                    logger.info(f"Successfully fetched GitHub page for URL: {github_url}")
-                    page.encoding = "utf-8"
-                    github_summary = page.text
-                else:
-                    logger.error(
-                        f"Failed to fetch GitHub page for URL: {github_url}. "
-                        f"Status code: {page.status_code}"
-                    )
-            except requests.RequestException as e:
-                logger.error(f"GitHub fetch error for {github_url}: {e}")
+                # doc = DocumentConverter().convert(str(save_path))
+                # markdown_data = doc.document.export_to_markdown()
+                with open("docs/data.md", "r", encoding="utf-8") as f:
+                    markdown_data = f.read()
+            except Exception as e:
+                save_path.unlink(missing_ok=True)
+                logger.error(f"Error converting CV to markdown: {e}")
+                raise RuntimeError("Failed to convert CV to markdown")
+           
+            cv_hash = _sha256_of(markdown_data)
+           
+            exsiting = self.user_repository.find_by_hash_and_github(cv_hash, github_url)
+            if exsiting:
+                logger.info(f"Found existing user profile with ID: {exsiting.user_id}")
+                save_path.unlink(missing_ok=True)  # Delete the uploaded file since it's a duplicate
+                return UserResponse(
+                    user_id=exsiting.user_id,
+                    cv_markdown=exsiting.cv_markdown,
+                    github_summary=exsiting.github_summary,
+                )
 
 
-        user_profile_data = {
-            "cv_url": cv_url,
+            latest = self.user_repository.find_latest_by_github(github_url)
+            next_version = (latest.version + 1) if latest else 1
+
+
+            cv_structured = self._parse_cv(markdown_data)
+            github_summary = None
+            if github_url:
+                try:
+                    page = requests.get(github_url, timeout=15)
+                    if page.status_code == 200:
+                        logger.info(f"Successfully fetched GitHub page for URL: {github_url}")
+                        page.encoding = "utf-8"
+                        github_summary = page.text
+                except requests.RequestException as e:
+                    logger.error(f"GitHub fetch error for {github_url}: {e}")
+           
+        # 7) Lưu DB
+        created = self.user_repository.create_user_profile({
+            "cv_url": str(save_path),
+            "cv_hash": cv_hash,
+            "version": next_version,
             "github_url": github_url,
             "cv_markdown": markdown_data,
             "cv_structured": cv_structured.model_dump(),
             "github_summary": github_summary,
-        }
-
-
-        created_profile = self.user_repository.create_user_profile(user_profile_data)
+        })
+        logger.info(f"Created user {created.user_id} (v{next_version})")
 
 
         return UserResponse(
-            user_id=created_profile.user_id,
-            cv_markdown=created_profile.cv_markdown,
-            github_summary=created_profile.github_summary,
+            user_id=created.user_id,
+            cv_markdown=created.cv_markdown,
+            github_summary=created.github_summary,
         )
+
+
 
 
     def get_all_user_info(self):
         return self.user_repository.get_all_users()
-
-
-

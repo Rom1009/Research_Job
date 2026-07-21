@@ -1,10 +1,12 @@
 'use client'
 
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 import { TrendingUp, Users, Target, Clock } from 'lucide-react'
+
 
 const hireRateData = [
   { month: 'Jan', hired: 4, interviewed: 12, shortlisted: 8 },
@@ -15,12 +17,14 @@ const hireRateData = [
   { month: 'Jun', hired: 7, interviewed: 16, shortlisted: 11 },
 ]
 
+
 const sourcesData = [
   { name: 'LinkedIn', value: 45, color: 'hsl(var(--chart-1))' },
   { name: 'GitHub', value: 28, color: 'hsl(var(--chart-2))' },
   { name: 'Referral', value: 18, color: 'hsl(var(--chart-3))' },
   { name: 'Direct', value: 9, color: 'hsl(var(--chart-4))' },
 ]
+
 
 const timeToHireData = [
   { week: 'Week 1', avgDays: 14 },
@@ -31,6 +35,7 @@ const timeToHireData = [
   { week: 'Week 6', avgDays: 9 },
 ]
 
+
 export default function ReportsPage() {
   return (
     <div className="p-6 space-y-8">
@@ -38,6 +43,7 @@ export default function ReportsPage() {
         <h1 className="text-3xl font-bold">Reports & Analytics</h1>
         <p className="text-muted-foreground mt-2">Comprehensive recruiting metrics and performance insights</p>
       </div>
+
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
@@ -56,6 +62,7 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
 
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center justify-between">
@@ -72,6 +79,7 @@ export default function ReportsPage() {
           </CardContent>
         </Card>
 
+
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center justify-between">
@@ -87,6 +95,7 @@ export default function ReportsPage() {
             <p className="text-xs text-muted-foreground">down from 11 days</p>
           </CardContent>
         </Card>
+
 
         <Card>
           <CardHeader className="pb-2">
@@ -105,12 +114,14 @@ export default function ReportsPage() {
         </Card>
       </div>
 
+
       <Tabs defaultValue="pipeline" className="w-full">
         <TabsList className="grid w-fit grid-cols-3">
           <TabsTrigger value="pipeline">Hiring Pipeline</TabsTrigger>
           <TabsTrigger value="sources">Candidate Sources</TabsTrigger>
           <TabsTrigger value="timeline">Time to Hire</TabsTrigger>
         </TabsList>
+
 
         <TabsContent value="pipeline" className="space-y-4 mt-6">
           <Card>
@@ -134,6 +145,7 @@ export default function ReportsPage() {
             </CardContent>
           </Card>
         </TabsContent>
+
 
         <TabsContent value="sources" className="space-y-4 mt-6">
           <Card>
@@ -167,6 +179,7 @@ export default function ReportsPage() {
           </Card>
         </TabsContent>
 
+
         <TabsContent value="timeline" className="space-y-4 mt-6">
           <Card>
             <CardHeader>
@@ -191,3 +204,6 @@ export default function ReportsPage() {
     </div>
   )
 }
+
+
+
