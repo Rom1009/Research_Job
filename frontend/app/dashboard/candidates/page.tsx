@@ -1,16 +1,14 @@
 "use client";
 
-
 import { useState } from "react";
 import { CandidatesTable } from "@/components/dashboard/candidates-table";
 import { DashboardRightPanel } from "@/components/dashboard/dashboard-right-panel";
-import type { UserProfile } from "@/lib/api";
+import type { CandidateProfile } from "@/lib/api";
 
 
 export default function CandidatesPage() {
   const [selectedCandidate, setSelectedCandidate] =
-    useState<UserProfile | null>(null);
-
+    useState<CandidateProfile | null>(null);
 
   return (
     <div className="relative flex w-full flex-1 flex-col overflow-hidden">
@@ -34,4 +32,3 @@ export default function CandidatesPage() {
     </div>
   );
 }
-

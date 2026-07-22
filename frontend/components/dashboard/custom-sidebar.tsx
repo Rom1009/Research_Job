@@ -1,6 +1,5 @@
 "use client";
 
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -16,30 +15,55 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ThemeToggle } from "./theme-toggle";
 
+import { LogOut } from "lucide-react";
+import { useAuth } from "@/components/auth-provider";
+import { useRouter } from "next/navigation";
 
 export function CustomSidebar() {
   const pathname = usePathname();
 
+  const { user, logout } = useAuth();
+  const router = useRouter();
+
+  const initials = (user?.name || "U")
+    .split(" ")
+    .map((s) => s[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  const handleLogout = () => {
+    logout();
+    router.replace("/login");
+  };
 
   const research = [
-    { title: "Overview",       icon: LayoutDashboard, href: "/dashboard" },
-    { title: "Candidates",     icon: Users,           href: "/dashboard/candidates",     badge: "9" },
-    { title: "Profile Intake", icon: UploadCloud,     href: "/dashboard/profile-intake" },
-    { title: "Job Scraping",   icon: Briefcase,       href: "/dashboard/jobs" },
-    { title: "AI Analysis",    icon: Sparkles,        href: "/dashboard/ai-analysis" },
+    { title: "Overview", icon: LayoutDashboard, href: "/dashboard" },
+    {
+      title: "Candidates",
+      icon: Users,
+      href: "/dashboard/candidates",
+      badge: "9",
+    },
+    {
+      title: "Profile Intake",
+      icon: UploadCloud,
+      href: "/dashboard/profile-intake",
+    },
+    { title: "Job Scraping", icon: Briefcase, href: "/dashboard/jobs" },
+    { title: "AI Analysis", icon: Sparkles, href: "/dashboard/ai-analysis" },
   ];
 
-
   const pipelines = [
-    { title: "Backend Squad",  icon: Briefcase, badge: "24" },
-    { title: "ML Platform",    icon: Briefcase, badge: "16" },
+    { title: "Backend Squad", icon: Briefcase, badge: "24" },
+    { title: "ML Platform", icon: Briefcase, badge: "16" },
     { title: "Frontend Guild", icon: Briefcase, badge: "11" },
   ];
 
-
   const isActive = (href: string) =>
-    href === "/dashboard" ? pathname === "/dashboard" : pathname.startsWith(href);
-
+    href === "/dashboard"
+      ? pathname === "/dashboard"
+      : pathname.startsWith(href);
 
   return (
     <aside className="flex h-screen w-64 flex-col overflow-y-auto border-r border-border bg-sidebar">
@@ -62,7 +86,6 @@ export function CustomSidebar() {
           </div>
         </Link>
       </div>
-
 
       {/* Research Tools */}
       <div className="flex-1 overflow-y-auto px-3 py-4">
@@ -98,7 +121,6 @@ export function CustomSidebar() {
           </div>
         </div>
 
-
         {/* Pipelines (chưa có route thật) */}
         <div>
           <h3 className="mb-3 px-2 text-xs font-semibold text-muted-foreground">
@@ -123,7 +145,6 @@ export function CustomSidebar() {
         </div>
       </div>
 
-
       {/* Footer */}
       <div className="space-y-3 border-t border-sidebar-border p-3">
         <div className="space-y-1">
@@ -137,27 +158,32 @@ export function CustomSidebar() {
           </button>
         </div>
 
-
-        <div className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-sidebar-accent/50">
+        <div className="flex items-center gap-3 rounded-lg px-3 py-2">
           <Avatar className="size-8 shrink-0">
             <AvatarFallback className="bg-sidebar-primary text-xs font-bold text-sidebar-primary-foreground">
-              RK
+              {initials}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-sidebar-foreground">
-              Riya Kapoor
+            <p className="truncate text-sm font-semibold text-sidebar-foreground">
+              {user?.name}
             </p>
-            <p className="text-xs text-muted-foreground">Lead Recruiter</p>
+            <p className="truncate text-xs text-muted-foreground">
+              {user?.email}
+            </p>
           </div>
         </div>
 
+        <button
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sidebar-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+        >
+          <LogOut className="size-4" />
+          <span className="text-sm font-medium">Sign out</span>
+        </button>
 
         <ThemeToggle />
       </div>
     </aside>
   );
 }
-
-
-

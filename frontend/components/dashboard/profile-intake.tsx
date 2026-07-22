@@ -1,6 +1,5 @@
 "use client";
 
-
 import * as React from "react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -28,10 +27,8 @@ import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 import Link from "next/link";
 
-
 export function ProfileIntake() {
   const router = useRouter();
-
 
   const setActiveTab = useDashboardStore((s) => s.setActiveTab);
   const setActiveProfileId = useDashboardStore((s) => s.setActiveProfileId);
@@ -42,7 +39,6 @@ export function ProfileIntake() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string>();
 
-
   async function handleSubmit() {
     if (!file) {
       toast.error("Please select a CV file first.");
@@ -51,10 +47,10 @@ export function ProfileIntake() {
     try {
       setLoading(true);
       const data = await api.uploadCV(file, gitUrl || undefined);
-      setResult(data.user_id);
-      setActiveProfileId(data.user_id);
+      setResult(data.candidate_id); // ← lưu candidate_id vào state
+      setActiveProfileId(data.candidate_id);
       toast.success("Profile saved.", {
-        description: `User ID: ${data.user_id}`,
+        description: `User ID: ${data.candidate_id}`,
       });
       router.push("/dashboard/jobs");
     } catch (e) {
@@ -67,7 +63,6 @@ export function ProfileIntake() {
     }
   }
 
-
   function onStart() {
     if (!file) {
       toast.error("Please upload a CV file.");
@@ -75,7 +70,6 @@ export function ProfileIntake() {
     }
     handleSubmit(); // ← không truyền URL fake nữa
   }
-
 
   function handleFiles(files: FileList | null) {
     const f = files?.[0];
@@ -87,20 +81,17 @@ export function ProfileIntake() {
     setFile(f);
   }
 
-
   function goFindJobs() {
     if (!result) return;
     setActiveProfileId(result); // lưu id vào store
     setActiveTab("jobs"); // chuyển sang tab Jobs
   }
 
-
   function reset() {
     setResult(undefined);
     setFile(null);
     setGitUrl("");
   }
-
 
   return (
     <Card className="overflow-hidden">
@@ -151,7 +142,6 @@ export function ProfileIntake() {
           <div className="text-xs text-muted-foreground">PDF up to 10MB</div>
         </div>
 
-
         {file && (
           <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2">
             <div className="flex size-9 items-center justify-center rounded-md bg-primary/15 text-primary">
@@ -174,7 +164,6 @@ export function ProfileIntake() {
           </div>
         )}
 
-
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor="git-url">Git repository / profile</FieldLabel>
@@ -194,7 +183,6 @@ export function ProfileIntake() {
           </Field>
         </FieldGroup>
 
-
         <Link href="/dashboard/jobs" className="block w-full">
           <Button
             onClick={onStart}
@@ -205,7 +193,6 @@ export function ProfileIntake() {
             {loading ? "Uploading & parsing…" : "Start research"}
           </Button>
         </Link>
-
 
         {result && (
           <div className="flex flex-col gap-3 rounded-xl border border-primary/30 bg-primary/5 p-4">
@@ -220,7 +207,6 @@ export function ProfileIntake() {
                 </span>
               </div>
             </div>
-
 
             <div className="flex gap-2">
               <Button onClick={goFindJobs} size="sm" className="flex-1">
@@ -237,8 +223,3 @@ export function ProfileIntake() {
     </Card>
   );
 }
-
-
-
-
-

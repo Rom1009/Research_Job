@@ -1,20 +1,16 @@
 "use client";
 
-
 import { useEffect, useState } from "react";
 import { Users, Target, TrendingUp, Briefcase } from "lucide-react";
 
-
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { api, type UserProfile, type MatchResult } from "@/lib/api";
-
+import { api, type CandidateProfile, type MatchResult } from "@/lib/api";
 
 export function StatCards() {
-  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [users, setUsers] = useState<CandidateProfile[]>([]);
   const [scores, setScores] = useState<MatchResult[]>([]);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     let cancelled = false;
@@ -32,7 +28,6 @@ export function StatCards() {
     };
   }, []);
 
-
   if (loading) {
     return (
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -43,9 +38,7 @@ export function StatCards() {
     );
   }
 
-
   const totalProfiles = users.length;
-
 
   // Best score per profile
   const bestByProfile = new Map<string, number>();
@@ -54,11 +47,9 @@ export function StatCards() {
     bestByProfile.set(s.profile_id, Math.max(cur, s.total_score ?? 0));
   }
 
-
   const qualified = Array.from(bestByProfile.values()).filter(
     (v) => v >= 70,
   ).length;
-
 
   const avgAllScores =
     scores.length > 0
@@ -68,16 +59,13 @@ export function StatCards() {
         )
       : 0;
 
-
   const totalMatches = scores.length;
-
 
   // Profiles ingested trong 7 ngày gần nhất
   const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const recentProfiles = users.filter(
     (u) => u.created_at && new Date(u.created_at).getTime() >= oneWeekAgo,
   ).length;
-
 
   const stats = [
     {
@@ -118,7 +106,6 @@ export function StatCards() {
     },
   ];
 
-
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
       {stats.map((s) => (
@@ -140,4 +127,3 @@ export function StatCards() {
     </div>
   );
 }
-

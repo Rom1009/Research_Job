@@ -12,16 +12,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { type UserProfile } from "@/lib/api";
+import { type CandidateProfile } from "@/lib/api";
 import { GithubIcon } from "@/components/dashboard/brand-icons";
 import Link from "next/link";
 
-
 interface DashboardRightPanelProps {
-  selectedCandidate: UserProfile | null;
+  selectedCandidate: CandidateProfile | null;
   onClose: () => void;
 }
-
 
 function shortHandle(url?: string): string {
   if (!url) return "—";
@@ -32,7 +30,6 @@ function shortHandle(url?: string): string {
     return url;
   }
 }
-
 
 function initials(handle: string): string {
   const parts = handle
@@ -45,13 +42,11 @@ function initials(handle: string): string {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-
 export function DashboardRightPanel({
   selectedCandidate,
   onClose,
 }: DashboardRightPanelProps) {
   if (!selectedCandidate) return null;
-
 
   const u = selectedCandidate;
   const handle = shortHandle(u.github_url);
@@ -60,7 +55,6 @@ export function DashboardRightPanel({
   const work = u.cv_structured?.work_experience ?? [];
   const project = u.cv_structured?.project ?? [];
   const additional = u.cv_structured?.additional_info ?? [];
-
 
   return (
     <div className="fixed right-0 top-0 z-40 flex h-screen w-full max-w-md flex-col border-l border-border bg-background shadow-lg">
@@ -77,7 +71,6 @@ export function DashboardRightPanel({
         </Button>
       </div>
 
-
       <Tabs
         defaultValue="profile"
         className="flex flex-1 flex-col overflow-hidden"
@@ -90,7 +83,6 @@ export function DashboardRightPanel({
             Experience
           </TabsTrigger>
         </TabsList>
-
 
         {/* ══════════════════ PROFILE ══════════════════ */}
         <TabsContent value="profile" className="flex-1 overflow-hidden">
@@ -110,9 +102,7 @@ export function DashboardRightPanel({
                 </div>
               </div>
 
-
               <Separator />
-
 
               <div className="space-y-2">
                 <p className="text-xs text-muted-foreground">Links</p>
@@ -142,7 +132,6 @@ export function DashboardRightPanel({
                 </div>
               </div>
 
-
               <div>
                 <p className="mb-2 text-xs text-muted-foreground">
                   Skills ({skills.length})
@@ -161,7 +150,6 @@ export function DashboardRightPanel({
                 </div>
               </div>
 
-
               {u.created_at && (
                 <div>
                   <p className="mb-1 text-xs text-muted-foreground">Ingested</p>
@@ -170,7 +158,6 @@ export function DashboardRightPanel({
                   </p>
                 </div>
               )}
-
 
               {/* CTA — hướng dẫn tới trang AI Analysis đúng nghĩa */}
               <div className="rounded-xl border border-primary/30 bg-primary/[0.04] p-3">
@@ -197,12 +184,10 @@ export function DashboardRightPanel({
           </ScrollArea>
         </TabsContent>
 
-
         {/* ══════════════════ EXPERIENCE ══════════════════ */}
         <TabsContent value="experience" className="flex-1 overflow-hidden">
           <ScrollArea className="h-full">
             <div className="space-y-4 p-4">
-              
               <section>
                 <h4 className="mb-3 flex items-center gap-2 font-semibold">
                   <Award className="h-4 w-4" />
@@ -240,9 +225,7 @@ export function DashboardRightPanel({
                 </div>
               </section>
 
-
               <Separator />
-
 
               <section>
                 <h4 className="mb-3 flex items-center gap-2 font-semibold">
@@ -321,7 +304,6 @@ export function DashboardRightPanel({
                 </div>
               </section>
 
-
               {additional.length > 0 && (
                 <>
                   <Separator />
@@ -351,6 +333,3 @@ export function DashboardRightPanel({
     </div>
   );
 }
-
-
-

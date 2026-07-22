@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -14,14 +13,12 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { api, type UserProfile } from "@/lib/api";
-
+import { api, type CandidateProfile } from "@/lib/api";
 
 interface DashboardCandidateListProps {
-  onSelectCandidate: (user: UserProfile) => void;
+  onSelectCandidate: (user: CandidateProfile) => void;
   selectedCandidateId?: string;
 }
-
 
 function handleFromUrl(url?: string): string {
   if (!url) return "—";
@@ -33,16 +30,14 @@ function handleFromUrl(url?: string): string {
   }
 }
 
-
 export function DashboardCandidateList({
   onSelectCandidate,
   selectedCandidateId,
 }: DashboardCandidateListProps) {
-  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [users, setUsers] = useState<CandidateProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
-
 
   function toggleExpanded(userId: string) {
     setExpanded((prev) => {
@@ -52,7 +47,6 @@ export function DashboardCandidateList({
       return next;
     });
   }
-
 
   useEffect(() => {
     let cancelled = false;
@@ -66,7 +60,6 @@ export function DashboardCandidateList({
     };
   }, []);
 
-
   const filtered = users.filter((u) => {
     if (!search.trim()) return true;
     const q = search.toLowerCase();
@@ -74,7 +67,6 @@ export function DashboardCandidateList({
     const skills = (u.cv_structured?.skills ?? []).map((s) => s.toLowerCase());
     return handle.includes(q) || skills.some((s) => s.includes(q));
   });
-
 
   return (
     <Card className="h-full">
@@ -96,7 +88,6 @@ export function DashboardCandidateList({
             />
           </div>
 
-
           {loading ? (
             <div className="space-y-2">
               {Array.from({ length: 4 }).map((_, i) => (
@@ -112,13 +103,12 @@ export function DashboardCandidateList({
               {filtered.map((u) => {
                 const handle = handleFromUrl(u.github_url);
                 const skills = u.cv_structured?.skills ?? [];
-                const isSelected = u.user_id === selectedCandidateId;
-                const isExpanded = expanded.has(u.user_id);
+                const isSelected = u.candidate_id === selectedCandidateId;
+                const isExpanded = expanded.has(u.candidate_id);
                 const visibleSkills = isExpanded ? skills : skills.slice(0, 2);
 
-
                 return (
-                  <li key={u.user_id}>
+                  <li key={u.candidate_id}>
                     <button
                       onClick={() => onSelectCandidate(u)}
                       className={cn(
@@ -136,7 +126,6 @@ export function DashboardCandidateList({
                           </span>
                         )}
                       </div>
-
 
                       {skills.length > 0 && (
                         <div className="mt-2 flex flex-wrap items-center gap-1">
@@ -156,7 +145,7 @@ export function DashboardCandidateList({
                               className="cursor-pointer text-xs hover:bg-muted"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                toggleExpanded(u.user_id);
+                                toggleExpanded(u.candidate_id);
                               }}
                             >
                               {isExpanded

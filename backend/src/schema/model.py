@@ -8,11 +8,22 @@ from pydantic import Field as PydField
 '''
 
 
-class UserProfile(SQLModel, table = True):
-    __tablename__ = "user_profiles"
-
+class User(SQLModel, table = True):
+    __tablename__ = "users"
 
     user_id: UUID = Field(default_factory = uuid4, primary_key = True)
+    email: str = Field(index=True, unique=True, nullable=False)
+    hashed_password: str = Field(nullable=False)
+    full_name: Optional[str] = Field(default=None, nullable=True)
+    role: str = Field(default="recruiter", nullable=False)  # recruiter | admin
+    is_active: bool = Field(default=True, nullable=False)
+    created_at: datetime = Field(default_factory=datetime.utcnow, nullable=False)
+
+class CandidateProfile(SQLModel, table = True):
+    __tablename__ = "candidate_profiles"
+
+    candidate_id: UUID = Field(default_factory = uuid4, primary_key = True)
+    owner_id: UUID = Field(foreign_key = "users.user_id", nullable = False, index = True)
     github_url: Optional[str] = Field(default = None, nullable = True)
     cv_url: Optional[str] = Field(default = None, nullable = True)
     cv_hash: Optional[str] = Field(default=None, index=True, nullable=True)  # ← THÊM
@@ -21,13 +32,13 @@ class UserProfile(SQLModel, table = True):
     cv_structured: Optional[dict] = Field(default = None, sa_column = Column(JSON , nullable = True))
     github_summary: Optional[str] = Field(default = None, nullable = True)
     created_at: datetime = Field(default_factory = datetime.utcnow, nullable = False)
-
+   
 
 class LinkedInJobs(SQLModel, table = True):
     __tablename__ = "linkedin_jobs"
 
-
     job_id: UUID = Field(default_factory = uuid4, primary_key = True)
+    owner_id: UUID = Field(foreign_key = "users.user_id", nullable = False, index = True)
     title: Optional[str] = Field(default = None, nullable = True)
     company: Optional[str] = Field(default = None, nullable = True)
     location: Optional[str] = Field(default = None, nullable = True)
@@ -39,9 +50,8 @@ class LinkedInJobs(SQLModel, table = True):
 class MatchResults(SQLModel, table = True):
     __tablename__ = "match_results"
 
-
     match_id: UUID = Field(default_factory = uuid4, primary_key = True)
-    profile_id: UUID = Field(foreign_key = "user_profiles.user_id", nullable = False)
+    profile_id: UUID = Field(foreign_key = "candidate_profiles.candidate_id", nullable = False)
     job_id: UUID = Field(foreign_key = "linkedin_jobs.job_id", nullable = False)
     skill_score: Optional[float] = Field(default = None, nullable = True)
     education_score: Optional[float] = Field(default = None, nullable = True)
@@ -55,6 +65,28 @@ class MatchResults(SQLModel, table = True):
 '''
     Define models for input and output data validation using Pydantic.
 '''
+class RegisterRequest(SQLModel):
+    email: str
+    password: str = PydField(min_length=6)
+    full_name: Optional[str] = None
+
+
+class LoginRequest(SQLModel):
+    email: str
+    password: str
+
+
+class UserPublic(SQLModel):
+    user_id: UUID
+    email: str
+    full_name: Optional[str] = None
+    role: str
+
+
+class TokenResponse(SQLModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserPublic
 
 
 class UserRequest(SQLModel):
@@ -62,16 +94,15 @@ class UserRequest(SQLModel):
     github_url: Optional[str] = Field(default = None)
     cv_url: Optional[str] = Field(default = None)
 
+
 class UserResponse(SQLModel):
-    user_id: UUID
+    candidate_id: UUID
     cv_markdown: Optional[str] = Field(default = None)
     github_summary: Optional[str] = Field(default = None)
-
 
 class Validation(SQLModel):
     is_valid: bool
     syntax_errors: list[str] = []
-
 
 class EducationItem(SQLModel):
     institution: Optional[str] = None
@@ -94,7 +125,6 @@ class ProjectItem(SQLModel):
     period: Optional[str] = None
     descriptions: list[str] = []
 
-
 class SchemaCVResponse(SQLModel):
     skills: list[str] = []
     education: list[EducationItem] = []
@@ -103,7 +133,6 @@ class SchemaCVResponse(SQLModel):
     additional_info: list[str] = []
     validation_status: Optional[Validation] = None
 
-
 class JobRequest(SQLModel):
     # job_id: UUID
     keywords: Optional[str] = Field(default = None)
@@ -111,15 +140,14 @@ class JobRequest(SQLModel):
     page_to_scrape: Optional[int] = Field(default = 1)
     filter_level: Optional[str] = Field(default = None)
 
-
 class JobResponse(SQLModel):
     job_id: UUID
+    owner_id: Optional[UUID] = None       # ← THÊM (optional)
     title: Optional[str] = Field(default = None)
     company: Optional[str] = Field(default = None)
     location: Optional[str] = Field(default = None)
     job_url: Optional[str] = Field(default = None)
     description: Optional[str] = Field(default = None)
-
 
 class ScoreResponse(SQLModel):
     match_id: UUID
@@ -140,13 +168,11 @@ class ScoreResponse(SQLModel):
 class ScoreRequest(SQLModel):
     profile_id: UUID
 
-
 class ScoreCV(SQLModel):
     skill_score: int
     education_score: int
     work_experience_score: int
     project_score: int
-
 
     matched_skills: list[str] = PydField(min_length=3)
     gap_analysis: list[str] = PydField(min_length=2)

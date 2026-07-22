@@ -6,9 +6,9 @@ import requests
 from fastapi import UploadFile
 from backend.utils.utils import _sha256_of
 from backend.utils.storage import save_uploaded_file
+from uuid import UUID
 
-
-from backend.src.schema.model import SchemaCVResponse, UserResponse
+from backend.src.schema.model import SchemaCVResponse, UserResponse, CandidateProfile
 from backend.src.repositories.user_repositories import UserRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
@@ -39,7 +39,6 @@ class UserService:
                 },
             }
         ]
-
 
         system_prompt = (
             "You are a strict CV parser. Extract structured information from "
@@ -84,7 +83,6 @@ class UserService:
             "   null for scalars or empty list [] for arrays."
         )
 
-
         user_prompt = (
             "Parse the following CV markdown into the structured schema. "
             "Ensure the tool call arguments are VALID, well-formed JSON with "
@@ -92,10 +90,8 @@ class UserService:
             f"===== CV MARKDOWN =====\n{markdown_data}\n===== END CV ====="
         )
 
-
         MAX_ATTEMPTS = 3
         last_err: Exception | None = None
-
 
         for attempt in range(MAX_ATTEMPTS):
             try:
@@ -112,7 +108,6 @@ class UserService:
                         "function": {"name": "take_content_from_markdown"},
                     },
                 )
-
 
                 tool_calls = response.choices[0].message.tool_calls
                 if not tool_calls:
@@ -133,14 +128,12 @@ class UserService:
             f"Failed to parse CV after {MAX_ATTEMPTS} attempts: {last_err}"
         )
 
-
     # ─────────────────────────────────────────────────────────────
     #  Endpoint chính
     # ─────────────────────────────────────────────────────────────
-    async def process_user_data(self, cv_file: UploadFile, github_url: str | None) -> UserResponse:
+    async def process_user_data(self, cv_file: UploadFile, github_url: str | None, owner_id: UUID) -> UserResponse:
         save_path = await save_uploaded_file(cv_file, subdir="cv")
         logger.info(f"Uploaded CV saved to: {save_path}")
-
 
         ext = save_path.suffix.lower()
         if ext in {".md", ".txt"}:
@@ -149,7 +142,7 @@ class UserService:
             try:
                 # doc = DocumentConverter().convert(str(save_path))
                 # markdown_data = doc.document.export_to_markdown()
-                with open("docs/data.md", "r", encoding="utf-8") as f:
+                with open("/home/thomas/Desktop/AI/Research_Job/docs/data.md", "r", encoding="utf-8") as f:
                     markdown_data = f.read()
             except Exception as e:
                 save_path.unlink(missing_ok=True)
@@ -158,12 +151,12 @@ class UserService:
            
             cv_hash = _sha256_of(markdown_data)
            
-            exsiting = self.user_repository.find_by_hash_and_github(cv_hash, github_url)
+            exsiting = self.user_repository.find_by_hash_and_github(cv_hash, github_url, owner_id)
             if exsiting:
-                logger.info(f"Found existing user profile with ID: {exsiting.user_id}")
+                logger.info(f"Found existing user profile with ID: {exsiting.candidate_id}")
                 save_path.unlink(missing_ok=True)  # Delete the uploaded file since it's a duplicate
                 return UserResponse(
-                    user_id=exsiting.user_id,
+                    user_id=exsiting.candidate_id,
                     cv_markdown=exsiting.cv_markdown,
                     github_summary=exsiting.github_summary,
                 )
@@ -171,7 +164,6 @@ class UserService:
 
             latest = self.user_repository.find_latest_by_github(github_url)
             next_version = (latest.version + 1) if latest else 1
-
 
             cv_structured = self._parse_cv(markdown_data)
             github_summary = None
@@ -187,6 +179,7 @@ class UserService:
            
         # 7) Lưu DB
         created = self.user_repository.create_user_profile({
+            "owner_id": owner_id,
             "cv_url": str(save_path),
             "cv_hash": cv_hash,
             "version": next_version,
@@ -195,17 +188,16 @@ class UserService:
             "cv_structured": cv_structured.model_dump(),
             "github_summary": github_summary,
         })
-        logger.info(f"Created user {created.user_id} (v{next_version})")
-
+        logger.info(f"Created user {created.candidate_id} (v{next_version})")
 
         return UserResponse(
-            user_id=created.user_id,
+            candidate_id=created.candidate_id,
             cv_markdown=created.cv_markdown,
             github_summary=created.github_summary,
         )
 
+    def get_all_user_info(self, owner_id: UUID) -> list[CandidateProfile]:
 
 
-
-    def get_all_user_info(self):
-        return self.user_repository.get_all_users()
+        profiles = self.user_repository.get_all_users(owner_id)
+        return [CandidateProfile.model_validate(p.model_dump()) for p in profiles]

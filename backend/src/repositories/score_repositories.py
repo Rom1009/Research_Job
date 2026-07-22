@@ -1,10 +1,7 @@
 from uuid import UUID
 from sqlmodel import Session, select
-
-
-from backend.src.schema.model import MatchResults
+from backend.src.schema.model import MatchResults, CandidateProfile, LinkedInJobs
 from backend.utils.logger import setup_logger
-
 
 logger = setup_logger("Score Repository")
 
@@ -13,44 +10,49 @@ class ScoreRepository:
     def __init__(self, session: Session):
         self.session = session
 
-
-    def create_match_result(self, match_data):
-        logger.info(f"Creating match result with data: {match_data}")
-
-
-        match_result = MatchResults(**match_data)
-        self.session.add(match_result)
+    def create_match_result(self, match_data: dict) -> MatchResults:
+        match = MatchResults(**match_data)
+        self.session.add(match)
         self.session.commit()
-        self.session.refresh(match_result)
-       
-        return match_result
+        self.session.refresh(match)
+        return match
 
+    def get_all_scores_by_owner(self, owner_id: UUID) -> list[MatchResults]:
+        """List tất cả match của recruiter — JOIN qua CandidateProfile."""
+        stmt = (
+            select(MatchResults)
+            .join(CandidateProfile,
+                  CandidateProfile.candidate_id == MatchResults.profile_id)
+            .where(CandidateProfile.owner_id == owner_id)
+            .order_by(MatchResults.created_at.desc())
+        )
+        return list(self.session.exec(stmt).all())
 
-    def get_match_result(self, match_id):
-        logger.info(f"Fetching match result with ID: {match_id}")
-       
-        statement = select(MatchResults).where(MatchResults.match_id == match_id)
-        result = self.session.exec(statement).first()
+    def get_scores_by_profile(
+        self, profile_id: UUID, owner_id: UUID,
+    ) -> list[MatchResults]:
+        """Filter cả profile_id lẫn owner để chắc chắn."""
+        stmt = (
+            select(MatchResults)
+            .join(CandidateProfile,
+                  CandidateProfile.candidate_id == MatchResults.profile_id)
+            .where(
+                MatchResults.profile_id == profile_id,
+                CandidateProfile.owner_id == owner_id,
+            )
+        )
+        return list(self.session.exec(stmt).all())
 
-
-        if result:
-            logger.info(f"Match result found: {result}")
-        else:
-            logger.warning(f"No match result found with ID: {match_id}")
-
-
-        return result
-
-
-    def get_all_scores(self) -> list[MatchResults]:
-        logger.info("Fetching all match results")
-        return list(self.session.exec(select(MatchResults)).all())
-
-
-    def get_scores_by_profile(self, profile_id: UUID) -> list[MatchResults]:
-        logger.info(f"Fetching match results for profile: {profile_id}")
-        statement = select(MatchResults).where(MatchResults.profile_id == profile_id)
-        return list(self.session.exec(statement).all())
-
-
-
+    def get_scores_with_jobs_by_owner(
+        self, owner_id: UUID,
+    ) -> list[tuple[MatchResults, LinkedInJobs]]:
+        """List match kèm thông tin job (1 query)."""
+        stmt = (
+            select(MatchResults, LinkedInJobs)
+            .join(CandidateProfile,
+                  CandidateProfile.candidate_id == MatchResults.profile_id)
+            .join(LinkedInJobs, LinkedInJobs.job_id == MatchResults.job_id)
+            .where(CandidateProfile.owner_id == owner_id)
+            .order_by(MatchResults.total_score.desc())
+        )
+        return list(self.session.exec(stmt).all())

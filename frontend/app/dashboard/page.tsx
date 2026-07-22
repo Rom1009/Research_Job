@@ -8,12 +8,12 @@ import { StatCards } from "@/components/dashboard/stat-cards";
 import { AnalysisCharts } from "@/components/dashboard/analysis-charts";
 import { DashboardCandidateList } from "@/components/dashboard/dashboard-candidate-list";
 import { DashboardRightPanel } from "@/components/dashboard/dashboard-right-panel";
-import type { UserProfile } from "@/lib/api";
+import type { CandidateProfile } from "@/lib/api";
 
 
 export default function OverviewPage() {
   const [selectedCandidate, setSelectedCandidate] =
-    useState<UserProfile | null>(null);
+    useState<CandidateProfile | null>(null);
 
 
   return (
@@ -38,7 +38,7 @@ export default function OverviewPage() {
 
         <DashboardCandidateList
           onSelectCandidate={setSelectedCandidate}
-          selectedCandidateId={selectedCandidate?.user_id}
+          selectedCandidateId={selectedCandidate?.candidate_id}
         />
 
 

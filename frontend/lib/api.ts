@@ -1,13 +1,33 @@
 const BASE_URL = "http://localhost:8000/api";
+const TOKEN_KEY = "talentgraph:token";
+
+
+export function setAuthToken(token: string | null) {
+  if (typeof window === "undefined") return;
+  if (token) localStorage.setItem(TOKEN_KEY, token);
+  else localStorage.removeItem(TOKEN_KEY);
+}
+
+
+export function getAuthToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(TOKEN_KEY);
+}
 
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
-    ...options,
-  });
+  const token = getAuthToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...((options.headers as Record<string, string>) || {}),
+  };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+
+
+  const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
   if (!res.ok) {
     const text = await res.text();
+    if (res.status === 401) setAuthToken(null);
     throw new Error(`API ${res.status}: ${text}`);
   }
   return res.json() as Promise<T>;
@@ -16,7 +36,7 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 
 export type UserRequest = { github_url?: string; cv_url?: string };
 export type UserResponse = {
-  user_id: string;
+  candidate_id: string;
   cv_markdown?: string;
   github_summary?: string;
 };
@@ -66,6 +86,7 @@ export type WorkExperienceItem = {
   achievements?: string[];
 };
 
+
 export type ProjectItem = {
   name?: string;
   technologies?: string[];
@@ -74,8 +95,8 @@ export type ProjectItem = {
 };
 
 
-export type UserProfile = {
-  user_id: string;
+export type CandidateProfile = {
+  candidate_id: string;
   cv_url?: string;
   github_url?: string;
   cv_markdown?: string;
@@ -115,13 +136,59 @@ export type MatchResult = {
 };
 
 
+// ---- Auth API ----
+export type AuthUserApi = {
+  user_id: string;
+  email: string;
+  full_name?: string;
+  role: string;
+};
+
+
+export type TokenResponse = {
+  access_token: string;
+  token_type: string;
+  user: AuthUserApi;
+};
+
+
+export const authApi = {
+  register: (email: string, password: string, full_name?: string) =>
+    request<TokenResponse>("/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ email, password, full_name }),
+    }),
+
+
+  login: (email: string, password: string) =>
+    request<TokenResponse>("/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    }),
+
+
+  me: () => request<AuthUserApi>("/auth/me"),
+};
+
+
+export const jobApi = {
+  list: () => request<JobResponse[]>("/job/"),
+  get: (jobId: string) => request<JobResponse>(`/job/${jobId}`),
+  scrape: (payload: JobRequest) =>
+    request<JobResponse[]>("/job/scrape", {
+      method: "POST",
+      body: JSON.stringify(payload),
+    }),
+};
+
+
 export const api = {
   submitUser: (body: UserRequest) =>
     request<UserResponse>("/user/", {
       method: "POST",
       body: JSON.stringify(body),
     }),
-  listUsers: () => request<UserProfile[]>("/user/"),
+  listUsers: () => request<CandidateProfile[]>("/user/"),
 
 
   scrapeJobs: (body: JobRequest) =>
@@ -148,13 +215,18 @@ export const api = {
     form.append("cv_file", file);
     if (github_url) form.append("github_url", github_url);
 
+    const token = getAuthToken(); // ← THÊM
+    const headers: Record<string, string> = {};
+    if (token) headers["Authorization"] = `Bearer ${token}`; // ← THÊM
+    // ⚠️ KHÔNG set Content-Type — browser tự set với boundary
 
     return fetch(`${BASE_URL}/user/upload-cv`, {
       method: "POST",
+      headers, // ← THÊM
       body: form,
-      // ⚠️ KHÔNG set Content-Type — browser tự set với boundary
     }).then(async (r) => {
       if (!r.ok) {
+        if (r.status === 401) setAuthToken(null); // ← auto logout
         const text = await r.text();
         throw new Error(`Upload ${r.status}: ${text}`);
       }

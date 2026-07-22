@@ -1,11 +1,9 @@
 "use client";
 
-
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Search, ArrowUpDown, ExternalLink } from "lucide-react";
 import { GithubIcon } from "@/components/dashboard/brand-icons";
-
 
 import {
   Card,
@@ -33,16 +31,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { api, type UserProfile, type MatchResult } from "@/lib/api";
-
+import { api, type CandidateProfile, type MatchResult } from "@/lib/api";
 
 type SortKey = "created_at" | "skills" | "score";
 
-
 interface CandidatesTableProps {
-  onSelectCandidate?: (user: UserProfile) => void;
+  onSelectCandidate?: (user: CandidateProfile) => void;
 }
-
 
 function extractGithubHandle(url?: string): string {
   if (!url) return "—";
@@ -54,7 +49,6 @@ function extractGithubHandle(url?: string): string {
   }
 }
 
-
 function initialsFromHandle(handle: string): string {
   const clean = handle.replace(/[-_]/g, " ").trim();
   const parts = clean.split(/\s+/).filter(Boolean);
@@ -63,23 +57,19 @@ function initialsFromHandle(handle: string): string {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-
 export function CandidatesTable({
   onSelectCandidate,
 }: CandidatesTableProps = {}) {
-  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [users, setUsers] = useState<CandidateProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
-
 
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("created_at");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
-
   const [scores, setScores] = useState<Record<string, number>>({});
   const [expandedSkills, setExpandedSkills] = useState<Set<string>>(new Set());
-
 
   function toggleSkillsExpanded(userId: string) {
     setExpandedSkills((prev) => {
@@ -89,7 +79,6 @@ export function CandidatesTable({
       return next;
     });
   }
-
 
   useEffect(() => {
     let cancelled = false;
@@ -102,7 +91,7 @@ export function CandidatesTable({
         // fetch scores parallel
         const allScores = await Promise.all(
           data.map((u) =>
-            api.getUserScores(u.user_id).catch(() => [] as MatchResult[]),
+            api.getUserScores(u.candidate_id).catch(() => [] as MatchResult[]),
           ),
         );
         if (cancelled) return;
@@ -112,7 +101,7 @@ export function CandidatesTable({
             (m, s) => Math.max(m, s.total_score ?? 0),
             0,
           );
-          if (best > 0) map[data[i].user_id] = best;
+          if (best > 0) map[data[i].candidate_id] = best;
         });
         setScores(map);
       })
@@ -127,10 +116,8 @@ export function CandidatesTable({
     };
   }, []);
 
-
   const rows = React.useMemo(() => {
     let out = [...users];
-
 
     if (query.trim()) {
       const q = query.toLowerCase();
@@ -141,12 +128,11 @@ export function CandidatesTable({
         );
         return (
           handle.includes(q) ||
-          u.user_id.toLowerCase().includes(q) ||
+          u.candidate_id.toLowerCase().includes(q) ||
           skills.some((s) => s.includes(q))
         );
       });
     }
-
 
     out.sort((a, b) => {
       let av = 0,
@@ -155,8 +141,8 @@ export function CandidatesTable({
         av = a.cv_structured?.skills?.length ?? 0;
         bv = b.cv_structured?.skills?.length ?? 0;
       } else if (sortKey === "score") {
-        av = scores[a.user_id] ?? -1;
-        bv = scores[b.user_id] ?? -1;
+        av = scores[a.candidate_id] ?? -1;
+        bv = scores[b.candidate_id] ?? -1;
       } else {
         av = a.created_at ? new Date(a.created_at).getTime() : 0;
         bv = b.created_at ? new Date(b.created_at).getTime() : 0;
@@ -164,10 +150,8 @@ export function CandidatesTable({
       return sortDir === "desc" ? bv - av : av - bv;
     });
 
-
     return out;
   }, [users, query, sortKey, sortDir]);
-
 
   function toggleSort(key: SortKey) {
     if (key === sortKey) {
@@ -177,7 +161,6 @@ export function CandidatesTable({
       setSortDir("desc");
     }
   }
-
 
   return (
     <Card>
@@ -203,14 +186,12 @@ export function CandidatesTable({
         </div>
       </CardHeader>
 
-
       <CardContent>
         {error && (
           <div className="mb-3 rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive">
             {error}
           </div>
         )}
-
 
         {loading ? (
           <div className="flex flex-col gap-2">
@@ -263,7 +244,6 @@ export function CandidatesTable({
                   </TableRow>
                 </TableHeader>
 
-
                 <TableBody>
                   {rows.map((u) => {
                     const handle = extractGithubHandle(u.github_url);
@@ -271,15 +251,14 @@ export function CandidatesTable({
                     const skills = u.cv_structured?.skills ?? [];
                     const education = u.cv_structured?.education ?? [];
                     const work = u.cv_structured?.work_experience ?? [];
-                    const isExpanded = expandedSkills.has(u.user_id);
+                    const isExpanded = expandedSkills.has(u.candidate_id);
                     const visibleSkills = isExpanded
                       ? skills
                       : skills.slice(0, 2);
 
-
                     return (
                       <TableRow
-                        key={u.user_id}
+                        key={u.candidate_id}
                         className="cursor-pointer transition-colors hover:bg-muted/50"
                         onClick={() => onSelectCandidate?.(u)}
                       >
@@ -294,7 +273,6 @@ export function CandidatesTable({
                             <span className="font-medium">{handle}</span>
                           </div>
                         </TableCell>
-
 
                         {/* ── Skills (ngắn + expand) ── */}
                         <TableCell className="hidden md:table-cell max-w-[260px]">
@@ -320,7 +298,7 @@ export function CandidatesTable({
                                   className="cursor-pointer hover:bg-muted"
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    toggleSkillsExpanded(u.user_id);
+                                    toggleSkillsExpanded(u.candidate_id);
                                   }}
                                 >
                                   {isExpanded
@@ -331,7 +309,6 @@ export function CandidatesTable({
                             </div>
                           )}
                         </TableCell>
-
 
                         {/* ── Education ── */}
                         <TableCell className="hidden sm:table-cell max-w-[220px]">
@@ -368,7 +345,6 @@ export function CandidatesTable({
                           )}
                         </TableCell>
 
-
                         {/* ── Experience ── */}
                         <TableCell className="hidden lg:table-cell max-w-[240px]">
                           {work.length === 0 ? (
@@ -401,7 +377,6 @@ export function CandidatesTable({
                           )}
                         </TableCell>
 
-
                         {/* ── Created ── */}
                         <TableCell>
                           <span className="text-xs text-muted-foreground">
@@ -410,7 +385,6 @@ export function CandidatesTable({
                               : "—"}
                           </span>
                         </TableCell>
-
 
                         {/* ── Links ── */}
                         <TableCell className="text-right">
@@ -444,23 +418,22 @@ export function CandidatesTable({
                           )}
                         </TableCell>
 
-
                         {/* ── AI Score ── */}
                         <TableCell>
-                          {scores[u.user_id] != null ? (
+                          {scores[u.candidate_id] != null ? (
                             <span
                               className={cn(
                                 "inline-flex items-center rounded-md border px-2 py-0.5 font-mono text-sm font-semibold tabular-nums",
-                                scores[u.user_id] >= 80 &&
+                                scores[u.candidate_id] >= 80 &&
                                   "bg-emerald-500/15 text-emerald-500 border-emerald-500/30",
-                                scores[u.user_id] >= 60 &&
-                                  scores[u.user_id] < 80 &&
+                                scores[u.candidate_id] >= 60 &&
+                                  scores[u.candidate_id] < 80 &&
                                   "bg-amber-500/15 text-amber-500 border-amber-500/30",
-                                scores[u.user_id] < 60 &&
+                                scores[u.candidate_id] < 60 &&
                                   "bg-muted text-muted-foreground border-transparent",
                               )}
                             >
-                              {Math.round(scores[u.user_id])}
+                              {Math.round(scores[u.candidate_id])}
                             </span>
                           ) : (
                             <span className="text-xs text-muted-foreground">
@@ -475,7 +448,6 @@ export function CandidatesTable({
               </Table>
             </div>
 
-
             <p className="mt-3 text-xs text-muted-foreground">
               Showing {rows.length} of {users.length} candidates
             </p>
@@ -485,7 +457,6 @@ export function CandidatesTable({
     </Card>
   );
 }
-
 
 function SortButton({
   label,

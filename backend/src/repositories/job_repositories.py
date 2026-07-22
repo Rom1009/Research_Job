@@ -1,5 +1,5 @@
 from sqlmodel import Session, select
-
+from uuid import UUID
 from backend.src.schema.model import LinkedInJobs
 from backend.utils.logger import setup_logger
 
@@ -16,28 +16,27 @@ class JobRepository:
         self.session.add(new_job)
         self.session.commit()
         self.session.refresh(new_job)
-
         return new_job
-    
-    def get_job_id(self, job_id):
-        logger.info(f"Fetching job profile with ID: {job_id}")
-        
-        statement = select(LinkedInJobs).where(LinkedInJobs.job_id == job_id)
-        result = self.session.exec(statement).first()
+   
+    def get_by_url_and_owner(self, job_url: str, owner_id: UUID):
+        """Dedupe theo (owner, url) — tránh scrape trùng."""
+        stmt = select(LinkedInJobs).where(
+            LinkedInJobs.job_url == job_url,
+            LinkedInJobs.owner_id == owner_id,
+        )
+        return self.session.exec(stmt).first()
 
-        if result:
-            logger.info(f"Job profile found: {result}")
-        else:
-            logger.warning(f"No job profile found with ID: {job_id}")
+    def get_all_jobs_by_owner(self, owner_id: UUID) -> list[LinkedInJobs]:
+        stmt = (
+            select(LinkedInJobs)
+            .where(LinkedInJobs.owner_id == owner_id)
+            .order_by(LinkedInJobs.created_at.desc())
+        )
+        return self.session.exec(stmt).all()
 
-        return result
-
-    def get_all_jobs(self):
-        logger.info("Fetching all job profiles")
-        
-        statement = select(LinkedInJobs)
-        results = self.session.exec(statement).all()
-
-        logger.info(f"Total job profiles found: {len(results)}")
-        return results
-        
+    def get_job_by_id_and_owner(self, job_id: UUID, owner_id: UUID):
+        stmt = select(LinkedInJobs).where(
+            LinkedInJobs.job_id == job_id,
+            LinkedInJobs.owner_id == owner_id,
+        )
+        return self.session.exec(stmt).first()

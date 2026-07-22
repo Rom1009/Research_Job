@@ -1,6 +1,5 @@
 "use client";
 
-
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -33,7 +32,6 @@ import {
   Trophy,
 } from "lucide-react";
 
-
 import {
   Card,
   CardContent,
@@ -45,8 +43,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { api, type MatchResult, type UserProfile } from "@/lib/api";
-
+import { api, type MatchResult, type CandidateProfile } from "@/lib/api";
 
 const CHART_TOOLTIP_STYLE = {
   background: "var(--popover)",
@@ -56,7 +53,6 @@ const CHART_TOOLTIP_STYLE = {
   boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
 };
 
-
 function weekKey(iso?: string): string {
   if (!iso) return "?";
   const d = new Date(iso);
@@ -65,19 +61,16 @@ function weekKey(iso?: string): string {
   return start.toISOString().slice(0, 10);
 }
 
-
 function scoreTone(v: number) {
   if (v >= 80) return "text-emerald-500";
   if (v >= 60) return "text-amber-500";
   return "text-muted-foreground";
 }
 
-
 export function AnalysisCharts() {
-  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [users, setUsers] = useState<CandidateProfile[]>([]);
   const [scores, setScores] = useState<MatchResult[]>([]);
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     let cancelled = false;
@@ -94,22 +87,17 @@ export function AnalysisCharts() {
     };
   }, []);
 
-
   // ── KPI strip ──
   const kpi = useMemo(() => {
-    if (scores.length === 0)
-      return { avg: 0, best: 0, qualified: 0, total: 0 };
+    if (scores.length === 0) return { avg: 0, best: 0, qualified: 0, total: 0 };
     const total = scores.length;
     const avg = Math.round(
       scores.reduce((a, s) => a + (s.total_score ?? 0), 0) / total,
     );
-    const best = Math.round(
-      Math.max(...scores.map((s) => s.total_score ?? 0)),
-    );
+    const best = Math.round(Math.max(...scores.map((s) => s.total_score ?? 0)));
     const qualified = scores.filter((s) => (s.total_score ?? 0) >= 70).length;
     return { avg, best, qualified, total };
   }, [scores]);
-
 
   // ── Score trend by week ──
   const trend = useMemo(() => {
@@ -132,7 +120,6 @@ export function AnalysisCharts() {
       }));
   }, [scores]);
 
-
   // ── Distribution ──
   const distribution = useMemo(() => {
     const buckets = [
@@ -148,7 +135,6 @@ export function AnalysisCharts() {
     });
     return buckets;
   }, [scores]);
-
 
   // ── Competencies radar ──
   const competencies = useMemo(() => {
@@ -170,7 +156,6 @@ export function AnalysisCharts() {
     ];
   }, [scores]);
 
-
   // ── Skill coverage ──
   const skillCoverage = useMemo(() => {
     const counter = new Map<string, number>();
@@ -185,10 +170,8 @@ export function AnalysisCharts() {
       .map(([skill, count]) => ({ skill, count }));
   }, [users]);
 
-
   const hasAnyScore = scores.length > 0;
   const hasAnyUser = users.length > 0;
-
 
   if (loading) {
     return (
@@ -202,7 +185,6 @@ export function AnalysisCharts() {
       </Card>
     );
   }
-
 
   return (
     <Card className="overflow-hidden border-border/80 bg-gradient-to-br from-primary/[0.02] via-transparent to-blue-500/[0.02]">
@@ -230,7 +212,6 @@ export function AnalysisCharts() {
             </Badge>
           </div>
         </div>
-
 
         {/* KPI strip — always visible */}
         {hasAnyScore && (
@@ -264,7 +245,6 @@ export function AnalysisCharts() {
         )}
       </CardHeader>
 
-
       <CardContent>
         <Tabs defaultValue="trend">
           <TabsList className="mb-4 grid w-full grid-cols-4 sm:w-auto sm:inline-flex">
@@ -274,10 +254,13 @@ export function AnalysisCharts() {
               icon={BarChart3}
               label="Distribution"
             />
-            <TabTrigger value="competency" icon={RadarIcon} label="Competencies" />
+            <TabTrigger
+              value="competency"
+              icon={RadarIcon}
+              label="Competencies"
+            />
             <TabTrigger value="coverage" icon={Layers} label="Skills" />
           </TabsList>
-
 
           {/* ── SCORE TREND ── */}
           <TabsContent value="trend">
@@ -297,8 +280,16 @@ export function AnalysisCharts() {
                 >
                   <defs>
                     <linearGradient id="fillScore" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.5} />
-                      <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
+                      <stop
+                        offset="0%"
+                        stopColor="var(--primary)"
+                        stopOpacity={0.5}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--primary)"
+                        stopOpacity={0}
+                      />
                     </linearGradient>
                   </defs>
                   <CartesianGrid
@@ -353,7 +344,6 @@ export function AnalysisCharts() {
               </ResponsiveContainer>
             )}
           </TabsContent>
-
 
           {/* ── DISTRIBUTION ── */}
           <TabsContent value="distribution">
@@ -413,7 +403,6 @@ export function AnalysisCharts() {
             )}
           </TabsContent>
 
-
           {/* ── COMPETENCIES ── */}
           <TabsContent value="competency">
             {!hasAnyScore ? (
@@ -426,9 +415,22 @@ export function AnalysisCharts() {
               <ResponsiveContainer width="100%" height={340}>
                 <RadarChart data={competencies} outerRadius="75%">
                   <defs>
-                    <radialGradient id="radarGradient" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.6} />
-                      <stop offset="100%" stopColor="var(--primary)" stopOpacity={0.1} />
+                    <radialGradient
+                      id="radarGradient"
+                      cx="50%"
+                      cy="50%"
+                      r="50%"
+                    >
+                      <stop
+                        offset="0%"
+                        stopColor="var(--primary)"
+                        stopOpacity={0.6}
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--primary)"
+                        stopOpacity={0.1}
+                      />
                     </radialGradient>
                   </defs>
                   <PolarGrid stroke="var(--border)" strokeDasharray="2 4" />
@@ -468,7 +470,6 @@ export function AnalysisCharts() {
             )}
           </TabsContent>
 
-
           {/* ── SKILL COVERAGE ── */}
           <TabsContent value="coverage">
             {!hasAnyUser || skillCoverage.length === 0 ? (
@@ -485,9 +486,19 @@ export function AnalysisCharts() {
                   margin={{ left: 8, right: 24, top: 8, bottom: 8 }}
                 >
                   <defs>
-                    <linearGradient id="skillGradient" x1="0" y1="0" x2="1" y2="0">
+                    <linearGradient
+                      id="skillGradient"
+                      x1="0"
+                      y1="0"
+                      x2="1"
+                      y2="0"
+                    >
                       <stop offset="0%" stopColor="#10b981" stopOpacity={0.9} />
-                      <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.9} />
+                      <stop
+                        offset="100%"
+                        stopColor="#3b82f6"
+                        stopOpacity={0.9}
+                      />
                     </linearGradient>
                   </defs>
                   <CartesianGrid
@@ -547,9 +558,7 @@ export function AnalysisCharts() {
   );
 }
 
-
 // ═════════════════════ SUB-COMPONENTS ═════════════════════
-
 
 function KpiTile({
   icon: Icon,
@@ -582,7 +591,6 @@ function KpiTile({
   );
 }
 
-
 function TabTrigger({
   value,
   icon: Icon,
@@ -599,7 +607,6 @@ function TabTrigger({
     </TabsTrigger>
   );
 }
-
 
 function EmptyState({
   icon: Icon,
@@ -622,7 +629,6 @@ function EmptyState({
     </div>
   );
 }
-
 
 /** Khi chỉ có 1 tuần data — hiển thị big number thay vì cố vẽ line rỗng */
 function SingleWeekView({
@@ -676,4 +682,3 @@ function SingleWeekView({
     </div>
   );
 }
-

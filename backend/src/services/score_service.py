@@ -2,39 +2,61 @@ import json
 import re
 import time
 from uuid import UUID
-
-
+from fastapi import HTTPException, status
 from sqlmodel import Session
 from groq import Groq, BadRequestError, RateLimitError
 
-
-from backend.src.schema.model import ScoreCV, ScoreResponse
+from backend.src.schema.model import (
+    ScoreCV, ScoreResponse, CandidateProfile, User, LinkedInJobs,
+)
 from backend.src.repositories.score_repositories import ScoreRepository
 from backend.src.repositories.user_repositories import UserRepository
 from backend.src.repositories.job_repositories import JobRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
 
-
 logger = setup_logger("Score Service")
-
-
-
 
 class ScoreService:
     def __init__(self, session: Session):
+        self.session = session
         self.score_repository = ScoreRepository(session=session)
         self.user_repository = UserRepository(session=session)
         self.job_repository = JobRepository(session=session)
-        self.client = Groq(
-            api_key=settings.GROQ_API_KEY.get_secret_value(),
-        )
+        self.client = Groq(api_key=settings.GROQ_API_KEY.get_secret_value())
+
+
+    # ─────────────────────────────────────────────────────────────
+    #  Ownership guards
+    # ─────────────────────────────────────────────────────────────
+    def _assert_owns_profile(
+        self, profile_id: UUID, owner_id: UUID,
+    ) -> CandidateProfile:
+        profile = self.session.get(CandidateProfile, profile_id)
+        if not profile:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Profile không tồn tại")
+        if profile.owner_id != owner_id:
+            raise HTTPException(
+                status.HTTP_403_FORBIDDEN, "Không có quyền truy cập profile"
+            )
+        return profile
+
+
+    def _assert_owns_job(self, job_id: UUID, owner_id: UUID) -> LinkedInJobs:
+        job = self.session.get(LinkedInJobs, job_id)
+        if not job:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "Job không tồn tại")
+        if job.owner_id != owner_id:
+            raise HTTPException(
+                status.HTTP_403_FORBIDDEN, "Không có quyền truy cập job"
+            )
+        return job
 
 
     # ─────────────────────────────────────────────────────────────
     #  Helpers
     # ─────────────────────────────────────────────────────────────
-    def _serialize_match(self, m, job=None) -> dict:
+    def _serialize_match(self, m, job: LinkedInJobs | None = None) -> dict:
         return {
             "match_id": m.match_id,
             "job_id": m.job_id,
@@ -58,17 +80,23 @@ class ScoreService:
 
 
     # ─────────────────────────────────────────────────────────────
-    #  Score 1 (user, job)
+    #  Score 1 (candidate, job) via LLM
     # ─────────────────────────────────────────────────────────────
-    def _score_one(self, user, job, tools) -> ScoreCV:
-        cv = user.cv_structured or {}
-        work_experience = json.dumps(cv.get("work_experience", []), ensure_ascii=False, indent=2)
+    def _score_one(
+        self, profile: CandidateProfile, job: LinkedInJobs, tools: list,
+    ) -> ScoreCV:
+        cv = profile.cv_structured or {}
+        work_experience = json.dumps(
+            cv.get("work_experience", []), ensure_ascii=False, indent=2
+        )
         skills = json.dumps(cv.get("skills", []), ensure_ascii=False)
-        education = json.dumps(cv.get("education", []), ensure_ascii=False, indent=2)
+        education = json.dumps(
+            cv.get("education", []), ensure_ascii=False, indent=2
+        )
 
 
         # Truncate để giảm token/request → tránh 429
-        github_summary = (user.github_summary or "")[:6000]
+        github_summary = (profile.github_summary or "")[:6000]
         jd = (job.description or "")[:4000]
 
 
@@ -97,31 +125,31 @@ class ScoreService:
 
 
         user_prompt = f"""
-Please evaluate how well the candidate's CV and their practical projects match the Job Description below.
+        Please evaluate how well the candidate's CV and their practical projects match the Job Description below.
 
 
-📝 [CANDIDATE CV - work experience]
-{work_experience}
+        📝 [CANDIDATE CV - work experience]
+        {work_experience}
 
 
-📝 [CANDIDATE CV - skills]
-{skills}
+        📝 [CANDIDATE CV - skills]
+        {skills}
 
 
-📝 [CANDIDATE CV - education]
-{education}
+        📝 [CANDIDATE CV - education]
+        {education}
 
 
-💻 [PRACTICAL PROJECT EVIDENCE (README)]
-{github_summary}
+        💻 [PRACTICAL PROJECT EVIDENCE (README)]
+        {github_summary}
 
 
-🎯 [JOB DESCRIPTION (JD)]
-{jd}
+        🎯 [JOB DESCRIPTION (JD)]
+        {jd}
 
 
-Now call the `score_cv` tool. Every list field must have the minimum items specified. Never return empty lists.
-""".strip()
+        Now call the `score_cv` tool. Every list field must have the minimum items specified. Never return empty lists.
+        """.strip()
 
 
         messages = [
@@ -173,7 +201,8 @@ Now call the `score_cv` tool. Every list field must have the minimum items speci
                 ]
                 if missing and attempt < MAX_ATTEMPTS - 1:
                     logger.warning(
-                        f"Attempt {attempt+1} for job_id={job.job_id} has thin fields: {missing}, retrying..."
+                        f"Attempt {attempt+1} for job_id={job.job_id} "
+                        f"has thin fields: {missing}, retrying..."
                     )
                     messages.append({
                         "role": "user",
@@ -206,29 +235,40 @@ Now call the `score_cv` tool. Every list field must have the minimum items speci
             except (BadRequestError, ValueError, KeyError, json.JSONDecodeError) as e:
                 last_err = e
                 logger.warning(
-                    f"Score attempt {attempt+1}/{MAX_ATTEMPTS} failed for job_id={job.job_id}: {e}"
+                    f"Score attempt {attempt+1}/{MAX_ATTEMPTS} "
+                    f"failed for job_id={job.job_id}: {e}"
                 )
                 attempt += 1
 
 
         raise RuntimeError(
-            f"Failed to score job_id={job.job_id} after {MAX_ATTEMPTS} attempts: {last_err}"
+            f"Failed to score job_id={job.job_id} "
+            f"after {MAX_ATTEMPTS} attempts: {last_err}"
         )
 
 
     # ─────────────────────────────────────────────────────────────
-    #  Public
+    #  Public API — mọi hàm đều yêu cầu owner_id
     # ─────────────────────────────────────────────────────────────
-    def calculate_score(self, profile_id: UUID) -> list[dict]:
-        logger.info(f"Calculating scores for profile_id={profile_id}")
+    def calculate_score(
+        self, profile_id: UUID, owner_id: UUID,
+    ) -> list[dict]:
+        logger.info(
+            f"[owner={owner_id}] Calculating scores for profile_id={profile_id}"
+        )
 
 
-        user = self.user_repository.get_user_id(profile_id)
-        if not user:
-            raise ValueError(f"Profile {profile_id} not found")
+        # 1. Verify profile thuộc recruiter
+        profile = self._assert_owns_profile(profile_id, owner_id)
 
 
-        all_jobs = self.job_repository.get_all_jobs()
+        # 2. Chỉ scoring với jobs của chính recruiter
+        all_jobs = self.job_repository.get_all_jobs_by_owner(owner_id)
+        if not all_jobs:
+            raise HTTPException(
+                status.HTTP_404_NOT_FOUND,
+                "Chưa có job nào để chấm. Hãy scrape trước.",
+            )
         logger.info(f"Total jobs to score: {len(all_jobs)}")
 
 
@@ -247,7 +287,7 @@ Now call the `score_cv` tool. Every list field must have the minimum items speci
         all_match = []
         for idx, job in enumerate(all_jobs):
             try:
-                content_score = self._score_one(user, job, tools)
+                content_score = self._score_one(profile, job, tools)
             except RuntimeError as e:
                 logger.error(str(e))
                 continue
@@ -262,7 +302,7 @@ Now call the `score_cv` tool. Every list field must have the minimum items speci
 
 
             match_content = {
-                "profile_id": user.user_id,
+                "profile_id": profile.candidate_id,
                 "job_id": job.job_id,
                 "skill_score": content_score.skill_score,
                 "education_score": content_score.education_score,
@@ -280,8 +320,8 @@ Now call the `score_cv` tool. Every list field must have the minimum items speci
             }
 
 
-            match_results = self.score_repository.create_match_result(match_content)
-            all_match.append(self._serialize_match(match_results, job))
+            match = self.score_repository.create_match_result(match_content)
+            all_match.append(self._serialize_match(match, job))
 
 
             # Throttle nhẹ giữa các job để không burst quá TPM
@@ -292,16 +332,71 @@ Now call the `score_cv` tool. Every list field must have the minimum items speci
         return all_match
 
 
-    def list_scores(self):
-        scores = self.score_repository.get_all_scores()
-        jobs_by_id = {j.job_id: j for j in self.job_repository.get_all_jobs()}
-        return [self._serialize_match(s, jobs_by_id.get(s.job_id)) for s in scores]
+    def score_one_pair(
+        self, profile_id: UUID, job_id: UUID, owner_id: UUID,
+    ) -> dict:
+        """Chấm điểm 1 (profile, job) cụ thể — dùng cho tool của AI Agent."""
+        profile = self._assert_owns_profile(profile_id, owner_id)
+        job = self._assert_owns_job(job_id, owner_id)
 
 
-    def get_scores_by_profile(self, profile_id):
-        scores = self.score_repository.get_scores_by_profile(profile_id)
-        jobs_by_id = {j.job_id: j for j in self.job_repository.get_all_jobs()}
-        return [self._serialize_match(s, jobs_by_id.get(s.job_id)) for s in scores]
+        tools = [{
+            "type": "function",
+            "function": {
+                "name": "score_cv",
+                "description": "Score a candidate's CV against a Job Description",
+                "parameters": ScoreCV.model_json_schema(),
+            },
+        }]
 
 
+        content_score = self._score_one(profile, job, tools)
 
+
+        total_score = (
+            content_score.skill_score * 0.4
+            + content_score.education_score * 0.15
+            + content_score.work_experience_score * 0.05
+            + content_score.project_score * 0.4
+        )
+
+
+        match = self.score_repository.create_match_result({
+            "profile_id": profile.candidate_id,
+            "job_id": job.job_id,
+            "skill_score": content_score.skill_score,
+            "education_score": content_score.education_score,
+            "work_experience_score": content_score.work_experience_score,
+            "project_score": content_score.project_score,
+            "total_score": total_score,
+            "ai_analysis_details": {
+                "matched_skills": content_score.matched_skills,
+                "gap_analysis": content_score.gap_analysis,
+                "actionable_advice": content_score.actionable_advice,
+                "evaluation_summary": content_score.evaluation_summary,
+                "project_impact": content_score.project_impact,
+                "technical_complexity": content_score.technical_complexity,
+            },
+        })
+        return self._serialize_match(match, job)
+
+
+    def list_scores(self, owner_id: UUID) -> list[dict]:
+        """List toàn bộ match của recruiter — 1 query có JOIN."""
+        rows = self.score_repository.get_scores_with_jobs_by_owner(owner_id)
+        return [self._serialize_match(m, job) for m, job in rows]
+
+
+    def get_scores_by_profile(
+        self, profile_id: UUID, owner_id: UUID,
+    ) -> list[dict]:
+        self._assert_owns_profile(profile_id, owner_id)
+        matches = self.score_repository.get_scores_by_profile(profile_id, owner_id)
+
+
+        # Batch-load jobs 1 lần để tránh N+1
+        job_map = {
+            j.job_id: j
+            for j in self.job_repository.get_all_jobs_by_owner(owner_id)
+        }
+        return [self._serialize_match(m, job_map.get(m.job_id)) for m in matches]
