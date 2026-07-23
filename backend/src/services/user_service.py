@@ -13,6 +13,8 @@ from backend.src.repositories.user_repositories import UserRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
 
+from backend.ai.github import GitHubService, GitHubAPIError
+
 
 logger = setup_logger("User Service")
 
@@ -131,10 +133,17 @@ class UserService:
     # ─────────────────────────────────────────────────────────────
     #  Endpoint chính
     # ─────────────────────────────────────────────────────────────
-    async def process_user_data(self, cv_file: UploadFile, github_url: str | None, owner_id: UUID) -> UserResponse:
+    async def process_user_data(
+        self,
+        cv_file: UploadFile,
+        github_url: str | None,
+        owner_id: UUID,
+    ) -> UserResponse:
+        # 1) Lưu file CV
         save_path = await save_uploaded_file(cv_file, subdir="cv")
         logger.info(f"Uploaded CV saved to: {save_path}")
 
+        # 2) Convert sang markdown
         ext = save_path.suffix.lower()
         if ext in {".md", ".txt"}:
             markdown_data = save_path.read_text(encoding="utf-8")
@@ -142,42 +151,54 @@ class UserService:
             try:
                 # doc = DocumentConverter().convert(str(save_path))
                 # markdown_data = doc.document.export_to_markdown()
-                with open("/home/thomas/Desktop/AI/Research_Job/docs/data.md", "r", encoding="utf-8") as f:
+                with open(
+                    "/home/thomas/Desktop/AI/Research_Job/docs/data.md",
+                    "r", encoding="utf-8",
+                ) as f:
                     markdown_data = f.read()
             except Exception as e:
                 save_path.unlink(missing_ok=True)
                 logger.error(f"Error converting CV to markdown: {e}")
                 raise RuntimeError("Failed to convert CV to markdown")
-           
-            cv_hash = _sha256_of(markdown_data)
-           
-            exsiting = self.user_repository.find_by_hash_and_github(cv_hash, github_url, owner_id)
-            if exsiting:
-                logger.info(f"Found existing user profile with ID: {exsiting.candidate_id}")
-                save_path.unlink(missing_ok=True)  # Delete the uploaded file since it's a duplicate
-                return UserResponse(
-                    user_id=exsiting.candidate_id,
-                    cv_markdown=exsiting.cv_markdown,
-                    github_summary=exsiting.github_summary,
+
+        # 3) Hash & dedup (ĐƯA RA NGOÀI try/except — fix bug)
+        cv_hash = _sha256_of(markdown_data)
+
+        existing = self.user_repository.find_by_hash_and_github(
+            cv_hash, github_url, owner_id
+        )
+        if existing:
+            logger.info(f"Found existing user profile: {existing.candidate_id}")
+            save_path.unlink(missing_ok=True)
+            return UserResponse(
+                candidate_id=existing.candidate_id,
+                cv_markdown=existing.cv_markdown,
+                github_summary=existing.github_summary,
+            )
+
+        latest = self.user_repository.find_latest_by_github(github_url)
+        next_version = (latest.version + 1) if latest else 1
+
+        # 4) Parse CV
+        cv_structured = self._parse_cv(markdown_data)
+
+        # 5) GitHub — dùng GitHubService mới
+        github_summary: str | None = None
+        if github_url:
+            try:
+                async with GitHubService() as gh:
+                    gh_result = await gh.analyze(github_url)
+                # Lưu dạng JSON string vào cột github_summary (kiểu Text)
+                github_summary = json.dumps(gh_result, ensure_ascii=False)
+                logger.info(
+                    f"GitHub analyzed: @{gh_result['profile']['profile']['login']} — "
+                    f"{len(gh_result['profile']['top_repos'])} repos"
                 )
+            except (GitHubAPIError, ValueError) as e:
+                logger.warning(f"GitHub analyze failed for {github_url}: {e}")
+                github_summary = json.dumps({"error": str(e)})
 
-
-            latest = self.user_repository.find_latest_by_github(github_url)
-            next_version = (latest.version + 1) if latest else 1
-
-            cv_structured = self._parse_cv(markdown_data)
-            github_summary = None
-            if github_url:
-                try:
-                    page = requests.get(github_url, timeout=15)
-                    if page.status_code == 200:
-                        logger.info(f"Successfully fetched GitHub page for URL: {github_url}")
-                        page.encoding = "utf-8"
-                        github_summary = page.text
-                except requests.RequestException as e:
-                    logger.error(f"GitHub fetch error for {github_url}: {e}")
-           
-        # 7) Lưu DB
+        # 6) Lưu DB
         created = self.user_repository.create_user_profile({
             "owner_id": owner_id,
             "cv_url": str(save_path),

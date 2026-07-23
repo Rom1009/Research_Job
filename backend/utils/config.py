@@ -11,6 +11,7 @@ class EnvMode(str, Enum):
 class Settings(BaseSettings):
     DEBUG: bool = True
     MODEL_NAME: str = "llama-3.1-8b-instant"
+    MODEL_GIT: str = "llama-3.3-70b-versatile"
     LOG_LEVEL: str = "INFO"
     ENV_MODE: EnvMode = EnvMode.DEV
     CONFIG_PATH : str = "config/input.yml"
@@ -29,6 +30,8 @@ class Settings(BaseSettings):
     JWT_SECRET: SecretStr
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRATION_MINUTES: int = 60 * 24  # 1 day
+
+    GITHUB_TOKEN: SecretStr
 
     model_config = SettingsConfigDict(
         env_file = ".env",
