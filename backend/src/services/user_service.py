@@ -12,12 +12,11 @@ from backend.src.schema.model import SchemaCVResponse, UserResponse, CandidatePr
 from backend.src.repositories.user_repositories import UserRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
-
+from backend.src.repositories.score_repositories import ScoreRepository
 from backend.ai.github import GitHubService, GitHubAPIError
 
 
 logger = setup_logger("User Service")
-
 
 class UserService:
     def __init__(self, session: Session):
@@ -25,7 +24,7 @@ class UserService:
             api_key=settings.GROQ_API_KEY.get_secret_value(),
         )
         self.user_repository = UserRepository(session=session)
-
+        self.score_repository = ScoreRepository(session=session)
 
     # ─────────────────────────────────────────────────────────────
     #  CV markdown → SchemaCVResponse  (có retry để tránh JSON lỗi)
@@ -110,11 +109,9 @@ class UserService:
                         "function": {"name": "take_content_from_markdown"},
                     },
                 )
-
                 tool_calls = response.choices[0].message.tool_calls
                 if not tool_calls:
                     raise ValueError("Groq did not return a tool call")
-
 
                 arguments = tool_calls[0].function.arguments
                 return SchemaCVResponse.model_validate(json.loads(arguments))
@@ -161,14 +158,18 @@ class UserService:
                 logger.error(f"Error converting CV to markdown: {e}")
                 raise RuntimeError("Failed to convert CV to markdown")
 
-        # 3) Hash & dedup (ĐƯA RA NGOÀI try/except — fix bug)
+        # 3) Hash
         cv_hash = _sha256_of(markdown_data)
 
-        existing = self.user_repository.find_by_hash_and_github(
-            cv_hash, github_url, owner_id
-        )
-        if existing:
-            logger.info(f"Found existing user profile: {existing.candidate_id}")
+        # 4) Check profile hiện có của user này
+        existing = self.user_repository.find_by_owner(owner_id)
+        # 4a. Nếu không có gì đổi → trả về ngay
+        if (
+            existing
+            and existing.cv_hash == cv_hash
+            and existing.github_url == github_url
+        ):
+            logger.info(f"No change for owner {owner_id} — returning existing")
             save_path.unlink(missing_ok=True)
             return UserResponse(
                 candidate_id=existing.candidate_id,
@@ -176,49 +177,73 @@ class UserService:
                 github_summary=existing.github_summary,
             )
 
-        latest = self.user_repository.find_latest_by_github(github_url)
-        next_version = (latest.version + 1) if latest else 1
+        # 5) Parse CV — chỉ khi CV đổi hoặc chưa có
+        if existing and existing.cv_hash == cv_hash:
+            cv_structured_dict = existing.cv_structured
+            cv_markdown_to_save = existing.cv_markdown
+        else:
+            cv_structured = self._parse_cv(markdown_data)
+            cv_structured_dict = cv_structured.model_dump()
+            cv_markdown_to_save = markdown_data
 
-        # 4) Parse CV
-        cv_structured = self._parse_cv(markdown_data)
+        # 6) GitHub — chỉ analyze khi github đổi
+        if existing and existing.github_url == github_url:
+            github_summary = existing.github_summary
+        else:
+            github_summary = None
+            if github_url:
+                try:
+                    async with GitHubService() as gh:
+                        gh_result = await gh.analyze(github_url)
+                    github_summary = json.dumps(gh_result, ensure_ascii=False)
+                    logger.info(
+                        f"GitHub analyzed: @{gh_result['profile']['profile']['login']} — "
+                        f"{len(gh_result['profile']['top_repos'])} repos"
+                    )
+                except (GitHubAPIError, ValueError) as e:
+                    logger.warning(f"GitHub analyze failed for {github_url}: {e}")
+                    github_summary = json.dumps({"error": str(e)})
 
-        # 5) GitHub — dùng GitHubService mới
-        github_summary: str | None = None
-        if github_url:
-            try:
-                async with GitHubService() as gh:
-                    gh_result = await gh.analyze(github_url)
-                # Lưu dạng JSON string vào cột github_summary (kiểu Text)
-                github_summary = json.dumps(gh_result, ensure_ascii=False)
-                logger.info(
-                    f"GitHub analyzed: @{gh_result['profile']['profile']['login']} — "
-                    f"{len(gh_result['profile']['top_repos'])} repos"
-                )
-            except (GitHubAPIError, ValueError) as e:
-                logger.warning(f"GitHub analyze failed for {github_url}: {e}")
-                github_summary = json.dumps({"error": str(e)})
-
-        # 6) Lưu DB
-        created = self.user_repository.create_user_profile({
+        # 7) Build payload DICT
+        payload = {
             "owner_id": owner_id,
             "cv_url": str(save_path),
             "cv_hash": cv_hash,
-            "version": next_version,
             "github_url": github_url,
-            "cv_markdown": markdown_data,
-            "cv_structured": cv_structured.model_dump(),
+            "cv_markdown": cv_markdown_to_save,
+            "cv_structured": cv_structured_dict,
             "github_summary": github_summary,
-        })
-        logger.info(f"Created user {created.candidate_id} (v{next_version})")
+        }
+        # 8) UPSERT
+        if existing:
+            # CV đổi thật → clear score cache
+            if existing.cv_hash != cv_hash:
+                deleted = self.score_repository.delete_by_profile(existing.candidate_id)
+                logger.info(f"Cleared {deleted} stale scores")
 
-        return UserResponse(
-            candidate_id=created.candidate_id,
-            cv_markdown=created.cv_markdown,
-            github_summary=created.github_summary,
-        )
 
+            # Xoá file CV cũ
+            if existing.cv_url and existing.cv_url != str(save_path):
+                from pathlib import Path
+                Path(existing.cv_url).unlink(missing_ok=True)
+
+
+            updated = self.user_repository.update_profile(existing.candidate_id, payload)
+            logger.info(f"Updated profile {updated.candidate_id}")
+            return UserResponse(
+                candidate_id=updated.candidate_id,
+                cv_markdown=updated.cv_markdown,
+                github_summary=updated.github_summary,
+            )
+        else:
+            created = self.user_repository.create_user_profile(payload)
+            logger.info(f"Created profile {created.candidate_id}")
+            return UserResponse(
+                candidate_id=created.candidate_id,
+                cv_markdown=created.cv_markdown,
+                github_summary=created.github_summary,
+            )
     def get_all_user_info(self, owner_id: UUID) -> list[CandidateProfile]:
-
 
         profiles = self.user_repository.get_all_users(owner_id)
         return [CandidateProfile.model_validate(p.model_dump()) for p in profiles]

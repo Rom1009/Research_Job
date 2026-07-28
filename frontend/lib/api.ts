@@ -132,6 +132,7 @@ export type MatchResult = {
   job_title?: string;
   job_company?: string;
   job_location?: string;
+  job_url?: string; // ← THÊM
   created_at?: string;
 };
 
@@ -152,6 +153,80 @@ export type TokenResponse = {
 };
 
 
+// frontend/lib/api.ts (thêm vào cuối phần types)
+
+
+export type GithubProfileData = {
+  profile: {
+    profile: {
+      login: string;
+      name?: string;
+      bio?: string;
+      avatar_url?: string;
+      company?: string | null;
+      location?: string | null;
+      website?: string | null;
+      followers: number;
+      following: number;
+      created_at: string;
+      orgs?: string[];
+    };
+    top_repos: Array<{
+      name: string;
+      full_name: string;
+      description?: string | null;
+      url: string;
+      stars: number;
+      forks: number;
+      primary_language?: string | null;
+      pushed_at: string;
+      readme?: string | null;
+    }>;
+    top_languages: Array<{ name: string; percent: number; bytes: number }>;
+    contributions: {
+      total_commits: number;
+      total_prs: number;
+      total_reviews: number;
+      total_issues: number;
+      total_repos_contributed: number;
+      calendar_total: number;
+      top_contributed_repos: Array<{
+        full_name: string;
+        url: string;
+        stars: number;
+        language?: string;
+        commits: number;
+      }>;
+    };
+  };
+  summary: {
+    primary_tech_stack: string[];
+    seniority_estimate: "junior" | "mid" | "senior" | string;
+    seniority_reasoning: string;
+    domains: string[];
+    notable_projects: Array<{ name: string; why: string }>;
+    open_source_engagement: "low" | "medium" | "high" | string;
+    activity_level: "inactive" | "moderate" | "active" | string;
+    red_flags: string[];
+    strengths: string[];
+  };
+};
+
+
+export function parseGithubSummary(
+  raw?: string | null,
+): GithubProfileData | null {
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed?.error) return null;
+    return parsed as GithubProfileData;
+  } catch {
+    return null;
+  }
+}
+
+
 export const authApi = {
   register: (email: string, password: string, full_name?: string) =>
     request<TokenResponse>("/auth/register", {
@@ -168,6 +243,13 @@ export const authApi = {
 
 
   me: () => request<AuthUserApi>("/auth/me"),
+
+
+  changePassword: (current_password: string, new_password: string) =>
+    request<{ message: string }>("/auth/change-password", {
+      method: "POST",
+      body: JSON.stringify({ current_password, new_password }),
+    }),
 };
 
 
@@ -179,6 +261,52 @@ export const jobApi = {
       method: "POST",
       body: JSON.stringify(payload),
     }),
+
+
+  // trong jobApi:
+  getAction: (jobId: string) =>
+    request<JobAction | null>(`/job/${jobId}/action`),
+
+
+  updateAction: (jobId: string, patch: Partial<JobAction>) =>
+    request<JobAction>(`/job/${jobId}/action`, {
+      method: "PATCH",
+      body: JSON.stringify(patch),
+    }),
+
+
+  listActions: (savedOnly = false) =>
+    request<JobAction[]>(`/job/actions/?saved_only=${savedOnly}`),
+
+
+  deleteAction: (jobId: string) =>
+    request<{ deleted: boolean }>(`/job/${jobId}/action`, {
+      method: "DELETE",
+    }),
+
+
+  clearAll: () =>
+    request<{
+      deleted: number;
+      scores_deleted: number;
+      actions_deleted: number;
+    }>("/job/clear-all", { method: "DELETE" }),
+};
+
+
+export type JobAction = {
+  id: string;
+  job_id: string;
+  saved: boolean;
+  hidden: boolean;
+  apply_status:
+    | "not_applied"
+    | "applied"
+    | "interviewed"
+    | "offered"
+    | "rejected";
+  notes?: string;
+  updated_at: string;
 };
 
 
@@ -210,15 +338,24 @@ export const api = {
     }),
 
 
+  updateGithub: (profileId: string, github_url: string) =>
+    request<UserResponse>(`/user/${profileId}/github`, {
+      method: "PATCH",
+      body: JSON.stringify({ github_url }),
+    }),
+
+
   uploadCV: (file: File, github_url?: string): Promise<UserResponse> => {
     const form = new FormData();
     form.append("cv_file", file);
     if (github_url) form.append("github_url", github_url);
 
+
     const token = getAuthToken(); // ← THÊM
     const headers: Record<string, string> = {};
     if (token) headers["Authorization"] = `Bearer ${token}`; // ← THÊM
     // ⚠️ KHÔNG set Content-Type — browser tự set với boundary
+
 
     return fetch(`${BASE_URL}/user/upload-cv`, {
       method: "POST",
@@ -234,3 +371,6 @@ export const api = {
     });
   },
 };
+
+
+

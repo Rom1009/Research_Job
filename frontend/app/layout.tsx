@@ -5,14 +5,14 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from "@/components/auth-provider";
 import "./globals.css";
-
+import { CommandPalette } from "@/components/command-palette";
 
 const geistSans = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-geist-mono",
 });
-
+import { ThemeApplier } from "@/components/theme-customizer";
 
 export const metadata: Metadata = {
   title: "Talentgraph — Candidate Research Dashboard",
@@ -21,12 +21,10 @@ export const metadata: Metadata = {
   generator: "v0.app",
 };
 
-
 export const viewport: Viewport = {
   colorScheme: "dark light",
   themeColor: "#1b1d23",
 };
-
 
 export default function RootLayout({
   children,
@@ -40,7 +38,11 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased" suppressHydrationWarning>
         <ThemeProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <ThemeApplier />
+            {children}
+            <CommandPalette /> {/* ← global */}
+          </AuthProvider>
         </ThemeProvider>
         <Toaster />
         {process.env.NODE_ENV === "production" && <Analytics />}

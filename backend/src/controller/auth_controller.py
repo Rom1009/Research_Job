@@ -6,13 +6,19 @@ from backend.src.schema.model import (
     LoginRequest,
     TokenResponse,
     UserPublic,
+    User,
+    ChangePasswordRequest,
 )
+
 
 from backend.src.services.auth_service import AuthService
 from backend.src.core.deps import get_current_user
 from backend.utils.logger import setup_logger
 
+
 logger = setup_logger("Auth Controller")
+
+
 
 
 class AuthController:
@@ -24,6 +30,7 @@ class AuthController:
         logger.info(f"Registering new user with email: {payload.email}")
         auth_service = AuthService(session)
         return auth_service.register(payload)
+
 
     def login (
         self,
@@ -45,3 +52,16 @@ class AuthController:
             full_name=current_user.full_name,
             role=current_user.role,
         )
+
+
+    def change_password(
+        self,
+        req: ChangePasswordRequest,
+        session: Session = Depends(get_session),
+        user: User = Depends(get_current_user),
+    ):
+        auth_service = AuthService(session)
+        return auth_service.change_password(
+            user.user_id, req.current_password, req.new_password,
+        )
+

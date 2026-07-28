@@ -1,296 +1,508 @@
-'use client'
+"use client";
 
-
-import { Candidate } from '@/lib/candidates'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Progress } from '@/components/ui/progress'
-import { X, Mail, MapPin, Briefcase, Award, Code, FileText, ExternalLink } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { GithubIcon, LinkedinIcon } from './brand-icons'
-
+import { type CandidateProfile, parseGithubSummary } from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import {
+  X,
+  ExternalLink,
+  Briefcase,
+  GraduationCap,
+  Code2,
+  FileText,
+  Sparkles,
+  MapPin,
+  Calendar,
+  Trophy,
+  Zap,
+  Users,
+  Star,
+} from "lucide-react";
+import { GithubIcon } from "./brand-icons";
+import { GithubInsights } from "./github-insights";
+import { normalizeSkills } from "@/lib/utils";
 
 interface CandidateDetailPanelProps {
-  candidate: Candidate
-  onClose: () => void
+  candidate: CandidateProfile;
+  onClose: () => void;
 }
 
-
-export function CandidateDetailPanel({ candidate, onClose }: CandidateDetailPanelProps) {
-  const statusColors: Record<string, string> = {
-    'completed': 'bg-emerald-500/20 text-emerald-700',
-    'scheduled': 'bg-blue-500/20 text-blue-700',
-    'not_started': 'bg-gray-500/20 text-gray-700',
-    'rejected': 'bg-red-500/20 text-red-700',
+function shortHandle(url?: string): string {
+  if (!url) return "—";
+  try {
+    const u = new URL(url);
+    return u.pathname.replace(/^\/+/, "").split("/")[0] || u.hostname;
+  } catch {
+    return url;
   }
+}
 
+const SENIORITY_STYLE: Record<string, string> = {
+  junior: "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30",
+  mid: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30",
+  senior:
+    "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
+};
 
-  const sourceColors: Record<string, string> = {
-    'linkedin': 'bg-blue-500/20 text-blue-700',
-    'github': 'bg-gray-500/20 text-gray-700',
-    'referral': 'bg-purple-500/20 text-purple-700',
-    'direct': 'bg-amber-500/20 text-amber-700',
-    'recruiter': 'bg-teal-500/20 text-teal-700',
-  }
+const ACTIVITY_DOT: Record<string, string> = {
+  active: "bg-emerald-500",
+  moderate: "bg-amber-500",
+  inactive: "bg-gray-400",
+};
 
+export function CandidateDetailPanel({
+  candidate,
+  onClose,
+}: CandidateDetailPanelProps) {
+  const handle = shortHandle(candidate.github_url);
+  const skills = normalizeSkills(candidate.cv_structured?.skills);
+  const education = candidate.cv_structured?.education ?? [];
+  const work = candidate.cv_structured?.work_experience ?? [];
+  const projects = candidate.cv_structured?.project ?? [];
+  const additional = candidate.cv_structured?.additional_info ?? [];
+  const githubData = parseGithubSummary(candidate.github_summary);
 
-  const availabilityLabel = {
-    'immediate': 'Available Immediately',
-    '2weeks': 'Available in 2 weeks',
-    '1month': 'Available in 1 month',
-    'negotiable': 'Availability Negotiable',
-  }
-  const interviewStatus = candidate.interviewStatus ?? "not_started"
-  const availability = candidate.availability ?? "negotiable"
-  const source = candidate.source ?? "direct"
-  const reasoning = candidate.reasoning ?? "No specific reasoning provided."
-  const certifications = candidate.certifications ?? []
-  const projects = candidate.projects ?? []
-  const companyHistory = candidate.companyHistory ?? []
-  const cultureFit = candidate.cultureFit ?? 0
-
+  const gh = githubData?.profile?.profile;
+  const summary = githubData?.summary;
+  const displayName = gh?.name || gh?.login || handle;
+  const displayTitle =
+    work[0]?.title || summary?.primary_tech_stack?.join(" · ") || "Candidate";
+  const seniority = summary?.seniority_estimate ?? "";
+  const activity = summary?.activity_level ?? "";
 
   return (
     <ScrollArea className="h-[calc(100vh-120px)]">
-      <div className="space-y-4 pr-4">
-        <div className="flex items-start justify-between gap-2 sticky top-0 bg-background/80 backdrop-blur-sm pb-4 pt-2">
-          <div className="flex-1">
-            <h2 className="text-xl font-bold">{candidate.name}</h2>
-            <p className="text-sm text-muted-foreground">{candidate.title}</p>
+      <div className="space-y-6 pr-4">
+        {/* ═══════════════ HERO ═══════════════ */}
+        <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6">
+          {/* Decorative blobs */}
+          <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-primary/10 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-20 -left-10 size-40 rounded-full bg-purple-500/10 blur-3xl" />
+
+          <div className="relative flex items-start justify-between gap-4">
+            <div className="flex items-start gap-4">
+              {gh?.avatar_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={gh.avatar_url}
+                  alt={displayName}
+                  className="size-20 rounded-2xl border-2 border-background object-cover shadow-lg ring-2 ring-primary/20"
+                />
+              ) : (
+                <div className="flex size-20 items-center justify-center rounded-2xl border-2 border-background bg-gradient-to-br from-primary to-purple-500 text-2xl font-bold text-primary-foreground shadow-lg ring-2 ring-primary/20">
+                  {(displayName[0] ?? "?").toUpperCase()}
+                </div>
+              )}
+
+              <div className="min-w-0 flex-1 space-y-1.5">
+                <h2 className="text-2xl font-bold tracking-tight">
+                  {displayName}
+                </h2>
+                <p className="text-sm text-muted-foreground">{displayTitle}</p>
+
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  {seniority && (
+                    <Badge
+                      variant="outline"
+                      className={SENIORITY_STYLE[seniority] ?? ""}
+                    >
+                      <Zap className="mr-1 size-3" />
+                      {seniority.toUpperCase()}
+                    </Badge>
+                  )}
+                  {activity && (
+                    <Badge variant="outline" className="gap-1.5">
+                      <span
+                        className={`size-1.5 rounded-full ${
+                          ACTIVITY_DOT[activity] ?? "bg-gray-400"
+                        }`}
+                      />
+                      {activity}
+                    </Badge>
+                  )}
+                  {summary?.open_source_engagement && (
+                    <Badge variant="outline">
+                      OSS · {summary.open_source_engagement}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              className="shrink-0 rounded-full"
+            >
+              <X className="size-4" />
+            </Button>
           </div>
-          <Button variant="ghost" size="sm" onClick={onClose}>
-            <X className="size-4" />
-          </Button>
+
+          {/* Meta row */}
+          <div className="relative mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+            {gh?.location && (
+              <span className="flex items-center gap-1">
+                <MapPin className="size-3" /> {gh.location}
+              </span>
+            )}
+            {gh?.followers !== undefined && (
+              <span className="flex items-center gap-1">
+                <Users className="size-3" /> {gh.followers} followers
+              </span>
+            )}
+            {candidate.created_at && (
+              <span className="flex items-center gap-1">
+                <Calendar className="size-3" />
+                Joined {new Date(candidate.created_at).toLocaleDateString()}
+              </span>
+            )}
+          </div>
+
+          {/* Action buttons */}
+          <div className="relative mt-4 flex flex-wrap gap-2">
+            {candidate.github_url && (
+              <a
+                href={candidate.github_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="sm" className="gap-1.5">
+                  <GithubIcon className="size-3.5" /> View GitHub
+                </Button>
+              </a>
+            )}
+            {candidate.cv_url && (
+              <a
+                href={candidate.cv_url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button size="sm" variant="outline" className="gap-1.5">
+                  <FileText className="size-3.5" /> View CV
+                </Button>
+              </a>
+            )}
+          </div>
         </div>
 
+        {/* ═══════════════ QUICK STATS ═══════════════ */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <StatBox
+            icon={<Code2 className="size-4" />}
+            label="Skills"
+            value={skills.length}
+            color="text-blue-500"
+          />
+          <StatBox
+            icon={<Briefcase className="size-4" />}
+            label="Experience"
+            value={work.length}
+            color="text-emerald-500"
+          />
+          <StatBox
+            icon={<Sparkles className="size-4" />}
+            label="Projects"
+            value={projects.length}
+            color="text-purple-500"
+          />
+          <StatBox
+            icon={<GraduationCap className="size-4" />}
+            label="Education"
+            value={education.length}
+            color="text-amber-500"
+          />
+        </div>
 
+        {/* ═══════════════ TABS ═══════════════ */}
         <Tabs defaultValue="profile" className="w-full">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="profile" className="text-xs">Profile</TabsTrigger>
-            <TabsTrigger value="experience" className="text-xs">Experience</TabsTrigger>
-            <TabsTrigger value="analysis" className="text-xs">Analysis</TabsTrigger>
+            <TabsTrigger value="profile">Profile</TabsTrigger>
+            <TabsTrigger value="experience">Experience</TabsTrigger>
+            <TabsTrigger value="github">GitHub</TabsTrigger>
           </TabsList>
 
-
-          <TabsContent value="profile" className="space-y-4 mt-4">
-            <Card>
+          {/* ─────────── PROFILE ─────────── */}
+          <TabsContent value="profile" className="mt-4 space-y-4">
+            <Card className="overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500" />
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Basic Info</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary">{candidate.score}% Match</Badge>
-                  <Badge variant="outline" className={statusColors[interviewStatus]}>
-                    {interviewStatus.replace('_', ' ')}
-                  </Badge>
-                </div>
-               
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="size-3.5" />
-                    <span>{candidate.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Briefcase className="size-3.5" />
-                    <span>{candidate.experience} years experience</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <Badge variant="outline" className={sourceColors[source]}>
-                      {source}
-                    </Badge>
-                  </div>
-                </div>
-
-
-                <div className="flex gap-2 pt-2">
-                  {candidate.github && (
-                    <a href={`https://github.com/${candidate.github}`} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="outline" className="gap-1">
-                        <GithubIcon className="size-3.5" />
-                        GitHub
-                      </Button>
-                    </a>
-                  )}
-                  {candidate.linkedin && (
-                    <a href={`https://linkedin.com/in/${candidate.linkedin}`} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" variant="outline" className="gap-1">
-                        <LinkedinIcon className="size-3.5" />
-                        LinkedIn
-                      </Button>
-                    </a>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Top Skills</CardTitle>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Code2 className="size-4 text-blue-500" />
+                  Skills ({skills.length})
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {candidate.topSkills.map((skill) => (
-                    <Badge key={skill} variant="secondary">{skill}</Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Availability</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm">
-                <p>{availabilityLabel[availability as keyof typeof availabilityLabel]}</p>
-                {candidate.salaryExpectation && (
-                  <p className="text-muted-foreground mt-2">
-                    ${candidate.salaryExpectation.min.toLocaleString()} - ${candidate.salaryExpectation.max.toLocaleString()}
+                {skills.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">
+                    No skills extracted.
                   </p>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5">
+                    {skills.map((s) => (
+                      <Badge
+                        key={s}
+                        variant="secondary"
+                        className="text-xs transition-colors hover:bg-primary hover:text-primary-foreground"
+                      >
+                        {s}
+                      </Badge>
+                    ))}
+                  </div>
                 )}
               </CardContent>
             </Card>
 
-
-            {candidate.notes && (
-              <Card>
+            {additional.length > 0 && (
+              <Card className="overflow-hidden">
+                <div className="h-1 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500" />
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <FileText className="size-4" />
-                    Notes
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Trophy className="size-4 text-amber-500" />
+                    Achievements & Extras ({additional.length})
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="text-sm">
-                  {candidate.notes}
+                <CardContent>
+                  <div className="grid gap-2">
+                    {additional.map((a, i) => (
+                      <div
+                        key={i}
+                        className="group flex items-start gap-2 rounded-lg border border-border/60 bg-gradient-to-br from-amber-500/5 to-transparent p-3 text-xs leading-relaxed transition-all hover:border-amber-500/40 hover:from-amber-500/10 hover:shadow-sm"
+                      >
+                        <Sparkles className="mt-0.5 size-3.5 shrink-0 text-amber-500/80 group-hover:text-amber-500" />
+                        <span className="text-foreground/90">{a}</span>
+                      </div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
             )}
-          </TabsContent>
 
-
-          <TabsContent value="experience" className="space-y-4 mt-4">
-            {certifications.length > 0 && (
-              <Card>
+            {summary?.strengths && summary.strengths.length > 0 && (
+              <Card className="overflow-hidden">
+                <div className="h-1 bg-gradient-to-r from-emerald-500 to-teal-500" />
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Award className="size-4" />
-                    Certifications
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Star className="size-4 text-emerald-500" />
+                    Key Strengths
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {certifications.map((cert, i) => (
-                      <li key={i} className="text-sm flex items-start gap-2">
-                        <span className="text-primary mt-1">•</span>
-                        <span>{cert}</span>
+                    {summary.strengths.map((s, i) => (
+                      <li
+                        key={i}
+                        className="flex items-start gap-2 text-xs text-foreground/90"
+                      >
+                        <span className="mt-1 size-1.5 shrink-0 rounded-full bg-emerald-500" />
+                        {s}
                       </li>
                     ))}
                   </ul>
                 </CardContent>
               </Card>
             )}
-
-
-            {projects.length > 0 && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base flex items-center gap-2">
-                    <Code className="size-4" />
-                    Key Projects
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {projects.map((project, i) => (
-                    <div key={i} className="border-b pb-3 last:border-0 last:pb-0">
-                      <p className="text-sm font-medium">{project.name}</p>
-                      <p className="text-xs text-muted-foreground mt-1">{project.description}</p>
-                      {project.link && (
-                        <a href={project.link} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline mt-2 flex items-center gap-1">
-                          View <ExternalLink className="size-3" />
-                        </a>
-                      )}
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            )}
-
-
-            {companyHistory.length > 0 && (
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-base">Company History</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {companyHistory.map((company, i) => (
-                    <div key={i} className="border-b pb-3 last:border-0 last:pb-0">
-                      <p className="text-sm font-medium">{company.role}</p>
-                      <p className="text-xs text-muted-foreground">{company.company} • {company.years} years</p>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            )}
           </TabsContent>
 
-
-          <TabsContent value="analysis" className="space-y-4 mt-4">
-            <Card>
+          {/* ─────────── EXPERIENCE ─────────── */}
+          <TabsContent value="experience" className="mt-4 space-y-4">
+            {/* Education */}
+            <Card className="overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-amber-500 to-orange-500" />
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">Scoring Breakdown</CardTitle>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <GraduationCap className="size-4 text-amber-500" />
+                  Education ({education.length})
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {Object.entries(candidate.breakdown).map(([key, value]) => (
-                  <div key={key}>
-                    <div className="flex items-center justify-between mb-2">
-                      <label className="text-sm font-medium capitalize">{key}</label>
-                      <span className="text-xs font-semibold">{value}%</span>
+              <CardContent>
+                {education.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">
+                    No education info.
+                  </p>
+                ) : (
+                  <div className="relative space-y-4 pl-6">
+                    <div className="absolute left-2 top-2 bottom-2 w-px bg-gradient-to-b from-amber-500/50 via-amber-500/30 to-transparent" />
+                    {education.map((e, i) => (
+                      <div key={i} className="relative">
+                        <span className="absolute -left-[18px] top-1.5 size-2.5 rounded-full border-2 border-background bg-amber-500 shadow" />
+                        <p className="text-sm font-semibold">
+                          {e.degree || "Untitled"}
+                        </p>
+                        <p className="text-xs text-foreground/80">
+                          {e.institution}
+                        </p>
+                        <p className="mt-0.5 flex flex-wrap gap-x-2 text-[11px] text-muted-foreground">
+                          {e.location && <span>📍 {e.location}</span>}
+                          {e.period && <span>🗓 {e.period}</span>}
+                          {e.gpa && <span>🎯 GPA {e.gpa}</span>}
+                        </p>
+                        {e.coursework && (
+                          <p className="mt-1.5 rounded-md bg-muted/40 p-2 text-[11px] text-foreground/80">
+                            <span className="font-medium">Coursework: </span>
+                            {e.coursework}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Work */}
+            <Card className="overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-emerald-500 to-cyan-500" />
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Briefcase className="size-4 text-emerald-500" />
+                  Work Experience ({work.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {work.length === 0 ? (
+                  <p className="text-xs text-muted-foreground">
+                    No work experience.
+                  </p>
+                ) : (
+                  <div className="relative space-y-5 pl-6">
+                    <div className="absolute left-2 top-2 bottom-2 w-px bg-gradient-to-b from-emerald-500/50 via-emerald-500/30 to-transparent" />
+                    {work.map((w, i) => (
+                      <div key={i} className="relative">
+                        <span className="absolute -left-[18px] top-1.5 size-2.5 rounded-full border-2 border-background bg-emerald-500 shadow" />
+                        <p className="text-sm font-semibold">
+                          {w.title || "Untitled role"}
+                        </p>
+                        <p className="text-xs text-foreground/80">
+                          {w.company}
+                        </p>
+                        <p className="mt-0.5 flex flex-wrap gap-x-2 text-[11px] text-muted-foreground">
+                          {w.location && <span>📍 {w.location}</span>}
+                          {w.period && <span>🗓 {w.period}</span>}
+                        </p>
+                        {w.achievements && w.achievements.length > 0 && (
+                          <ul className="mt-2 space-y-1">
+                            {w.achievements.map((a, j) => (
+                              <li
+                                key={j}
+                                className="flex items-start gap-2 text-[11px] leading-relaxed text-foreground/85"
+                              >
+                                <span className="mt-1 size-1 shrink-0 rounded-full bg-emerald-500" />
+                                {a}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Projects */}
+            <Card className="overflow-hidden">
+              <div className="h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500" />
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <Sparkles className="size-4 text-purple-500" />
+                  Projects ({projects.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {projects.length === 0 && (
+                  <p className="text-xs text-muted-foreground">No projects.</p>
+                )}
+                {projects.map((p, i) => (
+                  <div
+                    key={i}
+                    className="rounded-lg border bg-gradient-to-br from-purple-500/5 to-transparent p-3 transition-all hover:border-purple-500/40 hover:shadow-sm"
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-sm font-semibold">
+                        {p.name || "Untitled"}
+                      </p>
+                      {p.period && (
+                        <span className="shrink-0 text-[11px] text-muted-foreground">
+                          {p.period}
+                        </span>
+                      )}
                     </div>
-                    <Progress value={value} className="h-2" />
+                    {p.technologies && p.technologies.length > 0 && (
+                      <div className="mt-1.5 flex flex-wrap gap-1">
+                        {p.technologies.map((t, j) => (
+                          <Badge
+                            key={j}
+                            variant="outline"
+                            className="border-purple-500/30 bg-purple-500/5 text-[10px] text-purple-600 dark:text-purple-400"
+                          >
+                            {t}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                    {p.description && p.description.length > 0 && (
+                      <ul className="mt-2 space-y-1">
+                        {p.description.map((d, j) => (
+                          <li
+                            key={j}
+                            className="flex items-start gap-2 text-[11px] leading-relaxed text-foreground/85"
+                          >
+                            <span className="mt-1 size-1 shrink-0 rounded-full bg-purple-500" />
+                            {d}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 ))}
               </CardContent>
             </Card>
+          </TabsContent>
 
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Culture & Skills</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium">Culture Fit</label>
-                    <span className="text-xs font-semibold">{cultureFit}%</span>
-                  </div>
-                  <Progress value={cultureFit} className="h-2" />
-                </div>
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium">Skill Match</label>
-                    <span className="text-xs font-semibold">{candidate.skillMatch}%</span>
-                  </div>
-                  <Progress value={candidate.skillMatch} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
-
-
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base">Recommendation</CardTitle>
-              </CardHeader>
-              <CardContent className="text-sm">
-                <p className="text-muted-foreground">{reasoning}</p>
-              </CardContent>
-            </Card>
+          {/* ─────────── GITHUB ─────────── */}
+          <TabsContent value="github" className="mt-4">
+            {githubData ? (
+              <GithubInsights data={githubData} />
+            ) : (
+              <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed p-12 text-center">
+                <GithubIcon className="mb-3 size-10 text-muted-foreground/40" />
+                <p className="text-sm text-muted-foreground">
+                  No GitHub data available.
+                </p>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </div>
     </ScrollArea>
-  )
+  );
+}
+
+function StatBox({
+  icon,
+  label,
+  value,
+  color,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number;
+  color: string;
+}) {
+  return (
+    <div className="group relative overflow-hidden rounded-xl border bg-gradient-to-br from-muted/30 to-transparent p-3 transition-all hover:border-primary/40 hover:shadow-md">
+      <div className={`mb-1 flex items-center gap-1.5 ${color}`}>
+        {icon}
+        <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+          {label}
+        </span>
+      </div>
+      <p className="text-2xl font-bold tracking-tight">{value}</p>
+    </div>
+  );
 }

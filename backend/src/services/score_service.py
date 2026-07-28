@@ -5,6 +5,8 @@ from uuid import UUID
 from fastapi import HTTPException, status
 from sqlmodel import Session
 from groq import Groq, BadRequestError, RateLimitError
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 
 from backend.src.schema.model import (
     ScoreCV, ScoreResponse, CandidateProfile, User, LinkedInJobs,
@@ -14,6 +16,7 @@ from backend.src.repositories.user_repositories import UserRepository
 from backend.src.repositories.job_repositories import JobRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
+from backend.src.services.notification_service import NotificationService
 
 logger = setup_logger("Score Service")
 
@@ -24,8 +27,7 @@ class ScoreService:
         self.user_repository = UserRepository(session=session)
         self.job_repository = JobRepository(session=session)
         self.client = Groq(api_key=settings.GROQ_API_KEY.get_secret_value())
-
-
+        self.notification_service = NotificationService(session=session)
     # ─────────────────────────────────────────────────────────────
     #  Ownership guards
     # ─────────────────────────────────────────────────────────────
@@ -41,7 +43,6 @@ class ScoreService:
             )
         return profile
 
-
     def _assert_owns_job(self, job_id: UUID, owner_id: UUID) -> LinkedInJobs:
         job = self.session.get(LinkedInJobs, job_id)
         if not job:
@@ -51,7 +52,6 @@ class ScoreService:
                 status.HTTP_403_FORBIDDEN, "Không có quyền truy cập job"
             )
         return job
-
 
     # ─────────────────────────────────────────────────────────────
     #  Helpers
@@ -70,14 +70,13 @@ class ScoreService:
             "job_title": job.title if job else None,
             "job_company": job.company if job else None,
             "job_location": job.location if job else None,
+            "job_url": job.job_url if job else None,   # ← THÊM
         }
-
 
     def _sleep_from_rate_limit_error(self, err: RateLimitError) -> float:
         """Đọc thời gian chờ Groq báo trong message; fallback 10s."""
         m = re.search(r"try again in ([\d.]+)s", str(err))
         return float(m.group(1)) + 0.5 if m else 10.0
-
 
     # ─────────────────────────────────────────────────────────────
     #  Score 1 (candidate, job) via LLM
@@ -94,59 +93,68 @@ class ScoreService:
             cv.get("education", []), ensure_ascii=False, indent=2
         )
 
-
         # Truncate để giảm token/request → tránh 429
         github_summary = (profile.github_summary or "")[:6000]
         jd = (job.description or "")[:4000]
 
-
         system_prompt = (
-            "You are a strict and objective Technical Recruiter expert. "
-            "Your task is to match a candidate's CV against a Job Description (JD) "
-            "by CALLING the tool `score_cv` with well-reasoned arguments.\n\n"
-            "GENERAL RULES:\n"
-            "1. Every judgment in `gap_analysis` and `matched_skills` must be based "
-            "   strictly on the provided text. Do not hallucinate skills.\n"
-            "2. `evaluation_summary`: a professional, holistic critique from a "
-            "   recruiter's perspective (2-4 sentences). Never empty.\n"
-            "3. Scoring rubric (integer 0-100):\n"
-            "   - skill_score: % of mandatory technical keywords in the JD present in the CV.\n"
-            "   - education_score: relevance of degree, major, and certifications.\n"
-            "   - work_experience_score: years of relevant exp, titles, career progression.\n"
-            "   - project_score: README complexity, architectural decisions, problem-solving.\n\n"
-            "MANDATORY CONTENT RULES (do NOT return empty lists for these):\n"
-            "4. `matched_skills`: list every skill in the CV that appears in the JD. "
-            "   Minimum 3 items.\n"
-            "5. `gap_analysis`: ALWAYS list at least 2-3 specific gaps.\n"
-            "6. `actionable_advice`: ALWAYS at least 3 concrete recommendations. NEVER empty.\n"
-            "7. `project_impact`: at least 2 items.\n"
-            "8. `technical_complexity`: at least 2 items."
-        )
+            "You are a friendly and encouraging Career Coach. Your task is to help "
+            "the candidate understand how they match a job in a WARM and MOTIVATING "
+            "tone, by CALLING the tool `score_cv` with well-reasoned arguments.\n\n"
 
+
+            "TONE & VOICE:\n"
+            "- Address the candidate as 'you' — direct and personal.\n"
+            "- Frame feedback as growth opportunities, not deficiencies.\n"
+            "- Be specific and encouraging, never generic.\n\n"
+
+
+            "CONTENT RULES:\n"
+            "1. `evaluation_summary`: 2-3 sentences starting with what's exciting "
+            "   about this match. Example: 'You'd shine at this role because your "
+            "   PyTorch expertise directly matches their AI stack, and your "
+            "   Speech-to-IPA project shows exactly the kind of applied research "
+            "   they need.'\n"
+            "2. `matched_skills`: list every CV skill that appears in the JD, "
+            "   framed as strengths. Minimum 3 items.\n"
+            "3. `gap_analysis`: 2-3 GROWTH OPPORTUNITIES. Example: 'Add Kubernetes "
+            "   to your toolkit — they use it heavily' NOT 'Missing Kubernetes'.\n"
+            "4. `actionable_advice`: 3+ concrete next steps this week — specific "
+            "   courses, side projects, or experiments. Achievable and encouraging.\n"
+            "5. `project_impact`: 2+ items highlighting real outcomes from CV projects.\n"
+            "6. `technical_complexity`: 2+ items on architectural sophistication.\n\n"
+
+
+            "SCORING RUBRIC (integer 0-100, be strict but fair):\n"
+            "- skill_score: % of required JD keywords found in CV.\n"
+            "- education_score: degree/major relevance + certifications.\n"
+            "- work_experience_score: years + title progression + domain fit.\n"
+            "- project_score: README depth, architecture, problem-solving evidence.\n\n"
+
+
+            "GROUND RULES:\n"
+            "- Every claim must be based on the provided text — do NOT hallucinate skills.\n"
+            "- NEVER return empty lists for any field.\n"
+            "- Keep JSON well-formed: all brackets balanced, strings properly quoted."
+        )
 
         user_prompt = f"""
         Please evaluate how well the candidate's CV and their practical projects match the Job Description below.
 
-
         📝 [CANDIDATE CV - work experience]
         {work_experience}
-
 
         📝 [CANDIDATE CV - skills]
         {skills}
 
-
         📝 [CANDIDATE CV - education]
         {education}
-
 
         💻 [PRACTICAL PROJECT EVIDENCE (README)]
         {github_summary}
 
-
         🎯 [JOB DESCRIPTION (JD)]
         {jd}
-
 
         Now call the `score_cv` tool. Every list field must have the minimum items specified. Never return empty lists.
         """.strip()
@@ -166,11 +174,9 @@ class ScoreService:
             "technical_complexity": 2,
         }
 
-
         MAX_ATTEMPTS = 3
         last_err: Exception | None = None
         attempt = 0
-
 
         while attempt < MAX_ATTEMPTS:
             try:
@@ -219,9 +225,7 @@ class ScoreService:
                     attempt += 1
                     continue
 
-
                 return content_score
-
 
             except RateLimitError as e:
                 wait = self._sleep_from_rate_limit_error(e)
@@ -231,7 +235,6 @@ class ScoreService:
                 time.sleep(wait)
                 # KHÔNG tăng attempt — retry lại lần này
 
-
             except (BadRequestError, ValueError, KeyError, json.JSONDecodeError) as e:
                 last_err = e
                 logger.warning(
@@ -239,7 +242,6 @@ class ScoreService:
                     f"failed for job_id={job.job_id}: {e}"
                 )
                 attempt += 1
-
 
         raise RuntimeError(
             f"Failed to score job_id={job.job_id} "
@@ -252,92 +254,25 @@ class ScoreService:
     # ─────────────────────────────────────────────────────────────
     def calculate_score(
         self, profile_id: UUID, owner_id: UUID,
+        *, force_rescore: bool = False, max_workers: int = 5,
     ) -> list[dict]:
         logger.info(
             f"[owner={owner_id}] Calculating scores for profile_id={profile_id}"
         )
 
 
-        # 1. Verify profile thuộc recruiter
+        # 1. Verify profile
         profile = self._assert_owns_profile(profile_id, owner_id)
 
 
-        # 2. Chỉ scoring với jobs của chính recruiter
+        # 2. Load jobs
         all_jobs = self.job_repository.get_all_jobs_by_owner(owner_id)
         if not all_jobs:
             raise HTTPException(
                 status.HTTP_404_NOT_FOUND,
                 "Chưa có job nào để chấm. Hãy scrape trước.",
             )
-        logger.info(f"Total jobs to score: {len(all_jobs)}")
-
-
-        tools = [
-            {
-                "type": "function",
-                "function": {
-                    "name": "score_cv",
-                    "description": "Score a candidate's CV against a Job Description",
-                    "parameters": ScoreCV.model_json_schema(),
-                },
-            }
-        ]
-
-
-        all_match = []
-        for idx, job in enumerate(all_jobs):
-            try:
-                content_score = self._score_one(profile, job, tools)
-            except RuntimeError as e:
-                logger.error(str(e))
-                continue
-
-
-            total_score = (
-                content_score.skill_score * 0.4
-                + content_score.education_score * 0.15
-                + content_score.work_experience_score * 0.05
-                + content_score.project_score * 0.4
-            )
-
-
-            match_content = {
-                "profile_id": profile.candidate_id,
-                "job_id": job.job_id,
-                "skill_score": content_score.skill_score,
-                "education_score": content_score.education_score,
-                "work_experience_score": content_score.work_experience_score,
-                "project_score": content_score.project_score,
-                "total_score": total_score,
-                "ai_analysis_details": {
-                    "matched_skills": content_score.matched_skills,
-                    "gap_analysis": content_score.gap_analysis,
-                    "actionable_advice": content_score.actionable_advice,
-                    "evaluation_summary": content_score.evaluation_summary,
-                    "project_impact": content_score.project_impact,
-                    "technical_complexity": content_score.technical_complexity,
-                },
-            }
-
-
-            match = self.score_repository.create_match_result(match_content)
-            all_match.append(self._serialize_match(match, job))
-
-
-            # Throttle nhẹ giữa các job để không burst quá TPM
-            if idx < len(all_jobs) - 1:
-                time.sleep(3)
-
-
-        return all_match
-
-
-    def score_one_pair(
-        self, profile_id: UUID, job_id: UUID, owner_id: UUID,
-    ) -> dict:
-        """Chấm điểm 1 (profile, job) cụ thể — dùng cho tool của AI Agent."""
-        profile = self._assert_owns_profile(profile_id, owner_id)
-        job = self._assert_owns_job(job_id, owner_id)
+        logger.info(f"Total jobs: {len(all_jobs)}")
 
 
         tools = [{
@@ -350,8 +285,116 @@ class ScoreService:
         }]
 
 
-        content_score = self._score_one(profile, job, tools)
+        # ─── 3. Cache lookup: phân loại ───
+        cached_matches: list[dict] = []
+        to_score: list[LinkedInJobs] = []
 
+
+        if force_rescore:
+            to_score = list(all_jobs)
+        else:
+            for job in all_jobs:
+                existing = self.score_repository.find_by_profile_and_job(
+                    profile.candidate_id, job.job_id,
+                )
+                if existing:
+                    cached_matches.append(self._serialize_match(existing, job))
+                else:
+                    to_score.append(job)
+
+
+        logger.info(
+            f"Cache hit: {len(cached_matches)} · To score: {len(to_score)}"
+        )
+
+
+        if not to_score:
+            return cached_matches
+
+
+        # ─── 4. GIAI ĐOẠN 1: gọi LLM song song (KHÔNG DB) ───
+        def _score_only(job: LinkedInJobs) -> tuple[LinkedInJobs, ScoreCV] | None:
+            try:
+                cs = self._score_one(profile, job, tools)
+                return job, cs
+            except RuntimeError as e:
+                logger.error(str(e))
+                return None
+
+
+        scored_pairs: list[tuple[LinkedInJobs, ScoreCV]] = []
+        with ThreadPoolExecutor(max_workers=max_workers) as ex:
+            futures = [ex.submit(_score_only, j) for j in to_score]
+            for f in as_completed(futures):
+                r = f.result()
+                if r is not None:
+                    scored_pairs.append(r)
+
+
+        # ─── 5. GIAI ĐOẠN 2: persist tuần tự trên main thread ───
+        new_matches: list[dict] = []
+        for job, cs in scored_pairs:
+            total_score = (
+                cs.skill_score * 0.4
+                + cs.education_score * 0.15
+                + cs.work_experience_score * 0.05
+                + cs.project_score * 0.4
+            )
+            match = self.score_repository.create_match_result({
+                "profile_id": profile.candidate_id,
+                "job_id": job.job_id,
+                "skill_score": cs.skill_score,
+                "education_score": cs.education_score,
+                "work_experience_score": cs.work_experience_score,
+                "project_score": cs.project_score,
+                "total_score": total_score,
+                "ai_analysis_details": {
+                    "matched_skills": cs.matched_skills,
+                    "gap_analysis": cs.gap_analysis,
+                    "actionable_advice": cs.actionable_advice,
+                    "evaluation_summary": cs.evaluation_summary,
+                    "project_impact": cs.project_impact,
+                    "technical_complexity": cs.technical_complexity,
+                },
+            })
+            new_matches.append(self._serialize_match(match, job))
+
+        all_matches = cached_matches + new_matches
+        if all_matches:
+            top = max(all_matches, key=lambda m: m.get("total_score") or 0)
+            top_score = top.get("total_score") or 0
+            try:
+                self.notification_service.create(
+                    user_id=owner_id,
+                    title=f"Scored {len(all_matches)} jobs",
+                    description=(
+                        f"Top match: {top.get('job_title', 'Unknown')} — "
+                        f"{round(top_score)}%"
+                    ),
+                    link="/dashboard/ai-analysis",
+                )
+            except Exception as e:
+                logger.warning(f"Failed to create notification: {e}")
+
+        return all_matches
+
+    def score_one_pair(
+        self, profile_id: UUID, job_id: UUID, owner_id: UUID,
+    ) -> dict:
+        """Chấm điểm 1 (profile, job) cụ thể — dùng cho tool của AI Agent."""
+        profile = self._assert_owns_profile(profile_id, owner_id)
+        job = self._assert_owns_job(job_id, owner_id)
+
+        tools = [{
+            "type": "function",
+            "function": {
+                "name": "score_cv",
+                "description": "Score a candidate's CV against a Job Description",
+                "parameters": ScoreCV.model_json_schema(),
+            },
+        }]
+
+        content_score = self._score_one(profile, job, tools)
 
         total_score = (
             content_score.skill_score * 0.4
@@ -359,7 +402,6 @@ class ScoreService:
             + content_score.work_experience_score * 0.05
             + content_score.project_score * 0.4
         )
-
 
         match = self.score_repository.create_match_result({
             "profile_id": profile.candidate_id,
@@ -392,7 +434,6 @@ class ScoreService:
     ) -> list[dict]:
         self._assert_owns_profile(profile_id, owner_id)
         matches = self.score_repository.get_scores_by_profile(profile_id, owner_id)
-
 
         # Batch-load jobs 1 lần để tránh N+1
         job_map = {

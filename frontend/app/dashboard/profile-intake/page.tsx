@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
   UploadCloud,
   Sparkles,
@@ -12,7 +11,6 @@ import {
 import { ProfileIntake } from "@/components/dashboard/profile-intake";
 import { Card, CardContent } from "@/components/ui/card";
 
-
 export default function ProfileIntakePage() {
   return (
     <div className="flex-1 overflow-y-auto">
@@ -21,10 +19,10 @@ export default function ProfileIntakePage() {
         <div className="mx-auto max-w-6xl px-6 py-8">
           <div className="flex items-center gap-2 text-xs font-medium text-primary">
             <Sparkles className="size-3.5" />
-            NEW CANDIDATE PROFILE
+            YOUR PROFILE
           </div>
           <h1 className="mt-2 text-3xl font-bold tracking-tight">
-            Onboard a candidate
+            Set up your profile
           </h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
             Upload a resume PDF and connect a GitHub profile. Our system parses
@@ -33,7 +31,6 @@ export default function ProfileIntakePage() {
           </p>
         </div>
       </div>
-
 
       {/* Content */}
       <div className="mx-auto max-w-6xl px-6 py-8">
@@ -72,7 +69,6 @@ export default function ProfileIntakePage() {
               </ol>
             </div>
 
-
             {/* Trust signals */}
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <TrustCard
@@ -88,7 +84,6 @@ export default function ProfileIntakePage() {
             </div>
           </div>
 
-
           {/* ── RIGHT: the form ── */}
           <div>
             <ProfileIntake />
@@ -99,9 +94,7 @@ export default function ProfileIntakePage() {
   );
 }
 
-
 // ─────────────────── SUB-COMPONENTS ───────────────────
-
 
 function StepItem({
   n,
@@ -135,7 +128,6 @@ function StepItem({
   );
 }
 
-
 function TrustCard({
   icon: Icon,
   title,
@@ -159,6 +151,3 @@ function TrustCard({
     </Card>
   );
 }
-
-
-

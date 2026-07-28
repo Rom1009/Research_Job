@@ -265,8 +265,8 @@ export function CandidatesTable({
                         {/* ── Candidate ── */}
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <Avatar className="size-9">
-                              <AvatarFallback className="bg-secondary text-xs">
+                            <Avatar className="size-8 shrink-0 bg-transparent">
+                              <AvatarFallback className="bg-sidebar-primary text-xs font-bold text-sidebar-primary-foreground">
                                 {initials}
                               </AvatarFallback>
                             </Avatar>

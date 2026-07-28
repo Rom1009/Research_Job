@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { FileText, UploadCloud, X, Sparkles, Search } from "lucide-react";
 import { toast } from "sonner";
 import { GithubIcon } from "@/components/dashboard/brand-icons";
-import { useDashboardStore } from "@/lib/dashboard-store";
 import {
   Card,
   CardContent,
@@ -25,16 +24,23 @@ import {
 } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
-import Link from "next/link";
+import { useMyProfile } from "@/hooks/use-my-profile";
 
-export function ProfileIntake() {
+interface ProfileIntakeProps {
+  onSuccess?: (candidateId: string) => void;
+  initialGithubUrl?: string; // prefill khi update
+}
+
+export function ProfileIntake({
+  onSuccess,
+  initialGithubUrl,
+}: ProfileIntakeProps = {}) {
   const router = useRouter();
+  const { refresh } = useMyProfile();
 
-  const setActiveTab = useDashboardStore((s) => s.setActiveTab);
-  const setActiveProfileId = useDashboardStore((s) => s.setActiveProfileId);
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
-  const [gitUrl, setGitUrl] = useState("");
+  const [gitUrl, setGitUrl] = useState(initialGithubUrl ?? "");
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string>();
@@ -47,12 +53,20 @@ export function ProfileIntake() {
     try {
       setLoading(true);
       const data = await api.uploadCV(file, gitUrl || undefined);
-      setResult(data.candidate_id); // ← lưu candidate_id vào state
-      setActiveProfileId(data.candidate_id);
+      setResult(data.candidate_id);
+
+      // ✨ Sync store — mọi component (sidebar, job page) auto re-render
+      await refresh();
+
       toast.success("Profile saved.", {
-        description: `User ID: ${data.candidate_id}`,
+        description: "You can now start matching against jobs.",
       });
-      router.push("/dashboard/jobs");
+
+      if (onSuccess) {
+        onSuccess(data.candidate_id);
+      } else {
+        router.push("/dashboard/jobs");
+      }
     } catch (e) {
       console.error(e);
       toast.error("Failed to upload CV.", {
@@ -61,14 +75,6 @@ export function ProfileIntake() {
     } finally {
       setLoading(false);
     }
-  }
-
-  function onStart() {
-    if (!file) {
-      toast.error("Please upload a CV file.");
-      return;
-    }
-    handleSubmit(); // ← không truyền URL fake nữa
   }
 
   function handleFiles(files: FileList | null) {
@@ -82,15 +88,13 @@ export function ProfileIntake() {
   }
 
   function goFindJobs() {
-    if (!result) return;
-    setActiveProfileId(result); // lưu id vào store
-    setActiveTab("jobs"); // chuyển sang tab Jobs
+    router.push("/dashboard/jobs");
   }
 
   function reset() {
     setResult(undefined);
     setFile(null);
-    setGitUrl("");
+    setGitUrl(initialGithubUrl ?? "");
   }
 
   return (
@@ -102,6 +106,7 @@ export function ProfileIntake() {
           research.
         </CardDescription>
       </CardHeader>
+
       <CardContent className="flex flex-col gap-5">
         {/* Dropzone */}
         <div
@@ -154,10 +159,11 @@ export function ProfileIntake() {
               </span>
             </div>
             <Button
-              variant="ghost"
               size="icon"
-              aria-label="Remove file"
+              variant="ghost"
               onClick={() => setFile(null)}
+              aria-label="Remove file"
+              disabled={loading}
             >
               <X />
             </Button>
@@ -171,28 +177,28 @@ export function ProfileIntake() {
               <GithubIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 id="git-url"
-                placeholder="github.com/username"
+                placeholder="https://github.com/username"
                 className="pl-9"
                 value={gitUrl}
                 onChange={(e) => setGitUrl(e.target.value)}
+                disabled={loading}
               />
             </div>
             <FieldDescription>
-              We analyze public commit history and language breakdown.
+              Optional but recommended — we analyze public commits and language
+              breakdown.
             </FieldDescription>
           </Field>
         </FieldGroup>
 
-        <Link href="/dashboard/jobs" className="block w-full">
-          <Button
-            onClick={onStart}
-            disabled={loading || !file} // ← chỉ cần file, github là optional
-            className="w-full"
-          >
-            {loading ? <Spinner /> : <Sparkles data-icon="inline-start" />}
-            {loading ? "Uploading & parsing…" : "Start research"}
-          </Button>
-        </Link>
+        <Button
+          onClick={handleSubmit}
+          disabled={loading || !file}
+          className="w-full"
+        >
+          {loading ? <Spinner /> : <Sparkles data-icon="inline-start" />}
+          {loading ? "Uploading & parsing…" : "Start research"}
+        </Button>
 
         {result && (
           <div className="flex flex-col gap-3 rounded-xl border border-primary/30 bg-primary/5 p-4">

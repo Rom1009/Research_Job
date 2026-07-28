@@ -42,33 +42,17 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
-import { api, type CandidateProfile, type MatchResult } from "@/lib/api";
-import { useDashboardStore } from "@/lib/dashboard-store";
+import { api, type MatchResult } from "@/lib/api";
+import { useMyProfile } from "@/hooks/use-my-profile";
+import { cn, normalizeSkills } from "@/lib/utils";
+import { EmptyState } from "@/components/ui/empty-state";
 
 // ─────────────────── TYPES ───────────────────
 
 type ScoreBucket = "all" | "excellent" | "strong" | "fair" | "poor";
 
 // ─────────────────── HELPERS ───────────────────
-
-function handleFromUrl(url?: string): string {
-  if (!url) return "unknown";
-  try {
-    const u = new URL(url);
-    return u.pathname.replace(/^\/+/, "").split("/")[0] || u.hostname;
-  } catch {
-    return url;
-  }
-}
 
 function scoreTone(score: number) {
   if (score >= 80) return "text-emerald-500";
@@ -86,7 +70,7 @@ function matchContainsTerm(m: MatchResult, term: string): boolean {
   const ai = m.ai_analysis_details;
   if (!ai) return false;
   const all = [
-    ...(ai.matched_skills ?? []),
+    ...normalizeSkills(ai.matched_skills), // ← normalize
     ...(ai.gap_analysis ?? []),
     ...(ai.actionable_advice ?? []),
     ...(ai.project_impact ?? []),
@@ -99,33 +83,12 @@ function matchContainsTerm(m: MatchResult, term: string): boolean {
 // ─────────────────── MAIN ───────────────────
 
 export function AIAnalysisReport() {
-  const activeProfileId = useDashboardStore((s) => s.activeProfileId);
-  const setActiveProfileId = useDashboardStore((s) => s.setActiveProfileId);
+  const { profile, loading: loadingProfile } = useMyProfile();
+  const activeProfileId = profile?.candidate_id;
 
-  const [users, setUsers] = useState<CandidateProfile[]>([]);
   const [scores, setScores] = useState<MatchResult[]>([]);
-  const [loadingUsers, setLoadingUsers] = useState(true);
   const [loadingScores, setLoadingScores] = useState(false);
   const [highlightTerm, setHighlightTerm] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    api
-      .listUsers()
-      .then((data) => {
-        if (cancelled) return;
-        setUsers(data);
-        if (!activeProfileId && data.length > 0) {
-          setActiveProfileId(data[0].candidate_id);
-        }
-      })
-      .catch(console.error)
-      .finally(() => !cancelled && setLoadingUsers(false));
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (!activeProfileId) {
@@ -140,8 +103,6 @@ export function AIAnalysisReport() {
       .catch(console.error)
       .finally(() => setLoadingScores(false));
   }, [activeProfileId]);
-
-  const currentUser = users.find((u) => u.candidate_id === activeProfileId);
 
   const metrics = useMemo(() => {
     if (scores.length === 0) {
@@ -213,7 +174,7 @@ export function AIAnalysisReport() {
 
   // ─────────────────────── RENDER ───────────────────────
 
-  if (loadingUsers) {
+  if (loadingProfile) {
     return (
       <div className="space-y-4">
         <Skeleton className="h-16 w-full" />
@@ -227,7 +188,7 @@ export function AIAnalysisReport() {
     );
   }
 
-  if (users.length === 0) {
+  if (!profile) {
     return (
       <Card>
         <CardContent className="flex flex-col items-center justify-center gap-3 py-16 text-center">
@@ -235,9 +196,9 @@ export function AIAnalysisReport() {
             <Users className="size-6 text-muted-foreground" />
           </div>
           <div>
-            <h3 className="font-semibold">No candidates yet</h3>
+            <h3 className="font-semibold">Set up your profile first</h3>
             <p className="text-sm text-muted-foreground">
-              Upload a CV to see AI analysis here.
+              Upload your CV to see your AI-powered career analysis.
             </p>
           </div>
         </CardContent>
@@ -247,39 +208,15 @@ export function AIAnalysisReport() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <Card>
         <CardHeader>
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                <Sparkles className="size-5 text-primary" />
-                AI Analysis Report
-              </CardTitle>
-              <CardDescription>
-                LLM-driven insights combining CV, GitHub activity, and job match
-                signals.
-              </CardDescription>
-            </div>
-            <div className="min-w-[240px]">
-              <Select
-                value={activeProfileId ?? ""}
-                onValueChange={(v) => v && setActiveProfileId(v)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select candidate" />
-                </SelectTrigger>
-                <SelectContent>
-                  {users.map((u) => (
-                    <SelectItem key={u.candidate_id} value={u.candidate_id}>
-                      {handleFromUrl(u.github_url)} ·{" "}
-                      {u.candidate_id.slice(0, 8)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+          <CardTitle className="flex items-center gap-2">
+            <Sparkles className="size-5 text-primary" />
+            Your AI Analysis Report
+          </CardTitle>
+          <CardDescription>
+            Personalized insights from your CV, GitHub, and job matches.
+          </CardDescription>
         </CardHeader>
       </Card>
 
@@ -292,8 +229,8 @@ export function AIAnalysisReport() {
             metrics.best >= 80
               ? "Excellent fit"
               : metrics.best >= 60
-                ? "Consider interview"
-                : "Below threshold"
+                ? "Consider applying"
+                : "Room to grow"
           }
           tone={scoreTone(metrics.best)}
           icon={Award}
@@ -320,8 +257,8 @@ export function AIAnalysisReport() {
           label="Jobs scored"
           value={metrics.total}
           hint={
-            currentUser?.created_at
-              ? `since ${new Date(currentUser.created_at).toLocaleDateString()}`
+            profile.created_at
+              ? `since ${new Date(profile.created_at).toLocaleDateString()}`
               : "—"
           }
           tone="text-purple-500"
@@ -338,11 +275,12 @@ export function AIAnalysisReport() {
               <AlertCircle className="size-6 text-muted-foreground" />
             </div>
             <div>
-              <h3 className="font-semibold">No scores yet</h3>
-              <p className="text-sm text-muted-foreground">
-                Go to the Jobs page → Start scraping → Start scoring for this
-                candidate.
-              </p>
+              <EmptyState
+                icon={<Sparkles className="size-6" />}
+                title="No matches yet"
+                description="Scrape and score jobs to see your AI-powered career analysis."
+                action={{ label: "Go to Job Matches", href: "/dashboard/jobs" }}
+              />
             </div>
           </CardContent>
         </Card>
@@ -358,7 +296,6 @@ export function AIAnalysisReport() {
             </TabsTrigger>
           </TabsList>
 
-          {/* ══════════════════ TAB 1: OVERVIEW ══════════════════ */}
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               <RadarCard data={radarData} />
@@ -385,7 +322,6 @@ export function AIAnalysisReport() {
               </div>
             )}
 
-            {/* Top 5 Matches — EXPANDABLE */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Top 5 Matches</CardTitle>
@@ -405,14 +341,10 @@ export function AIAnalysisReport() {
               </CardContent>
             </Card>
 
-            {/* Match Landscape */}
             <MatchLandscapeCard scores={scores} />
-
-            {/* Companies in Pool */}
             <CompaniesCard scores={scores} />
           </TabsContent>
 
-          {/* ══════════════════ TAB 2: ALL JOBS ══════════════════ */}
           <TabsContent value="per-job">
             <PerJobList scores={scores} />
           </TabsContent>
@@ -461,8 +393,6 @@ function MetricCard({
     </Card>
   );
 }
-
-// ─────────── CHARTS ───────────
 
 function RadarCard({ data }: { data: { dim: string; value: number }[] }) {
   return (
@@ -543,7 +473,7 @@ function DistributionCard({
     <Card>
       <CardHeader>
         <CardTitle className="text-base">Score Distribution</CardTitle>
-        <CardDescription>How this candidate ranks per job</CardDescription>
+        <CardDescription>How your matches break down</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
@@ -613,8 +543,6 @@ function DistributionCard({
     </Card>
   );
 }
-
-// ─────────── MATCH LANDSCAPE ───────────
 
 function MatchLandscapeCard({ scores }: { scores: MatchResult[] }) {
   const data = useMemo(
@@ -755,8 +683,6 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   );
 }
 
-// ─────────── COMPANIES IN POOL ───────────
-
 function CompaniesCard({ scores }: { scores: MatchResult[] }) {
   const companies = useMemo(() => {
     const map = new Map<
@@ -846,8 +772,6 @@ function CompaniesCard({ scores }: { scores: MatchResult[] }) {
   );
 }
 
-// ─────────── EXPANDABLE TOP-MATCH ROW ───────────
-
 function ExpandableMatchRow({
   match,
   rank,
@@ -933,21 +857,29 @@ function ExpandableMatchRow({
                   </MiniSection>
                 </div>
               )}
-              {!!ai.matched_skills?.length && (
-                <MiniSection
-                  icon={Award}
-                  label="Matched Skills"
-                  tone="text-emerald-500"
-                >
-                  <div className="flex flex-wrap gap-1">
-                    {ai.matched_skills.map((s) => (
-                      <Badge key={s} variant="secondary" className="text-xs">
-                        {s}
-                      </Badge>
-                    ))}
-                  </div>
-                </MiniSection>
-              )}
+              {!!ai.matched_skills?.length &&
+                (() => {
+                  const skills = normalizeSkills(ai.matched_skills);
+                  return (
+                    <MiniSection
+                      icon={Award}
+                      label="Matched Skills"
+                      tone="text-emerald-500"
+                    >
+                      <div className="flex flex-wrap gap-1">
+                        {skills.map((s) => (
+                          <Badge
+                            key={s}
+                            variant="secondary"
+                            className="border-emerald-500/30 bg-emerald-500/5 text-[11px] text-emerald-700 dark:text-emerald-400"
+                          >
+                            {s}
+                          </Badge>
+                        ))}
+                      </div>
+                    </MiniSection>
+                  );
+                })()}
               {!!ai.gap_analysis?.length && (
                 <MiniSection
                   icon={FileWarning}
@@ -1030,8 +962,6 @@ function BulletList({ items }: { items: string[] }) {
     </ul>
   );
 }
-
-// ─────────── PER-JOB TAB LIST ───────────
 
 function PerJobList({ scores }: { scores: MatchResult[] }) {
   const [filter, setFilter] = useState<ScoreBucket>("all");

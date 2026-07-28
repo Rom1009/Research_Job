@@ -1,20 +1,26 @@
 "use client";
+import Link from "next/link";
+import { useEffect } from "react";
 import {
   X,
-  Award,
-  Briefcase,
-  ExternalLink,
+  Maximize2,
   Sparkles,
-  Trophy,
+  Briefcase,
+  GraduationCap,
+  Code2,
+  MapPin,
+  Users,
+  Calendar,
+  Zap,
+  FileText,
+  ArrowRight,
 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { type CandidateProfile } from "@/lib/api";
+import { type CandidateProfile, parseGithubSummary } from "@/lib/api";
 import { GithubIcon } from "@/components/dashboard/brand-icons";
-import Link from "next/link";
+import { normalizeSkills } from "@/lib/utils";
 
 interface DashboardRightPanelProps {
   selectedCandidate: CandidateProfile | null;
@@ -31,16 +37,20 @@ function shortHandle(url?: string): string {
   }
 }
 
-function initials(handle: string): string {
-  const parts = handle
-    .replace(/[-_]/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-  if (parts.length === 0) return "?";
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return (parts[0][0] + parts[1][0]).toUpperCase();
-}
+const SENIORITY_STYLE: Record<string, string> = {
+  junior: "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30",
+  mid: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30",
+  senior:
+    "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30",
+};
+
+const ACTIVITY_DOT: Record<string, string> = {
+  active: "bg-emerald-500",
+  moderate: "bg-amber-500",
+  inactive: "bg-gray-400",
+};
+
+const MAX_SKILLS_PREVIEW = 8;
 
 export function DashboardRightPanel({
   selectedCandidate,
@@ -50,286 +60,250 @@ export function DashboardRightPanel({
 
   const u = selectedCandidate;
   const handle = shortHandle(u.github_url);
-  const skills = u.cv_structured?.skills ?? [];
+  const skills = normalizeSkills(u.cv_structured?.skills);
   const education = u.cv_structured?.education ?? [];
   const work = u.cv_structured?.work_experience ?? [];
   const project = u.cv_structured?.project ?? [];
-  const additional = u.cv_structured?.additional_info ?? [];
+  const githubData = parseGithubSummary(u.github_summary);
+
+  const gh = githubData?.profile?.profile;
+  const summary = githubData?.summary;
+  const displayName = gh?.name || gh?.login || handle;
+  const displayTitle =
+    work[0]?.title ||
+    summary?.primary_tech_stack?.slice(0, 3).join(" · ") ||
+    "Candidate";
+  const seniority = summary?.seniority_estimate ?? "";
+  const activity = summary?.activity_level ?? "";
+
+  const detailHref = `/dashboard/candidates/${u.candidate_id}`;
+  const shownSkills = skills.slice(0, MAX_SKILLS_PREVIEW);
+  const hiddenSkillsCount = Math.max(0, skills.length - MAX_SKILLS_PREVIEW);
+
+  // bên trong component, sau khi khai báo biến:
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
 
   return (
-    <div className="fixed right-0 top-0 z-40 flex h-screen w-full max-w-md flex-col border-l border-border bg-background shadow-lg">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-border p-4">
-        <h2 className="text-lg font-semibold">Candidate Details</h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="h-8 w-8"
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
+    <>
+      <div
+        className="fixed inset-0 z-30 bg-black/20 backdrop-blur-[2px]"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+      <div className="fixed right-0 top-0 z-40 flex h-screen w-full max-w-sm flex-col border-l border-border bg-background shadow-2xl">
+        {/* Header */}
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
+          <h2 className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+            Preview
+          </h2>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-7 w-7 rounded-full"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
 
-      <Tabs
-        defaultValue="profile"
-        className="flex flex-1 flex-col overflow-hidden"
-      >
-        <TabsList className="mx-4 mt-4 grid grid-cols-2">
-          <TabsTrigger value="profile" className="text-xs">
-            Profile
-          </TabsTrigger>
-          <TabsTrigger value="experience" className="text-xs">
-            Experience
-          </TabsTrigger>
-        </TabsList>
+        <ScrollArea className="flex-1">
+          <div className="space-y-4 p-4">
+            {/* ═════ HERO ═════ */}
+            <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-4">
+              <div className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-primary/10 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-14 -left-6 size-28 rounded-full bg-purple-500/10 blur-3xl" />
 
-        {/* ══════════════════ PROFILE ══════════════════ */}
-        <TabsContent value="profile" className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="space-y-4 p-4">
-              <div className="flex items-center gap-3">
-                <div className="flex size-12 items-center justify-center rounded-full bg-primary/20 text-sm font-semibold">
-                  {initials(handle)}
-                </div>
-                <div className="min-w-0">
-                  <h3 className="truncate font-semibold">{handle}</h3>
-                  {u.created_at && (
-                    <p className="text-xs text-muted-foreground">
-                      Joined {new Date(u.created_at).toLocaleDateString()}
-                    </p>
-                  )}
-                </div>
-              </div>
+              <div className="relative flex items-start gap-3">
+                {gh?.avatar_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={gh.avatar_url}
+                    alt={displayName}
+                    className="size-14 rounded-xl border-2 border-background object-cover shadow-md ring-2 ring-primary/20"
+                  />
+                ) : (
+                  <div className="flex size-14 items-center justify-center rounded-xl border-2 border-background bg-gradient-to-br from-primary to-purple-500 text-lg font-bold text-primary-foreground shadow-md ring-2 ring-primary/20">
+                    {(displayName[0] ?? "?").toUpperCase()}
+                  </div>
+                )}
 
-              <Separator />
-
-              <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">Links</p>
-                <div className="flex flex-wrap gap-2">
-                  {u.github_url && (
-                    <a
-                      href={u.github_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted/40 px-2 py-1 text-xs hover:bg-muted"
-                    >
-                      <GithubIcon className="size-3.5" />
-                      GitHub
-                    </a>
-                  )}
-                  {u.cv_url && (
-                    <a
-                      href={u.cv_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-md border border-border bg-muted/40 px-2 py-1 text-xs hover:bg-muted"
-                    >
-                      <ExternalLink className="size-3.5" />
-                      CV source
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <p className="mb-2 text-xs text-muted-foreground">
-                  Skills ({skills.length})
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {skills.length === 0 && (
-                    <span className="text-xs text-muted-foreground">
-                      No skills extracted
-                    </span>
-                  )}
-                  {skills.map((s) => (
-                    <Badge key={s} variant="secondary" className="text-xs">
-                      {s}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              {u.created_at && (
-                <div>
-                  <p className="mb-1 text-xs text-muted-foreground">Ingested</p>
-                  <p className="text-sm">
-                    {new Date(u.created_at).toLocaleString()}
+                <div className="min-w-0 flex-1">
+                  <h3 className="truncate text-base font-bold">
+                    {displayName}
+                  </h3>
+                  <p className="truncate text-xs text-muted-foreground">
+                    {displayTitle}
                   </p>
-                </div>
-              )}
-
-              {/* CTA — hướng dẫn tới trang AI Analysis đúng nghĩa */}
-              <div className="rounded-xl border border-primary/30 bg-primary/[0.04] p-3">
-                <div className="flex items-start gap-2.5">
-                  <Sparkles className="mt-0.5 size-4 shrink-0 text-primary" />
-                  <div className="flex-1 space-y-2">
-                    <div>
-                      <p className="text-sm font-medium">
-                        Looking for per-job AI analysis?
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        Match scoring, gaps, and advice are computed per job.
-                      </p>
-                    </div>
-                    <Link href="/dashboard/ai-analysis" onClick={onClose}>
-                      <Button size="sm" variant="outline">
-                        Open AI Analysis →
-                      </Button>
-                    </Link>
+                  <div className="mt-1.5 flex flex-wrap items-center gap-1">
+                    {seniority && (
+                      <Badge
+                        variant="outline"
+                        className={`text-[10px] ${SENIORITY_STYLE[seniority] ?? ""}`}
+                      >
+                        <Zap className="mr-0.5 size-2.5" />
+                        {seniority.toUpperCase()}
+                      </Badge>
+                    )}
+                    {activity && (
+                      <Badge variant="outline" className="gap-1 text-[10px]">
+                        <span
+                          className={`size-1.5 rounded-full ${
+                            ACTIVITY_DOT[activity] ?? "bg-gray-400"
+                          }`}
+                        />
+                        {activity}
+                      </Badge>
+                    )}
                   </div>
                 </div>
               </div>
+
+              {/* Meta row */}
+              <div className="relative mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                {gh?.location && (
+                  <span className="flex items-center gap-1">
+                    <MapPin className="size-3" /> {gh.location}
+                  </span>
+                )}
+                {gh?.followers !== undefined && (
+                  <span className="flex items-center gap-1">
+                    <Users className="size-3" /> {gh.followers}
+                  </span>
+                )}
+                {u.created_at && (
+                  <span className="flex items-center gap-1">
+                    <Calendar className="size-3" />
+                    {new Date(u.created_at).toLocaleDateString()}
+                  </span>
+                )}
+              </div>
             </div>
-          </ScrollArea>
-        </TabsContent>
 
-        {/* ══════════════════ EXPERIENCE ══════════════════ */}
-        <TabsContent value="experience" className="flex-1 overflow-hidden">
-          <ScrollArea className="h-full">
-            <div className="space-y-4 p-4">
-              <section>
-                <h4 className="mb-3 flex items-center gap-2 font-semibold">
-                  <Award className="h-4 w-4" />
-                  Education ({education.length})
-                </h4>
-                <div className="space-y-2">
-                  {education.length === 0 && (
-                    <p className="text-xs text-muted-foreground">
-                      No education info.
-                    </p>
-                  )}
-                  {education.map((e, i) => (
-                    <div
-                      key={i}
-                      className="space-y-1 rounded-md border p-3 text-sm"
-                    >
-                      <p className="font-medium">
-                        {[e.degree, e.institution]
-                          .filter(Boolean)
-                          .join(" @ ") || "Untitled"}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {[e.location, e.period, e.gpa && `GPA ${e.gpa}`]
-                          .filter(Boolean)
-                          .join(" · ")}
-                      </p>
-                      {e.coursework && (
-                        <p className="text-xs text-foreground/80">
-                          <span className="font-medium">Coursework: </span>
-                          {e.coursework}
-                        </p>
-                      )}
-                    </div>
+            {/* ═════ QUICK STATS ═════ */}
+            <div className="grid grid-cols-4 gap-2">
+              <MiniStat
+                icon={<Code2 className="size-3" />}
+                value={skills.length}
+                label="Skills"
+                color="text-blue-500"
+              />
+              <MiniStat
+                icon={<Briefcase className="size-3" />}
+                value={work.length}
+                label="Work"
+                color="text-emerald-500"
+              />
+              <MiniStat
+                icon={<Sparkles className="size-3" />}
+                value={project.length}
+                label="Proj"
+                color="text-purple-500"
+              />
+              <MiniStat
+                icon={<GraduationCap className="size-3" />}
+                value={education.length}
+                label="Edu"
+                color="text-amber-500"
+              />
+            </div>
+
+            {/* ═════ SKILLS PREVIEW ═════ */}
+            {skills.length > 0 && (
+              <div className="space-y-1.5">
+                <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Top Skills
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {shownSkills.map((s) => (
+                    <Badge key={s} variant="secondary" className="text-[10px]">
+                      {s}
+                    </Badge>
                   ))}
-                </div>
-              </section>
-
-              <Separator />
-
-              <section>
-                <h4 className="mb-3 flex items-center gap-2 font-semibold">
-                  <Briefcase className="h-4 w-4" />
-                  Work Experience ({work.length})
-                </h4>
-                <div className="space-y-2">
-                  {work.length === 0 && (
-                    <p className="text-xs text-muted-foreground">
-                      No work experience.
-                    </p>
+                  {hiddenSkillsCount > 0 && (
+                    <Badge variant="outline" className="text-[10px]">
+                      +{hiddenSkillsCount} more
+                    </Badge>
                   )}
-                  {work.map((w, i) => (
-                    <div
-                      key={i}
-                      className="space-y-1 rounded-md border p-3 text-sm"
-                    >
-                      <p className="font-medium">
-                        {[w.title, w.company].filter(Boolean).join(" @ ") ||
-                          "Untitled role"}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {[w.location, w.period].filter(Boolean).join(" · ")}
-                      </p>
-                      {w.achievements && w.achievements.length > 0 && (
-                        <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs text-foreground/80">
-                          {w.achievements.map((a, j) => (
-                            <li key={j}>{a}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
                 </div>
-              </section>
+              </div>
+            )}
 
-              <section>
-                <h4 className="mb-3 flex items-center gap-2 font-semibold">
-                  <Briefcase className="h-4 w-4" />
-                  Projects ({project.length})
-                </h4>
-                <div className="space-y-2">
-                  {project.length === 0 && (
-                    <p className="text-xs text-muted-foreground">
-                      No projects.
-                    </p>
-                  )}
-                  {project.map((p, i) => (
-                    <div
-                      key={i}
-                      className="space-y-1 rounded-md border p-3 text-sm"
-                    >
-                      <p className="font-medium">
-                        {[p.name].filter(Boolean).join(" @ ") ||
-                          "Untitled role"}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {[p.period].filter(Boolean).join(" · ")}
-                      </p>
-                      {p.technologies && p.technologies.length > 0 && (
-                        <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs text-foreground/80">
-                          {p.technologies.map((a, j) => (
-                            <li key={j}>{a}</li>
-                          ))}
-                        </ul>
-                      )}
-                      {p.description && p.description.length > 0 && (
-                        <ul className="mt-1 list-disc space-y-0.5 pl-4 text-xs text-foreground/80">
-                          {p.description.map((a, j) => (
-                            <li key={j}>{a}</li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </section>
-
-              {additional.length > 0 && (
-                <>
-                  <Separator />
-                  <section>
-                    <h4 className="mb-3 flex items-center gap-2 font-semibold">
-                      <Trophy className="h-4 w-4 text-amber-500" />
-                      Achievements & Extras ({additional.length})
-                    </h4>
-                    <div className="grid grid-cols-1 gap-2">
-                      {additional.map((a, i) => (
-                        <div
-                          key={i}
-                          className="group flex items-start gap-2 rounded-lg border border-border/60 bg-gradient-to-br from-muted/40 to-transparent p-3 text-xs leading-relaxed transition-colors hover:border-amber-500/40 hover:from-amber-500/5"
-                        >
-                          <Sparkles className="mt-0.5 size-3.5 shrink-0 text-amber-500/80 group-hover:text-amber-500" />
-                          <span className="text-foreground/90">{a}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                </>
+            {/* ═════ QUICK LINKS ═════ */}
+            <div className="flex flex-wrap gap-1.5">
+              {u.github_url && (
+                <a
+                  href={u.github_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 gap-1 text-xs"
+                  >
+                    <GithubIcon className="size-3" /> GitHub
+                  </Button>
+                </a>
+              )}
+              {u.cv_url && (
+                <a href={u.cv_url} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 gap-1 text-xs"
+                  >
+                    <FileText className="size-3" /> CV
+                  </Button>
+                </a>
               )}
             </div>
-          </ScrollArea>
-        </TabsContent>
-      </Tabs>
+          </div>
+        </ScrollArea>
+
+        {/* ═════ FOOTER CTA ═════ */}
+        <div className="border-t border-border bg-gradient-to-br from-primary/5 to-transparent p-3">
+          <Link href={detailHref} className="block">
+            <Button className="group h-11 w-full gap-2 text-sm font-semibold shadow-md">
+              <Maximize2 className="size-4" />
+              Open Full Profile
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+          <p className="mt-1.5 text-center text-[10px] text-muted-foreground">
+            Full experience, projects, and GitHub insights
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+function MiniStat({
+  icon,
+  value,
+  label,
+  color,
+}: {
+  icon: React.ReactNode;
+  value: number;
+  label: string;
+  color: string;
+}) {
+  return (
+    <div className="rounded-lg border bg-gradient-to-br from-muted/30 to-transparent p-2 text-center">
+      <div className={`flex items-center justify-center gap-1 ${color}`}>
+        {icon}
+        <span className="text-[9px] font-medium uppercase tracking-wide text-muted-foreground">
+          {label}
+        </span>
+      </div>
+      <p className="text-sm font-bold">{value}</p>
     </div>
   );
 }

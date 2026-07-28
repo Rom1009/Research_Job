@@ -9,6 +9,7 @@ from backend.src.core.security import (
     hash_password, verify_password, create_access_token
 )
 from backend.utils.logger import setup_logger
+from uuid import UUID
 
 
 logger = setup_logger("Auth Service")
@@ -19,7 +20,6 @@ class AuthService:
    
     def register(self, req: RegisterRequest) -> TokenResponse:
         logger.info(f"Registering new user with email: {req.email}")
-
 
         email = req.email.lower().strip()
         if self.repository.get_by_email(email):
@@ -39,7 +39,6 @@ class AuthService:
    
     def login(self, req: LoginRequest) -> TokenResponse:
         logger.info(f"User login attempt with email: {req.email}")
-
 
         user = self.repository.get_by_email(req.email.lower().strip())
         if not user or not verify_password(req.password, user.hashed_password):
@@ -67,3 +66,29 @@ class AuthService:
                 role = user.role
             )
         )
+
+    def change_password(
+        self, user_id: UUID, current: str, new: str,
+    ) -> dict:
+        user = self.repository.get_by_id(user_id)
+        if not user:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "User not found")
+
+
+        if not verify_password(current, user.hashed_password):
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                "Current password is incorrect",
+            )
+
+        if verify_password(new, user.hashed_password):
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                "New password must be different from current",
+            )
+
+        user.hashed_password = hash_password(new)
+        self.repository.update(user)
+        logger.info(f"Password changed for user {user_id}")
+        return {"message": "Password updated successfully"}
+

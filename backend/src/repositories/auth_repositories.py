@@ -17,6 +17,7 @@ class AuthRepository:
 
 
     def get_by_id(self, user_id: UUID) -> Optional[User]:
+        logger.info(f"Fetching user by ID: {user_id}")
         return self.session.get(User, user_id)
    
     def create(self, user: User) -> User:
@@ -26,3 +27,12 @@ class AuthRepository:
         self.session.refresh(user)
         logger.info(f"User created with ID: {user.user_id}")
         return user
+
+
+    def update(self, user: User) -> User:
+        logger.info(f"Updating user: {user.user_id}")
+        self.session.add(user)
+        self.session.commit()
+        self.session.refresh(user)
+        return user
+

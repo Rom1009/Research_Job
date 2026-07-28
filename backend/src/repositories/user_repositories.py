@@ -41,7 +41,6 @@ class UserRepository:
             statement = statement.where(CandidateProfile.github_url == github_url)
         return self.session.exec(statement).first()
 
-
     def find_latest_by_github(self, github_url: str | None):
         if not github_url:
             return None
@@ -51,3 +50,14 @@ class UserRepository:
             .order_by(CandidateProfile.version.desc())
         )
         return self.session.exec(statement).first()
+
+    def find_by_owner(self, owner_id: UUID) -> CandidateProfile | None:
+        stmt = select(CandidateProfile).where(CandidateProfile.owner_id == owner_id)
+        return self.session.exec(stmt).first()
+
+    def update_profile(self, profile_id: UUID, data: dict) -> CandidateProfile:
+        profile = self.session.get(CandidateProfile, profile_id)
+        for k, v in data.items():
+            setattr(profile, k, v)
+        self.session.add(profile); self.session.commit(); self.session.refresh(profile)
+        return profile

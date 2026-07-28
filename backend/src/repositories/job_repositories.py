@@ -40,3 +40,10 @@ class JobRepository:
             LinkedInJobs.owner_id == owner_id,
         )
         return self.session.exec(stmt).first()
+
+    def delete(self, jobs: list[LinkedInJobs]):
+        for job in jobs:
+            logger.info(f"Deleting job with ID: {job.job_id}")
+            self.session.delete(job)
+        self.session.commit()
+        return True

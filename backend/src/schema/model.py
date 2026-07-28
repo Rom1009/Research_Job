@@ -70,11 +70,9 @@ class RegisterRequest(SQLModel):
     password: str = PydField(min_length=6)
     full_name: Optional[str] = None
 
-
 class LoginRequest(SQLModel):
     email: str
     password: str
-
 
 class UserPublic(SQLModel):
     user_id: UUID
@@ -82,18 +80,15 @@ class UserPublic(SQLModel):
     full_name: Optional[str] = None
     role: str
 
-
 class TokenResponse(SQLModel):
     access_token: str
     token_type: str = "bearer"
     user: UserPublic
 
-
 class UserRequest(SQLModel):
     # user_id: UUID
     github_url: Optional[str] = Field(default = None)
     cv_url: Optional[str] = Field(default = None)
-
 
 class UserResponse(SQLModel):
     candidate_id: UUID
@@ -163,6 +158,7 @@ class ScoreResponse(SQLModel):
     job_title: Optional[str] = None
     job_company: Optional[str] = None
     job_location: Optional[str] = None
+    job_url: Optional[str] = None
 
 
 class ScoreRequest(SQLModel):
@@ -180,3 +176,63 @@ class ScoreCV(SQLModel):
     evaluation_summary: str = PydField(min_length=1)
     project_impact: list[str] = PydField(min_length=2)
     technical_complexity: list[str] = PydField(min_length=2)
+
+class ChangePasswordRequest(SQLModel):
+    current_password: str
+    new_password: str = PydField(min_length=6)
+
+class JobAction(SQLModel, table=True):
+    __tablename__ = "job_actions"
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    user_id: UUID = Field(
+        foreign_key="users.user_id", nullable=False, index=True,
+    )
+    job_id: UUID = Field(
+        foreign_key="linkedin_jobs.job_id", nullable=False, index=True,
+    )
+    saved: bool = Field(default=False)
+    hidden: bool = Field(default=False)
+    apply_status: str = Field(default="not_applied")
+    # not_applied | applied | interviewed | offered | rejected
+    notes: Optional[str] = Field(default=None, nullable=True)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class JobActionUpdate(SQLModel):
+    saved: Optional[bool] = None
+    hidden: Optional[bool] = None
+    apply_status: Optional[str] = None
+    notes: Optional[str] = None
+
+class JobActionResponse(SQLModel):
+    id: UUID
+    job_id: UUID
+    saved: bool
+    hidden: bool
+    apply_status: str
+    notes: Optional[str] = None
+    updated_at: datetime
+
+# schema/model.py
+class Notification(SQLModel, table=True):
+    __tablename__ = "notifications"
+
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    user_id: UUID = Field(
+        foreign_key="users.user_id", nullable=False, index=True,
+    )
+    title: str = Field(nullable=False)
+    description: Optional[str] = Field(default=None, nullable=True)
+    read: bool = Field(default=False)
+    link: Optional[str] = Field(default=None, nullable=True)
+    created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
+
+
+class NotificationResponse(SQLModel):
+    id: UUID
+    title: str
+    description: Optional[str] = None
+    read: bool
+    link: Optional[str] = None
+    created_at: datetime
+

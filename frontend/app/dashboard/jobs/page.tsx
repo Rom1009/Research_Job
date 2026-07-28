@@ -1,6 +1,5 @@
 "use client";
 
-
 import Link from "next/link";
 import {
   Search,
@@ -15,23 +14,23 @@ import { LinkedinIcon } from "@/components/dashboard/brand-icons"; // ✅
 import { JobScraping } from "@/components/dashboard/job-scraping";
 import { Card, CardContent } from "@/components/ui/card";
 import { useDashboardStore } from "@/lib/dashboard-store";
-
+import { useMyProfile } from "@/hooks/use-my-profile";
 
 export default function JobsPage() {
-  const activeProfileId = useDashboardStore((s) => s.activeProfileId);
-
+  const { profile } = useMyProfile();
+  const activeProfileId = profile?.candidate_id;
 
   return (
     <div className="flex-1 overflow-y-auto">
       {/* Hero */}
       <div className="border-b border-border/60 bg-gradient-to-br from-blue-500/[0.06] via-transparent to-transparent">
-        <div className="mx-auto max-w-6xl px-6 py-8">
+        <div className="mx-auto max-w-7xl px-6 py-8">
           <div className="flex items-center gap-2 text-xs font-medium text-blue-500">
             <LinkedinIcon className="size-3.5" />
             JOB DISCOVERY
           </div>
           <h1 className="mt-2 text-3xl font-bold tracking-tight">
-            Scrape job postings
+            Find your next role
           </h1>
           <p className="mt-2 max-w-2xl text-muted-foreground">
             Collect open positions from LinkedIn and build a live job pool.
@@ -41,33 +40,31 @@ export default function JobsPage() {
         </div>
       </div>
 
-
       {/* Content */}
-      <div className="mx-auto max-w-6xl px-6 py-8">
+      <div className="mx-auto max-w-7xl px-6 py-8">
         {/* No profile warning */}
         {!activeProfileId && (
           <div className="mb-6 flex items-start gap-3 rounded-lg border border-amber-500/40 bg-amber-500/[0.06] p-4 text-sm">
             <AlertCircle className="mt-0.5 size-4 shrink-0 text-amber-500" />
             <div className="flex-1">
-              <p className="font-medium">No active candidate selected</p>
+              <p className="font-medium">Upload your CV first</p>
               <p className="mt-0.5 text-xs text-muted-foreground">
                 You can still scrape jobs, but scoring requires an active
                 profile.{" "}
                 <Link
-                  href="/dashboard/profile-intake"
+                  href="/dashboard/my-profile"
                   className="font-medium text-primary underline"
                 >
-                  Upload a candidate →
+                  Set up your profile →
                 </Link>
               </p>
             </div>
           </div>
         )}
 
-
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.15fr]">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(340px,420px)_1fr]">
           {/* ── LEFT: tips + sources ── */}
-          <div className="space-y-6">
+          <div className="space-y-6 lg:sticky lg:top-6 lg:self-start">
             {/* How it works */}
             <div>
               <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
@@ -89,12 +86,11 @@ export default function JobsPage() {
                 <StepItem
                   n={3}
                   icon={Sparkles}
-                  title="Score against candidate"
+                  title="See your match score"
                   desc="Every new job is scored vs. your active profile automatically."
                 />
               </ol>
             </div>
-
 
             {/* Tips */}
             <Card className="border-primary/20 bg-gradient-to-br from-primary/[0.04] to-transparent">
@@ -105,7 +101,10 @@ export default function JobsPage() {
                 </div>
                 <ul className="space-y-2 text-xs text-muted-foreground">
                   <TipItem>
-                    Use <span className="font-mono text-foreground">specific tech</span>{" "}
+                    Use{" "}
+                    <span className="font-mono text-foreground">
+                      specific tech
+                    </span>{" "}
                     keywords (e.g. "PyTorch", "Kubernetes") over generic titles.
                   </TipItem>
                   <TipItem>
@@ -121,13 +120,13 @@ export default function JobsPage() {
                     Leave location empty for remote-inclusive results.
                   </TipItem>
                   <TipItem>
-                    Start with <span className="font-mono text-foreground">1 page</span>{" "}
-                    to test filters before scraping more.
+                    Start with{" "}
+                    <span className="font-mono text-foreground">1 page</span> to
+                    test filters before scraping more.
                   </TipItem>
                 </ul>
               </CardContent>
             </Card>
-
 
             {/* Sources status */}
             <div>
@@ -140,7 +139,6 @@ export default function JobsPage() {
                 <SourceRow name="Indeed" status="soon" />
               </div>
             </div>
-
 
             {/* Quick stats */}
             <div className="grid grid-cols-2 gap-3">
@@ -159,7 +157,6 @@ export default function JobsPage() {
             </div>
           </div>
 
-
           {/* ── RIGHT: the form ── */}
           <div>
             <JobScraping />
@@ -170,9 +167,7 @@ export default function JobsPage() {
   );
 }
 
-
 // ─────────────────── SUB-COMPONENTS ───────────────────
-
 
 function StepItem({
   n,
@@ -206,7 +201,6 @@ function StepItem({
   );
 }
 
-
 function TipItem({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-start gap-1.5 leading-relaxed">
@@ -215,7 +209,6 @@ function TipItem({ children }: { children: React.ReactNode }) {
     </li>
   );
 }
-
 
 function SourceRow({
   name,
@@ -246,7 +239,6 @@ function SourceRow({
   );
 }
 
-
 function MiniStat({
   icon: Icon,
   label,
@@ -261,7 +253,9 @@ function MiniStat({
   return (
     <Card className="border-border/60">
       <CardContent className="flex items-center gap-3 p-3">
-        <div className={`flex size-8 shrink-0 items-center justify-center rounded-md bg-muted ${tone}`}>
+        <div
+          className={`flex size-8 shrink-0 items-center justify-center rounded-md bg-muted ${tone}`}
+        >
           <Icon className="size-4" />
         </div>
         <div>
@@ -272,4 +266,3 @@ function MiniStat({
     </Card>
   );
 }
-
