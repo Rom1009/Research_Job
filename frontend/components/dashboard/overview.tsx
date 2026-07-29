@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
@@ -18,9 +19,11 @@ import { Badge } from "@/components/ui/badge";
 import { normalizeSkills } from "@/lib/utils";
 import { AnimatedCard } from "@/components/animated-page";
 
+
 export function Overview() {
   const { profile } = useMyProfile();
   const [scores, setScores] = useState<MatchResult[]>([]);
+
 
   useEffect(() => {
     if (!profile) return;
@@ -30,11 +33,13 @@ export function Overview() {
       .catch(() => {});
   }, [profile]);
 
+
   const sorted = useMemo(
     () =>
       [...scores].sort((a, b) => (b.total_score ?? 0) - (a.total_score ?? 0)),
     [scores],
   );
+
 
   const topScore = sorted[0]?.total_score ?? 0;
   const avgScore = scores.length
@@ -42,6 +47,7 @@ export function Overview() {
         scores.reduce((s, m) => s + (m.total_score ?? 0), 0) / scores.length,
       )
     : 0;
+
 
   if (!profile) {
     return (
@@ -57,6 +63,7 @@ export function Overview() {
             Upload your CV and connect GitHub — we'll analyze your skills, match
             you with real jobs, and tell you exactly what to improve.
           </p>
+
 
           <div className="mb-8 grid w-full grid-cols-1 gap-3 sm:grid-cols-3 text-left">
             <StepBox n="1" icon="📄" title="Upload CV" desc="PDF, up to 10MB" />
@@ -74,11 +81,13 @@ export function Overview() {
             />
           </div>
 
+
           <Link href="/dashboard/my-profile">
             <Button size="lg" className="gap-2">
               Set up your profile <ArrowRight className="size-4" />
             </Button>
           </Link>
+
 
           <p className="mt-4 text-xs text-muted-foreground">
             Takes about 30 seconds
@@ -87,6 +96,7 @@ export function Overview() {
       </div>
     );
   }
+
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -97,6 +107,7 @@ export function Overview() {
             Here's how your job search is going.
           </p>
         </div>
+
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           <StatCard
@@ -116,6 +127,7 @@ export function Overview() {
           />
         </div>
 
+
         {sorted.length > 0 && (
           <div>
             <div className="mb-3 flex items-center justify-between">
@@ -129,6 +141,7 @@ export function Overview() {
                 See all {scores.length} →
               </Link>
             </div>
+
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
               {sorted.slice(0, 3).map((match, idx) => (
@@ -144,7 +157,9 @@ export function Overview() {
   );
 }
 
+
 /* ────────── Sub-components ────────── */
+
 
 function StepBox({
   n,
@@ -167,6 +182,7 @@ function StepBox({
   );
 }
 
+
 function StatCard({
   icon,
   label,
@@ -188,6 +204,7 @@ function StatCard({
   );
 }
 
+
 function TopMatchCard({ match, rank }: { match: MatchResult; rank: number }) {
   const score = Math.round(match.total_score ?? 0);
   const scoreColor =
@@ -198,10 +215,12 @@ function TopMatchCard({ match, rank }: { match: MatchResult; rank: number }) {
         : "border-border text-muted-foreground bg-muted/30";
   const rankEmoji = rank === 1 ? "🥇" : rank === 2 ? "🥈" : "🥉";
 
+
   return (
-    <div className="group relative flex flex-col overflow-hidden rounded-2xl border bg-gradient-to-br from-muted/20 to-transparent p-5 transition-all hover:border-primary/40 hover:shadow-lg">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-gradient-to-br from-muted/20 to-transparent p-5 transition-all hover:border-primary/40 hover:shadow-lg">
       {/* Rank medal */}
       <div className="absolute right-4 top-4 text-2xl">{rankEmoji}</div>
+
 
       {/* Score badge */}
       <div className="mb-3">
@@ -216,6 +235,7 @@ function TopMatchCard({ match, rank }: { match: MatchResult; rank: number }) {
           </span>
         </div>
       </div>
+
 
       {/* Title + company */}
       <h3 className="mb-1 line-clamp-2 pr-10 text-base font-bold leading-tight">
@@ -232,12 +252,14 @@ function TopMatchCard({ match, rank }: { match: MatchResult; rank: number }) {
         )}
       </p>
 
+
       {/* Evaluation preview */}
       {match.ai_analysis_details?.evaluation_summary && (
         <p className="mb-3 line-clamp-3 text-xs italic leading-relaxed text-foreground/70">
           "{match.ai_analysis_details.evaluation_summary}"
         </p>
       )}
+
 
       {/* Matched skills */}
       {!!match.ai_analysis_details?.matched_skills?.length &&
@@ -266,6 +288,7 @@ function TopMatchCard({ match, rank }: { match: MatchResult; rank: number }) {
           );
         })()}
 
+
       {/* Action */}
       <div className="mt-auto">
         {match.job_url ? (
@@ -289,3 +312,6 @@ function TopMatchCard({ match, rank }: { match: MatchResult; rank: number }) {
     </div>
   );
 }
+
+
+
