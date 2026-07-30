@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     ENV_MODE: EnvMode = EnvMode.DEV
     CONFIG_PATH : str = "config/input.yml"
 
-    DATABASE_URL: str = "sqlite:///./test.db"
+    DATABASE_URL: SecretStr
 
     BASE_SEARCH_URL: str = "https://www.linkedin.com/jobs-guest/jobs/api/seeMoreJobPostings/search"
     DETAIL_SEARCH_URL: str = "https://www.linkedin.com/jobs-guest/jobs/api/jobPosting"

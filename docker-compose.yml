@@ -1,29 +1,21 @@
-version: "3.9"
-
 services:
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    volumes:
-      - ollama_data:/root/.ollama
-    ports:
-      - "11434:11434"
-    restart: always
-    # Đã xóa entrypoint đi để nó chạy mặc định cho nhanh
-
-  open-webui:
-    image: ghcr.io/open-webui/open-webui:latest
-    container_name: open-webui
-    depends_on:
-      - ollama
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: research_job_postgres
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: research_job
     ports:
-      - "3000:8080"
+      - "5432:5432"
     volumes:
-      - openwebui_data:/app/backend/data
-    restart: always
-
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d research_job"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      
 volumes:
-  ollama_data:
-  openwebui_data:
+  postgres_data:
