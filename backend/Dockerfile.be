@@ -31,6 +31,7 @@ COPY --chown=appuser:appuser backend/ ./backend/
 COPY --chown=appuser:appuser alembic/ ./alembic/
 COPY --chown=appuser:appuser alembic.ini ./
 
+RUN mkdir logs && chown appuser:appuser logs
 
 USER appuser
 ENV PATH=/home/appuser/.local/bin:$PATH
