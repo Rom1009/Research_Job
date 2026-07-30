@@ -1,0 +1,14 @@
+myenv/
+__pycache__/
+*.pyc
+.env
+*.db
+frontend/
+docs/
+notebook/
+tests/
+.git/
+.gitignore
+README.md
+alembic/versions/__pycache__/
+uploads/

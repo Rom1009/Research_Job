@@ -35,6 +35,9 @@ def create_app():
         allow_headers=["*"],
     )
 
+    @app.get("/health")
+    async def health_care():
+        return {"status": "ok"}
 
     logger.info("Registering API modules")  
     register_modules(app)
@@ -47,7 +50,6 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    init_db()  # Initialize the database before starting the server
 
 
     uvicorn.run("backend.main:app", host="0.0.0.0", port=8000, reload=True)
