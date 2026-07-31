@@ -1,6 +1,8 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr, EmailStr
 from enum import Enum
+import tempfile
+from pathlib import Path
 
 class EnvMode(str, Enum):
     DEV: str = "development"
