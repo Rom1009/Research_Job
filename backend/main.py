@@ -32,7 +32,7 @@ def create_app():
             FRONTEND_URL,
             "http://localhost:3000",
         ],
-        allow_origin_regex=r"https://research-job-znp.*\.vercel\.app",
+        allow_origin_regex=r"https://research-job-zznp.*\.vercel\.app",
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
