@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
     ENV_MODE: EnvMode = EnvMode.DEV
     CONFIG_PATH : str = "config/input.yml"
+    MAX_JOBS_PER_SCRAPE: int = 5
 
     DATABASE_URL: SecretStr
 
