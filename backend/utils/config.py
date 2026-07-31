@@ -23,7 +23,7 @@ class Settings(BaseSettings):
 
     GROQ_API_KEY: SecretStr
 
-    UPLOAD_DIR: str = "uploads"
+    UPLOAD_DIR: str = str(Path(tempfile.gettempdir()) / "cv_uploads")
     MAX_CV_SIZE_MB: int = 10
     ALLOWED_CV_EXTENSIONS: set[str] = {".pdf", ".md", ".txt"}
 
