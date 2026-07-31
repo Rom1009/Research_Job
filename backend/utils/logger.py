@@ -3,8 +3,6 @@ import sys
 from pathlib import Path 
 from backend.utils.config import settings
 
-LOG_DIR = Path("logs")
-LOG_DIR.mkdir(exist_ok = True)
 
 def setup_logger(name: str):
     logger = logging.getLogger(name)
@@ -17,12 +15,14 @@ def setup_logger(name: str):
 
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
 
-    file_handler = logging.FileHandler(LOG_DIR / f"{name}.log", encoding = "utf-8")
-    file_handler.setFormatter(formatter)
 
-    if not logger.handlers:
-        logger.addHandler(console_handler)
+    if settings.ENV_MODE == "development":
+        log_dir = Path("logs")
+        log_dir.mkdir(exist_ok=True)
+        file_handler = logging.FileHandler(log_dir / f"{name}.log", encoding="utf-8")
+        file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
     return logger
