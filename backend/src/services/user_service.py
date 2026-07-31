@@ -1,6 +1,5 @@
 import json
 from sqlmodel import Session
-from docling.document_converter import DocumentConverter
 from groq import Groq, BadRequestError
 import pymupdf4llm
 from fastapi import UploadFile
