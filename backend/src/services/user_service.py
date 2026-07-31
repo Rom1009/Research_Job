@@ -1,7 +1,6 @@
 import json
 from sqlmodel import Session
 from groq import Groq, BadRequestError
-import pymupdf4llm
 from fastapi import UploadFile
 from backend.utils.utils import _sha256_of
 from backend.utils.storage import save_uploaded_file
@@ -144,26 +143,37 @@ class UserService:
         logger.info(f"Uploaded CV saved to: {save_path}")
 
         # 2) Convert sang markdown
-        ext = save_path.suffix.lower()
-        if ext in {".md", ".txt"}:
-            markdown_data = save_path.read_text(encoding="utf-8")
-        else:
-            try:
-                # # doc = DocumentConverter().convert(str(save_path))
-                # # markdown_data = doc.document.export_to_markdown()
-                # with open(
-                #     r"C:\Personal\AI Agent\Research_Job\docs\data_1.md",
-                #     "r", encoding="utf-8",
-                # ) as f:
-                #     markdown_data = f.read()
-                markdown_data = pymupdf4llm.to_markdown(str(save_path))
+        # ext = save_path.suffix.lower()
+        # if ext in {".md", ".txt"}:
+        #     markdown_data = save_path.read_text(encoding="utf-8")
+        # else:
+        #     try:
+                
+        #         import pymupdf4llm
+        #         markdown_data = pymupdf4llm.to_markdown(str(save_path))
     
+        #         if not markdown_data.strip():
+        #             raise ValueError("Empty PDF text")
+        #     except Exception as e:
+        #         save_path.unlink(missing_ok=True)
+        #         logger.error(f"Error converting CV to markdown: {e}")
+        #         raise RuntimeError("Failed to convert CV to markdown")
+        try:
+            ext = save_path.suffix.lower()
+            if ext in {".md", ".txt"}:
+                markdown_data = save_path.read_text(encoding="utf-8")
+            else:
+                import pymupdf4llm
+                markdown_data = pymupdf4llm.to_markdown(str(save_path))
                 if not markdown_data.strip():
-                    raise ValueError("Empty PDF text")
-            except Exception as e:
-                save_path.unlink(missing_ok=True)
-                logger.error(f"Error converting CV to markdown: {e}")
-                raise RuntimeError("Failed to convert CV to markdown")
+                    raise ValueError("PDF empty or image-only")
+
+        except Exception as e:
+            logger.error(f"CV extraction failed: {e}")
+            raise RuntimeError(f"Failed to extract CV: {e}")
+        finally:
+            save_path.unlink(missing_ok=True)   # ⭐ always cleanup
+            logger.info(f"Cleaned up temp file: {save_path}")
 
         # 3) Hash
         cv_hash = _sha256_of(markdown_data)
@@ -178,7 +188,7 @@ class UserService:
             and existing.github_url == github_url
         ):
             logger.info(f"No change for owner {owner_id} — returning existing")
-            save_path.unlink(missing_ok=True)
+            # save_path.unlink(missing_ok=True)  # Already cleaned up in the extraction step
             return UserResponse(
                 candidate_id=existing.candidate_id,
                 cv_markdown=existing.cv_markdown,
@@ -215,7 +225,7 @@ class UserService:
         # 7) Build payload DICT
         payload = {
             "owner_id": owner_id,
-            "cv_url": str(save_path),
+            "cv_url": None,
             "cv_hash": cv_hash,
             "github_url": github_url,
             "cv_markdown": cv_markdown_to_save,
