@@ -2,7 +2,7 @@ import json
 from sqlmodel import Session
 from docling.document_converter import DocumentConverter
 from groq import Groq, BadRequestError
-import requests
+import pymupdf4llm
 from fastapi import UploadFile
 from backend.utils.utils import _sha256_of
 from backend.utils.storage import save_uploaded_file
@@ -13,10 +13,12 @@ from backend.src.repositories.user_repositories import UserRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
 from backend.src.repositories.score_repositories import ScoreRepository
+
 from backend.ai.github import GitHubService, GitHubAPIError
 
 
 logger = setup_logger("User Service")
+
 
 class UserService:
     def __init__(self, session: Session):
@@ -109,9 +111,11 @@ class UserService:
                         "function": {"name": "take_content_from_markdown"},
                     },
                 )
+
                 tool_calls = response.choices[0].message.tool_calls
                 if not tool_calls:
                     raise ValueError("Groq did not return a tool call")
+
 
                 arguments = tool_calls[0].function.arguments
                 return SchemaCVResponse.model_validate(json.loads(arguments))
@@ -146,13 +150,17 @@ class UserService:
             markdown_data = save_path.read_text(encoding="utf-8")
         else:
             try:
-                # doc = DocumentConverter().convert(str(save_path))
-                # markdown_data = doc.document.export_to_markdown()
-                with open(
-                    "/home/thomas/Desktop/AI/Research_Job/docs/data.md",
-                    "r", encoding="utf-8",
-                ) as f:
-                    markdown_data = f.read()
+                # # doc = DocumentConverter().convert(str(save_path))
+                # # markdown_data = doc.document.export_to_markdown()
+                # with open(
+                #     r"C:\Personal\AI Agent\Research_Job\docs\data_1.md",
+                #     "r", encoding="utf-8",
+                # ) as f:
+                #     markdown_data = f.read()
+                markdown_data = pymupdf4llm.to_markdown(str(save_path))
+    
+                if not markdown_data.strip():
+                    raise ValueError("Empty PDF text")
             except Exception as e:
                 save_path.unlink(missing_ok=True)
                 logger.error(f"Error converting CV to markdown: {e}")
@@ -163,6 +171,7 @@ class UserService:
 
         # 4) Check profile hiện có của user này
         existing = self.user_repository.find_by_owner(owner_id)
+
         # 4a. Nếu không có gì đổi → trả về ngay
         if (
             existing
@@ -214,6 +223,7 @@ class UserService:
             "cv_structured": cv_structured_dict,
             "github_summary": github_summary,
         }
+
         # 8) UPSERT
         if existing:
             # CV đổi thật → clear score cache
@@ -221,12 +231,10 @@ class UserService:
                 deleted = self.score_repository.delete_by_profile(existing.candidate_id)
                 logger.info(f"Cleared {deleted} stale scores")
 
-
             # Xoá file CV cũ
             if existing.cv_url and existing.cv_url != str(save_path):
                 from pathlib import Path
                 Path(existing.cv_url).unlink(missing_ok=True)
-
 
             updated = self.user_repository.update_profile(existing.candidate_id, payload)
             logger.info(f"Updated profile {updated.candidate_id}")
@@ -244,6 +252,7 @@ class UserService:
                 github_summary=created.github_summary,
             )
     def get_all_user_info(self, owner_id: UUID) -> list[CandidateProfile]:
+
 
         profiles = self.user_repository.get_all_users(owner_id)
         return [CandidateProfile.model_validate(p.model_dump()) for p in profiles]
