@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     JWT_EXPIRATION_MINUTES: int = 60 * 24  # 1 day
 
     GITHUB_TOKEN: SecretStr
+    REDIS_URL: str = "redis://localhost:6379/0"
 
     model_config = SettingsConfigDict(
         env_file = ".env",
