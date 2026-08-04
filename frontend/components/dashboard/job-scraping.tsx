@@ -383,10 +383,14 @@ export function JobScraping() {
                       id="page"
                       type="number"
                       min={1}
-                      max={10}
+                      max={1}
+                      disabled
                       value={page}
                       onChange={(e) => setPage(Number(e.target.value) || 1)}
                     />
+                    <FieldDescription>
+                      Fixed at 1 page (~5 jobs) to respect LinkedIn rate limits.
+                    </FieldDescription>
                   </Field>
                 </div>
               </FieldGroup>

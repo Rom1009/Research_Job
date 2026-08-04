@@ -1,6 +1,8 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import SecretStr, EmailStr
 from enum import Enum
+import tempfile
+from pathlib import Path
 
 class EnvMode(str, Enum):
     DEV: str = "development"
@@ -15,6 +17,7 @@ class Settings(BaseSettings):
     LOG_LEVEL: str = "INFO"
     ENV_MODE: EnvMode = EnvMode.DEV
     CONFIG_PATH : str = "config/input.yml"
+    MAX_JOBS_PER_SCRAPE: int = 5
 
     DATABASE_URL: SecretStr
 
@@ -23,7 +26,7 @@ class Settings(BaseSettings):
 
     GROQ_API_KEY: SecretStr
 
-    UPLOAD_DIR: str = "uploads"
+    UPLOAD_DIR: str = str(Path(tempfile.gettempdir()) / "cv_uploads")
     MAX_CV_SIZE_MB: int = 10
     ALLOWED_CV_EXTENSIONS: set[str] = {".pdf", ".md", ".txt"}
 

@@ -1,8 +1,6 @@
 import json
 from sqlmodel import Session
-from docling.document_converter import DocumentConverter
 from groq import Groq, BadRequestError
-import requests
 from fastapi import UploadFile
 from backend.utils.utils import _sha256_of
 from backend.utils.storage import save_uploaded_file
@@ -13,10 +11,12 @@ from backend.src.repositories.user_repositories import UserRepository
 from backend.utils.logger import setup_logger
 from backend.utils.config import settings
 from backend.src.repositories.score_repositories import ScoreRepository
+
 from backend.ai.github import GitHubService, GitHubAPIError
 
 
 logger = setup_logger("User Service")
+
 
 class UserService:
     def __init__(self, session: Session):
@@ -109,9 +109,11 @@ class UserService:
                         "function": {"name": "take_content_from_markdown"},
                     },
                 )
+
                 tool_calls = response.choices[0].message.tool_calls
                 if not tool_calls:
                     raise ValueError("Groq did not return a tool call")
+
 
                 arguments = tool_calls[0].function.arguments
                 return SchemaCVResponse.model_validate(json.loads(arguments))
@@ -141,28 +143,44 @@ class UserService:
         logger.info(f"Uploaded CV saved to: {save_path}")
 
         # 2) Convert sang markdown
-        ext = save_path.suffix.lower()
-        if ext in {".md", ".txt"}:
-            markdown_data = save_path.read_text(encoding="utf-8")
-        else:
-            try:
-                # doc = DocumentConverter().convert(str(save_path))
-                # markdown_data = doc.document.export_to_markdown()
-                with open(
-                    "/home/thomas/Desktop/AI/Research_Job/docs/data.md",
-                    "r", encoding="utf-8",
-                ) as f:
-                    markdown_data = f.read()
-            except Exception as e:
-                save_path.unlink(missing_ok=True)
-                logger.error(f"Error converting CV to markdown: {e}")
-                raise RuntimeError("Failed to convert CV to markdown")
+        # ext = save_path.suffix.lower()
+        # if ext in {".md", ".txt"}:
+        #     markdown_data = save_path.read_text(encoding="utf-8")
+        # else:
+        #     try:
+                
+        #         import pymupdf4llm
+        #         markdown_data = pymupdf4llm.to_markdown(str(save_path))
+    
+        #         if not markdown_data.strip():
+        #             raise ValueError("Empty PDF text")
+        #     except Exception as e:
+        #         save_path.unlink(missing_ok=True)
+        #         logger.error(f"Error converting CV to markdown: {e}")
+        #         raise RuntimeError("Failed to convert CV to markdown")
+        try:
+            ext = save_path.suffix.lower()
+            if ext in {".md", ".txt"}:
+                markdown_data = save_path.read_text(encoding="utf-8")
+            else:
+                import pymupdf4llm
+                markdown_data = pymupdf4llm.to_markdown(str(save_path))
+                if not markdown_data.strip():
+                    raise ValueError("PDF empty or image-only")
+
+        except Exception as e:
+            logger.error(f"CV extraction failed: {e}")
+            raise RuntimeError(f"Failed to extract CV: {e}")
+        finally:
+            save_path.unlink(missing_ok=True)   # ⭐ always cleanup
+            logger.info(f"Cleaned up temp file: {save_path}")
 
         # 3) Hash
         cv_hash = _sha256_of(markdown_data)
 
         # 4) Check profile hiện có của user này
         existing = self.user_repository.find_by_owner(owner_id)
+
         # 4a. Nếu không có gì đổi → trả về ngay
         if (
             existing
@@ -170,7 +188,7 @@ class UserService:
             and existing.github_url == github_url
         ):
             logger.info(f"No change for owner {owner_id} — returning existing")
-            save_path.unlink(missing_ok=True)
+            # save_path.unlink(missing_ok=True)  # Already cleaned up in the extraction step
             return UserResponse(
                 candidate_id=existing.candidate_id,
                 cv_markdown=existing.cv_markdown,
@@ -207,13 +225,14 @@ class UserService:
         # 7) Build payload DICT
         payload = {
             "owner_id": owner_id,
-            "cv_url": str(save_path),
+            "cv_url": None,
             "cv_hash": cv_hash,
             "github_url": github_url,
             "cv_markdown": cv_markdown_to_save,
             "cv_structured": cv_structured_dict,
             "github_summary": github_summary,
         }
+
         # 8) UPSERT
         if existing:
             # CV đổi thật → clear score cache
@@ -221,12 +240,10 @@ class UserService:
                 deleted = self.score_repository.delete_by_profile(existing.candidate_id)
                 logger.info(f"Cleared {deleted} stale scores")
 
-
             # Xoá file CV cũ
             if existing.cv_url and existing.cv_url != str(save_path):
                 from pathlib import Path
                 Path(existing.cv_url).unlink(missing_ok=True)
-
 
             updated = self.user_repository.update_profile(existing.candidate_id, payload)
             logger.info(f"Updated profile {updated.candidate_id}")
@@ -244,6 +261,7 @@ class UserService:
                 github_summary=created.github_summary,
             )
     def get_all_user_info(self, owner_id: UUID) -> list[CandidateProfile]:
+
 
         profiles = self.user_repository.get_all_users(owner_id)
         return [CandidateProfile.model_validate(p.model_dump()) for p in profiles]

@@ -101,6 +101,13 @@ export default function JobsPage() {
                 </div>
                 <ul className="space-y-2 text-xs text-muted-foreground">
                   <TipItem>
+                    <span className="font-semibold text-foreground">
+                      Each search returns ~5 jobs
+                    </span>{" "}
+                    — refine keywords or run multiple searches to build up your
+                    pool.
+                  </TipItem>
+                  <TipItem>
                     Use{" "}
                     <span className="font-mono text-foreground">
                       specific tech
@@ -118,11 +125,6 @@ export default function JobsPage() {
                   </TipItem>
                   <TipItem>
                     Leave location empty for remote-inclusive results.
-                  </TipItem>
-                  <TipItem>
-                    Start with{" "}
-                    <span className="font-mono text-foreground">1 page</span> to
-                    test filters before scraping more.
                   </TipItem>
                 </ul>
               </CardContent>
