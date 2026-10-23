@@ -1,0 +1,31 @@
+Marcus Silva
+QA Automation Engineer
+marcus.silva5@example.com | +1 555-5977 | Austin, TX
+
+Professional Summary
+QA Automation Engineer with 4+ years of experience in Python, Selenium, Pytest. Experience in mobile banking. Comfortable working in cross-functional teams.
+
+Skills
+Python, Selenium, Pytest, API Testing, Postman, CI/CD, SQL, Git
+
+Work Experience
+QA Automation Engineer - Lotus Solutions
+Austin, TX | Sep 2023 - Present
+• Integrated automated tests into CI so every pull request is verified.
+• Built an automation suite with API Testing that cut regression time by 35%.
+• Triaged defects with developers and tracked quality metrics per release.
+• Wrote manual and automated test cases for mobile banking features using Git.
+
+QA Engineer - Blue Harbor Software
+Austin, TX | Dec 2021 - Sep 2023
+• Wrote manual and automated test cases for mobile banking features using Postman.
+• Built an automation suite with API Testing that cut regression time by 31%.
+• Integrated automated tests into CI so every pull request is verified.
+• Triaged defects with developers and tracked quality metrics per release.
+
+Education
+Bachelor of Information Technology - National Economics University
+Austin, TX | 2021
+
+Additional Information
+• English: Professional working proficiency

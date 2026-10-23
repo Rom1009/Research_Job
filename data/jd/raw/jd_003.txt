@@ -1,0 +1,47 @@
+We are looking for an experienced Middle/Senior AI Engineer to design, build, and deploy artificial intelligence/machine learning solutions into real-world products. The successful candidate will be a key technical contributor, involved from research and model selection through system architecture, production deployment, and performance optimization, while also providing technical leadership and mentoring junior/mid-level team members.
+Job Description
+• Design and build end-to-end AI/ML systems: from data collection and processing, to model training, evaluation, and production deployment.
+• Research, evaluate, and apply appropriate machine learning/deep learning techniques (including large language models - LLMs, computer vision, NLP, recommendation systems, etc.) to solve business problems.
+• Build and maintain MLOps pipelines: automate training, testing, deployment (CI/CD), monitoring, and model retraining.
+• Optimize performance, latency, scalability, and operating cost of AI systems in production environments.
+• Collaborate closely with Product Managers, Data Engineers, Data Scientists, and other stakeholders to translate business requirements into feasible technical solutions.
+• Design AI system architecture (APIs, microservices, vector databases, feature stores, etc.) ensuring security, reliability, and maintainability.
+• Monitor and evaluate model quality after deployment (model drift, bias, fairness) and propose continuous improvements.
+• Provide technical leadership: conduct code/architecture reviews, establish best practices, and coach/mentor junior and mid-level engineers.
+• Stay current with emerging AI trends (LLMs, GenAI, agentic AI, etc.) and recommend adoption aligned with product strategy.
+• Produce technical documentation, system design documents, and model operating procedures.
+Job Qualifications
+Education & Experience
+• Bachelor's or Master's degree in Computer Science, Mathematics, Artificial Intelligence, Software Engineering, or a related field.
+• Have 3-5 years of experience in AI/Machine Learning, including experience deploying at least 2-3 AI projects into production. Technical Skills
+• Proficient in Python and common ML frameworks/libraries: TensorFlow, PyTorch, scikit-learn, Hugging Face Transformers.
+• Hands-on experience in at least one of the following areas: Deep Learning, NLP, Computer Vision, or Generative AI/LLM (RAG, fine-tuning, prompt engineering).
+• Solid understanding of MLOps principles: model versioning, CI/CD for ML, containerization (Docker/Kubernetes), monitoring (MLflow, Weights & Biases, etc.).
+• Experience working with large-scale data systems and cloud platforms (AWS/GCP/Azure); experience with vector databases (FAISS, Milvus, Pinecone, etc.) is a plus.
+• Strong understanding of data structures, algorithms, distributed system design, and APIs (REST/gRPC).
+• SQL skills and experience with big data processing (Spark, Hadoop) are a plus.
+Soft Skills
+• Strong critical thinking, problem-solving, and data-driven decision-making skills.
+• Good communication and presentation skills, with the ability to explain complex technical issues to non-technical audiences.
+• Technical leadership ability, with effective mentoring and teamwork skills across multiple projects.
+• Proactive and eager to learn, staying up to date with emerging AI technology trends.
+• Good English reading comprehension of technical documents; spoken English is a plus.
+Nice to Have
+• Relevant AI/ML certifications (AWS Certified Machine Learning, Google Professional ML Engineer, etc.).
+• Experience publishing research papers or contributing to open-source AI/ML projects.
+• Experience building AI agents, multi-agent systems, or enterprise GenAI applications.
+• Experience working in Agile/Scrum environments.
+Benefits
+• “FPT Care” health insurance provided by PJICO (exclusive for FPT employees).
+• Annual Summer Vacation following company policy (starting from May each year).
+• Salary review once per year.
+• International, dynamic, and friendly working environment.
+• Annual leave and working conditions in compliance with Vietnam Labor Law.
+• Sponsorship for training programs and international certification exams.
+• Preferential loan interest support policy for FPT Software employees.
+• Shuttle bus service for employees.
+Contact
+Ms. Trang - Talent Acquisition Executive
+Email: TrangDVH@fpt.com
+Tel/Zalo: 0706087114
+Linkedin: linkedin.com/in/doanvohoaitrang

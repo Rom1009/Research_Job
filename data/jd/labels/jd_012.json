@@ -1,0 +1,24 @@
+{
+    "jd_id": "jd_012",
+    "label": {
+        "must_have_skills": [
+            "Python",
+            "FastAPI",
+            "REST API",
+            "Clean Code",
+            "Design Patterns",
+            "Testing",
+            "SQL",
+            "NoSQL",
+            "PostgreSQL",
+            "MySQL",
+            "MongoDB",
+            "Pytest",
+            "Cloud-Native",
+            "Azure"
+        ],
+        "min_exp_years": 4.0,
+        "responsibilities": "Develop and maintain cloud-native backend services on AWS (e.g., ECS, SQS, SNS).\nDesign and build scalable backend services using Python on a production running product.\nDevelop and maintain RESTful APIs following industry best practices.\nWrite clean, maintainable code with proper testing coverage (unit and integration tests).\nParticipate in code reviews and architectural discussions.\nImplement basic observability practices including logging and monitoring.\nCollaborate with frontend engineers, QA, DevOps, and product stakeholders to deliver high-quality solutions.\nContribute to technical documentation and knowledge sharing.\nSupport troubleshooting and root-cause analysis of production issues.\nStay up to date with emerging technologies, especially in AI/LLM tooling.",
+        "requirements": "4+ years of experience in backend software development using Python.\nStrong Python skills with experience building production systems using FastAPI or similar frameworks.\nSolid software engineering fundamentals: clean code, design patterns, testing discipline.\nExperience with RESTful API design.\nHands-on experience with SQL and/or NoSQL databases (e.g., PostgreSQL, MySQL, MongoDB).\nExperience with automated testing using Pytest or similar.\nExperience deploying or working with cloud-native applications (Azure preferred).\nGood problem-solving ability and willingness to take ownership.\nGood communication skills and ability to collaborate across teams.\nProficiency in English communication."
+    }
+}

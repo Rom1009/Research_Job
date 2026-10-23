@@ -1,0 +1,53 @@
+{
+    "cv_014": {
+        "persona": "mid_backend_nodejs_go",
+        "labels": {
+            "skills": [
+                "Node.js",
+                "Go",
+                "TypeScript",
+                "MongoDB",
+                "Redis",
+                "Docker",
+                "gRPC",
+                "Git"
+            ],
+            "education": [
+                {
+                    "institution": "Bach Khoa University",
+                    "degree": "Bachelor of Science in Computer Science",
+                    "location": "Seattle, WA",
+                    "period": "2022"
+                }
+            ],
+            "work_experience": [
+                {
+                    "company": "Vertex Analytics",
+                    "title": "Backend Engineer",
+                    "location": "Seattle, WA",
+                    "period": "Aug 2024 - Present",
+                    "achievements": [
+                        "Implemented background jobs and caching, reducing load on the primary database.",
+                        "Designed MongoDB-backed data models and optimized slow queries, cutting p95 latency by 35%.",
+                        "Built and maintained REST APIs in Docker serving the gaming product."
+                    ]
+                },
+                {
+                    "company": "Lotus Cloud",
+                    "title": "Backend Developer",
+                    "location": "Seattle, WA",
+                    "period": "Oct 2022 - Aug 2024",
+                    "achievements": [
+                        "Designed Git-backed data models and optimized slow queries, cutting p95 latency by 35%.",
+                        "Collaborated with frontend and product teams to ship features for gaming.",
+                        "Containerized services and set up CI pipelines for automated deployment."
+                    ]
+                }
+            ],
+            "project": [],
+            "additional_info": [
+                "English: Professional working proficiency"
+            ]
+        }
+    }
+}

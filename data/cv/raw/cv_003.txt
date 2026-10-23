@@ -1,0 +1,39 @@
+Hana Patel
+Senior Backend Engineer
+hana.patel43@example.com | +84 995421789 | Ha Noi
+
+Professional Summary
+Senior Backend Engineer with 9+ years of experience in Java, Spring Boot, Kafka. Experience in payments. Comfortable working in cross-functional teams.
+
+Skills
+Java, Spring Boot, Kafka, PostgreSQL, Kubernetes, Microservices, System Design, AWS, CI/CD
+
+Work Experience
+Senior Backend Engineer - Redwood Analytics
+Ha Noi | Jul 2023 - Present
+• Implemented background jobs and caching, reducing load on the primary database.
+• Wrote unit and integration tests, raising coverage to 85%.
+• Built and maintained REST APIs in Kafka serving the payments product.
+• Containerized services and set up CI pipelines for automated deployment.
+• Designed Microservices-backed data models and optimized slow queries, cutting p95 latency by 22%.
+
+Backend Engineer - Orbit Analytics
+Ha Noi | Jan 2020 - Jul 2023
+• Containerized services and set up CI pipelines for automated deployment.
+• Implemented background jobs and caching, reducing load on the primary database.
+• Designed Kafka-backed data models and optimized slow queries, cutting p95 latency by 18%.
+• Collaborated with frontend and product teams to ship features for logistics.
+• Built and maintained REST APIs in Java serving the logistics product.
+
+Software Engineer - Orbit Technologies
+Ha Noi | Oct 2017 - Jan 2020
+• Wrote unit and integration tests, raising coverage to 90%.
+• Containerized services and set up CI pipelines for automated deployment.
+• Implemented background jobs and caching, reducing load on the primary database.
+
+Education
+Bachelor of Science in Computer Science - Northern Valley University
+Ha Noi | 2017
+
+Additional Information
+• English: Professional working proficiency

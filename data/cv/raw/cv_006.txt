@@ -1,0 +1,32 @@
+Omar Silva
+Machine Learning Engineer
+omar.silva87@example.com | +1 555-5237 | Berlin
+
+Professional Summary
+Machine Learning Engineer with 1+ years of experience in Python, PyTorch, Scikit-learn. Experience in e-commerce search. Comfortable working in cross-functional teams.
+
+Skills
+Python, PyTorch, Scikit-learn, Pandas, NumPy, SQL, Docker, Machine Learning
+
+Work Experience
+Machine Learning Engineer - Quanta Digital
+Berlin | Feb 2025 - Present
+• Ran error analysis and labeling reviews to improve data quality.
+• Wrote evaluation scripts and compared candidate models on held-out data.
+• Built feature pipelines with Pandas and tracked experiments for reproducibility.
+
+Education
+Master of Science in Data Science - National Economics University
+Berlin | 2025
+
+Projects
+Sentiment Classifier
+2025 | NumPy, Python, PyTorch
+• Fine-tuned text classifier with evaluation report
+
+Image Defect Detection
+2025 | Scikit-learn, Docker, Pandas
+• CNN trained on a small labeled dataset
+
+Additional Information
+• English: Professional working proficiency

@@ -1,0 +1,34 @@
+Priya Patel
+Junior Backend Developer
+priya.patel55@example.com | +1 555-6146 | Toronto, ON
+
+Professional Summary
+Junior Backend Developer with Entry-level in Python, Django, PostgreSQL. Experience in e-commerce. Comfortable working in cross-functional teams.
+
+Skills
+Python, Django, PostgreSQL, REST APIs, Git, Docker, Linux
+
+Work Experience
+Junior Backend Developer - Quanta Solutions
+Toronto, ON | Feb 2026 - Present
+• Built and maintained REST APIs in Git serving the e-commerce product.
+• Collaborated with frontend and product teams to ship features for e-commerce.
+• Containerized services and set up CI pipelines for automated deployment.
+• Designed Python-backed data models and optimized slow queries, cutting p95 latency by 35%.
+• Wrote unit and integration tests, raising coverage to 85%.
+
+Education
+Bachelor of Science in Computer Science - Northern Valley University
+Toronto, ON | 2026
+
+Projects
+Library Management System
+2026 | Python, Git, Linux
+• Role-based access and reporting endpoints
+
+Task Manager API
+2025 | Git, Django, REST APIs
+• Auth, CRUD and pagination with automated tests
+
+Additional Information
+• English: Professional working proficiency

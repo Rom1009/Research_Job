@@ -1,0 +1,32 @@
+{
+    "jd_id": "jd_004",
+    "label": {
+        "must_have_skills": [
+            "Python",
+            "Data Pipelines",
+            "Prompt Engineering",
+            "RAG",
+            "Embeddings",
+            "Vector Databases",
+            "Tool Calling",
+            "AI Agents",
+            "LLM Evaluation",
+            "REST APIs",
+            "SQL",
+            "NoSQL",
+            "Docker",
+            "Git",
+            "CI/CD",
+            "LLM Serving",
+            "OpenAI API",
+            "Anthropic API",
+            "Azure OpenAI",
+            "vLLM",
+            "Ollama",
+            "Quantization"
+        ],
+        "min_exp_years": 3.0,
+        "responsibilities": "Develop and integrate RAG, AI agents, recommendation/search systems, and AI-powered automation workflows.\nBuild and maintain data ingestion, embedding, retrieval, and evaluation pipelines.\nCollaborate with the Engineering Team (Developers & QA) to design, build, test, and deliver AI features.\nCollaborate with the DevOps Team to deploy, monitor, and optimize our self-hosted LLMs.\nBuild and maintain evaluation gates for every LLM change and make it something the team trusts more than its own intuition.",
+        "requirements": "At least 3+ years of relevant experience in AI engineering.\nStrong Python, including building data pipelines for training datasets.\nGood understanding of Prompt Engineering, RAG, Embeddings, Vector Databases, Tool Calling, AI Agents, and LLM Evaluation.\nExperience with Rest APIs, SQL/No-SQL databases, Docker, Git, and CI/CD.\nAbility to debug, evaluate, and validate AI systems in real-world production environments.\nExperience with LLM serving, APIs (e.g. OpenAI, Anthropic, Azure OpenAI, ...), inference (e.g. vLLM, Ollama), including quantization and the memory / latency / quality trade-off on constrained hardware.\nFamiliarity with tool-calling / agent-based LLM applications.\nAbility to design and run model evaluations for non-deterministic systems: you can name a metric you designed and the number you moved.\nStrong verbal and written communication skills in English: the language of the team, the docs, and the prompts.\nSelf-motivated, adaptable, and comfortable owning a track in a fast-paced, team-oriented environment."
+    }
+}

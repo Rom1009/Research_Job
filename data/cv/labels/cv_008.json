@@ -1,0 +1,68 @@
+{
+    "cv_008": {
+        "persona": "mid_frontend_react",
+        "labels": {
+            "skills": [
+                "JavaScript",
+                "TypeScript",
+                "React",
+                "Redux",
+                "HTML/CSS",
+                "Jest",
+                "Git"
+            ],
+            "education": [
+                {
+                    "institution": "Lakeside University",
+                    "degree": "Bachelor of Science in Computer Science",
+                    "location": "Toronto, ON",
+                    "period": "2023"
+                }
+            ],
+            "work_experience": [
+                {
+                    "company": "Helix Solutions",
+                    "title": "Frontend Engineer",
+                    "location": "Toronto, ON",
+                    "period": "Jul 2025 - Present",
+                    "achievements": [
+                        "Worked with designers and backend engineers to deliver features on schedule.",
+                        "Improved page load time by 35% through code splitting and asset optimization.",
+                        "Implemented reusable component library and accessibility fixes.",
+                        "Built responsive interfaces with Redux and JavaScript for the SaaS platform.",
+                        "Wrote component and end-to-end tests, raising coverage to 75%."
+                    ]
+                },
+                {
+                    "company": "Blue Harbor Cloud",
+                    "title": "Frontend Developer",
+                    "location": "Toronto, ON",
+                    "period": "Jan 2023 - Jul 2025",
+                    "achievements": [
+                        "Worked with designers and backend engineers to deliver features on schedule.",
+                        "Improved page load time by 18% through code splitting and asset optimization.",
+                        "Built responsive interfaces with TypeScript and JavaScript for the SaaS platform.",
+                        "Implemented reusable component library and accessibility fixes."
+                    ]
+                }
+            ],
+            "project": [
+                {
+                    "name": "Personal Portfolio",
+                    "period": "2022",
+                    "technologies": [
+                        "Jest",
+                        "Git",
+                        "Redux"
+                    ],
+                    "description": [
+                        "Responsive site with performance budget"
+                    ]
+                }
+            ],
+            "additional_info": [
+                "English: Professional working proficiency"
+            ]
+        }
+    }
+}

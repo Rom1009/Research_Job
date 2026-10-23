@@ -1,0 +1,17 @@
+{
+    "jd_id": "jd_002",
+    "label": {
+        "must_have_skills": [
+            "Python",
+            "R",
+            "Java",
+            "Machine Learning",
+            "Statistics",
+            "Experimentation",
+            "SQL"
+        ],
+        "min_exp_years": 2.0,
+        "responsibilities": "Build the decisioning that picks which accounts we work with, through which channel, when, and how often.\nOwn a decision end to end, from the signal that triggered it to the outcome it produced.\nBuild the models behind those decisions — propensity, timing, channel response, contactability — and the pipelines that feed them.\nHold recovery, cost and reliability together, and move one without giving away the other two.\nBuild the monitoring that catches a broken input or a drifted model before the business notices.\nBacktest a change before it ships and measure it on live traffic after, on the metric the business is actually paid on.\nBenchmark new methods on our own portfolios and our own metrics before adopting them.",
+        "requirements": "Minimum 2 years of experience in IT, Computer Science, Banking, or Finance.\nProficiency in Python, R, or Java.\nStrong hands-on experience in machine learning, statistics, and experimentation.\nExperience with SQL databases and statistical analysis.\nStrong English communication skills (spoken and written, professional fluency required).\nHigh adaptability and comfort operating in fast-paced, ambiguous environments."
+    }
+}

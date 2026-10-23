@@ -1,0 +1,32 @@
+{
+    "jd_id": "jd_010",
+    "label": {
+        "must_have_skills": [
+            "Python",
+            "NumPy",
+            "Pandas",
+            "Asyncio",
+            "Django",
+            "DRF",
+            "Flask",
+            "SQL",
+            "MySQL",
+            "PostgreSQL",
+            "Schema Design",
+            "Query Optimization",
+            "Migrations",
+            "Microservices",
+            "Caching",
+            "Data Visualization",
+            "Log Aggregation",
+            "Search",
+            "Queuing Systems",
+            "Linux",
+            "Shell Scripting",
+            "Debugging"
+        ],
+        "min_exp_years": 2.0,
+        "responsibilities": "Develop backend application services and APIs.\nIntegrate systems with AWS and external cloud services.\nOptimize backend components for speed and scalability.\nImplement and manage caching, queuing and background processing.\nParticipate in code reviews, technical design discussions and architecture decisions.\nBe an active member of an agile engineering team who is continuously looking to improve team performance.\nWork with leading cloud technologies (such as AWS, GCP).\nWork with leading open-source technologies (such as MySQL, PostgreSQL, ELK stack, Sentry, Redis, Git, etc.).\nLeverage modern AI tools and practices to increase developer productivity.\nParticipate in periodic on-call duties.",
+        "requirements": "2+ years demonstrated experience developing scalable and robust software.\nPassion about software engineering, be strongly driven to build and run real-world applications at scale.\nEagerness to learn and introduce new technologies. Be curious about what's happening in the tech world.\nExcellent coding skills, solid understanding of the broad Python ecosystem including Numpy, Pandas and Asyncio. Expertise in Python web frameworks such as Django, DRF, Flask or others.\nExperience with SQL databases (MySQL, PostgreSQL), including schema design, query optimisation and migrations.\nExperience with microservices, caching tools, data visualization, log collection and aggregation, search, queuing systems.\nExperience with Linux environment and shell scripting.\nExcellent debugging and problem solving skills."
+    }
+}

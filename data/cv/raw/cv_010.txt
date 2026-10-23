@@ -1,0 +1,32 @@
+Hana Kim
+DevOps Engineer
+hana.kim55@example.com | +1 555-3287 | Toronto, ON
+
+Professional Summary
+DevOps Engineer with 5+ years of experience in Linux, Docker, Kubernetes. Experience in SaaS. Comfortable working in cross-functional teams.
+
+Skills
+Linux, Docker, Kubernetes, Terraform, AWS, Jenkins, CI/CD, Python, Prometheus
+
+Work Experience
+DevOps Engineer - Orbit Labs
+Toronto, ON | Jan 2022 - Present
+• Reduced cloud cost by 35% through right-sizing and autoscaling.
+• Built CI/CD pipelines that cut release time by 22%.
+• Set up monitoring, alerting and on-call runbooks for SaaS services.
+• Managed infrastructure as code with Terraform and AWS across staging and production.
+• Hardened container images and automated secret rotation.
+
+System Administrator - Apex Labs
+Toronto, ON | Dec 2020 - Jan 2022
+• Set up monitoring, alerting and on-call runbooks for hosting services.
+• Reduced cloud cost by 27% through right-sizing and autoscaling.
+• Managed infrastructure as code with AWS and Docker across staging and production.
+• Hardened container images and automated secret rotation.
+
+Education
+Bachelor of Science in Computer Science - FPT University
+Toronto, ON | 2020
+
+Additional Information
+• English: Professional working proficiency

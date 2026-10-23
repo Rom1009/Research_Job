@@ -1,0 +1,56 @@
+YOUR NEW ROLE CODE LEAP
+This role is for CODE LEAP's sister-company named
+AINAVIO
+.
+AINAVIO
+is a startup providing an all-in-one cloud solution for the e-commerce industry to gather, enrich, and distribute product content at scale. We are using AI and workflow automation to help our clients improve their product information management. As a spinoff of a consulting company, we already have a large e-commerce company as our client and are financially backed to get our product to the next level.
+We are looking for an experienced
+Backend Engineer (Python)
+to join our team and help us develop further our deep learning models for image processing and classification.
+YOUR EXCITING TASKS
+Develop and maintain cloud-native backend services on AWS (e.g., ECS, SQS, SNS)
+Design and build scalable backend services using Python on a production running product
+Develop and maintain RESTful APIs following industry best practices
+Write clean, maintainable code with proper testing coverage (unit and integration tests)
+Participate in code reviews and architectural discussions
+Implement basic observability practices including logging and monitoring
+Collaborate with frontend engineers, QA, DevOps, and product stakeholders to deliver high-quality solutions
+Contribute to technical documentation and knowledge sharing
+Support troubleshooting and root-cause analysis of production issues
+Stay up to date with emerging technologies, especially in AI/LLM tooling
+YOUR PROFILE AND YOUR PERSONALITY
+4+ years of experience in backend software development using Python
+Strong Python skills with experience building production systems using FastAPI or similar frameworks
+Solid software engineering fundamentals: clean code, design patterns, testing discipline
+Experience with RESTful API design
+Hands-on experience with SQL and/or NoSQL databases (e.g., PostgreSQL, MySQL, MongoDB)
+Experience with automated testing using Pytest or similar
+Experience deploying or working with cloud-native applications (Azure preferred)
+Good problem-solving ability and willingness to take ownership
+Good communication skills and ability to collaborate across teams
+Proficiency in English communication
+Nice To Have
+C# experience
+Hands-on experience building LLM-powered features: prompting, tool calling, agent frameworks
+Benefits Await You At Code Leap
+Competitive salary and benefits
+Year-end bonus (13th-month salary)
+Generous annual leave of up to 18 days
+Additional premium health insurance
+Enjoy a stress-free and comfortable commute to and from work with our Grab Services sponsor
+Enjoy an endless selection of delicious refreshments, including gourmet coffee, beverages, snacks, and fresh fruits, all complimentary
+Focused on individual development:
+Unlimited access to Udemy and other recommended courses
+Sponsored Professional certificates such as AWS, PMI, Scrum Master, etc
+Soft skills training for professional growth
+Sharing session every Friday, come along with lunch provided by CODE LEAP
+1-on-1 coaching with experienced professionals
+Flexible work policy, which provides flexible hours to accommodate personal schedules and commitments
+Dynamic, fun, and agile environment, perfect for sharing and creativity
+Open-minded, kind & humble colleagues
+CONTACT
+Come to talk to us at jobs@codeleap.de
+About Us
+With our expert teams spread across two continents, CODE LEAP provides innovative software solutions for venture-backed companies and leading enterprise businesses in Germany. Our teams in Berlin (Germany) and Ho Chi Minh City (Vietnam) work hand in hand to develop state-of-the-art solutions of the highest quality.
+Because collaborating with the right people is the secret to our successful growth.
+We future-proof organizations - be part of it!

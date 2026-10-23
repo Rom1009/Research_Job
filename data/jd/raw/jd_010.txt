@@ -1,0 +1,38 @@
+WorldQuant develops and deploys systematic financial strategies across a broad range of asset classes and global markets. We seek to produce high-quality predictive signals (alphas) through our proprietary research platform to employ financial strategies focused on market inefficiencies. Our teams work collaboratively to drive the production of alphas and financial strategies – the foundation of a balanced, global investment platform.
+WorldQuant is built on a culture that pairs academic sensibility with accountability for results. Employees are encouraged to think openly about problems, balancing intellectualism and practicality. Excellent ideas come from anyone, anywhere. Employees are encouraged to challenge conventional thinking and possess an attitude of continuous improvement.
+Our goal is to hire the best and the brightest. We value intellectual horsepower first and foremost, and people who demonstrate an outstanding talent. There is no roadmap to future success, so we need people who can help us build it.
+Technologists at WorldQuant research, design, code, test and deploy firmwide platforms and tooling while working collaboratively with researchers. Our environment is relaxed yet intellectually driven. We seek people who think in code and are motivated by being around like-minded people.
+About WorldQuant BRAIN
+BRAIN is a group within WorldQuant similar to a traditional B2C fintech setup. Our mission is to simplify quant finance and provide global remote-work opportunities to participants, while they learn quant finance, AI and ML concepts. WorldQuant BRAIN provides an advanced crowdsourcing platform for external participants to contribute signals, data, and more.
+What You'll Do
+Develop backend application services and APIs.
+Integrate systems with AWS and external cloud services.
+Optimize backend components for speed and scalability.
+Implement and manage caching, queuing and background processing.
+Participate in code reviews, technical design discussions and architecture decisions.
+Be an active member of an agile engineering team who is continuously looking to improve team performance.
+Work with leading cloud technologies (such as AWS, GCP).
+Work with leading open-source technologies (such as MySQL, PostgreSQL, ELK stack, Sentry, Redis, Git, etc.).
+Leverage modern AI tools and practices to increase developer productivity.
+Participate in periodic on-call duties.
+What You’ll Bring
+2+ years demonstrated experience developing scalable and robust software.
+Passion about software engineering, be strongly driven to build and run real-world applications at scale.
+Eagerness to learn and introduce new technologies. Be curious about what's happening in the tech world.
+Excellent coding skills, solid understanding of the broad Python ecosystem including Numpy, Pandas and Asyncio. Expertise in Python web frameworks such as Django, DRF, Flask or others.
+Experience with SQL databases (MySQL, PostgreSQL), including schema design, query optimisation and migrations.
+Experience with microservices, caching tools, data visualization, log collection and aggregation, search, queuing systems.
+Experience with Linux environment and shell scripting.
+Excellent debugging and problem solving skills.
+What We Offer
+Competitive and attractive compensation package with clear career road-map – where you feel challenged everyday
+We offer a strong culture of learning and development: training courses, library, speakers, share and learn events
+Learn from who sits next to you! Working in WQ you are surrounded by smart and talented people
+Premium Health Insurance and Employee Assistance Program
+Generous time-off policy, re-creation sabbatical leave (based on tenure), Trade Union benefits for staff and family
+Team building activities every month: Local engagement events, Employee clubs: football, ping-pong, badminton, yoga, running, PS5, movies, etc.
+Annual company trip and occasional global conferences – opportunity to travel and connect with our global teams
+Happy-hour with tea break, snacks and meals every day in the office!
+By submitting this application, you acknowledge and consent to terms of the WorldQuant Privacy Policy. The privacy policy offers an explanation of how and why your data will be collected, how it will be used and disclosed, how it will be retained and secured, and what legal rights are associated with that data (including the rights of access, correction, and deletion). The policy also describes legal and contractual limitations on these rights. The specific rights and obligations of individuals living and working in different areas may vary by jurisdiction.
+Copyright © 2025 WorldQuant, LLC. All Rights Reserved.
+WorldQuant is an equal opportunity employer and does not discriminate in hiring on the basis of race, color, creed, religion, sex, sexual orientation or preference, age, marital status, citizenship, national origin, disability, military status, genetic predisposition or carrier status, or any other protected characteristic as established by applicable law.

@@ -1,0 +1,81 @@
+{
+    "cv_013": {
+        "persona": "overqualified_eng_manager",
+        "labels": {
+            "skills": [
+                "Python",
+                "Java",
+                "System Design",
+                "Microservices",
+                "Kafka",
+                "AWS",
+                "PostgreSQL",
+                "Team Leadership"
+            ],
+            "education": [
+                {
+                    "institution": "FPT University",
+                    "degree": "Master of Science in Computer Science",
+                    "location": "Ho Chi Minh City",
+                    "period": "2012"
+                }
+            ],
+            "work_experience": [
+                {
+                    "company": "Blue Harbor Digital",
+                    "title": "Engineering Manager",
+                    "location": "Ho Chi Minh City",
+                    "period": "Aug 2022 - Present",
+                    "achievements": [
+                        "Defined architecture standards in Python and Microservices and reviewed critical designs.",
+                        "Reduced incident count by 27% by introducing postmortems and SLOs.",
+                        "Partnered with product leadership to prioritize and de-risk major releases.",
+                        "Led a team of 7 engineers delivering telecom services; owned roadmap and hiring."
+                    ]
+                },
+                {
+                    "company": "Redwood Analytics",
+                    "title": "Tech Lead",
+                    "location": "Ho Chi Minh City",
+                    "period": "Nov 2016 - Aug 2022",
+                    "achievements": [
+                        "Led a team of 6 engineers delivering telecom services; owned roadmap and hiring.",
+                        "Mentored engineers, ran code reviews and improved delivery predictability.",
+                        "Partnered with product leadership to prioritize and de-risk major releases.",
+                        "Defined architecture standards in Python and PostgreSQL and reviewed critical designs.",
+                        "Reduced incident count by 27% by introducing postmortems and SLOs."
+                    ]
+                },
+                {
+                    "company": "Apex Technologies",
+                    "title": "Senior Software Engineer",
+                    "location": "Ho Chi Minh City",
+                    "period": "May 2014 - Nov 2016",
+                    "achievements": [
+                        "Built and maintained REST APIs in AWS serving the telecom product.",
+                        "Collaborated with frontend and product teams to ship features for telecom.",
+                        "Wrote unit and integration tests, raising coverage to 75%.",
+                        "Containerized services and set up CI pipelines for automated deployment."
+                    ]
+                },
+                {
+                    "company": "Lotus Labs",
+                    "title": "Software Engineer",
+                    "location": "Ho Chi Minh City",
+                    "period": "Oct 2012 - May 2014",
+                    "achievements": [
+                        "Designed Microservices-backed data models and optimized slow queries, cutting p95 latency by 31%.",
+                        "Wrote unit and integration tests, raising coverage to 80%.",
+                        "Built and maintained REST APIs in Kafka serving the telecom product.",
+                        "Implemented background jobs and caching, reducing load on the primary database.",
+                        "Containerized services and set up CI pipelines for automated deployment."
+                    ]
+                }
+            ],
+            "project": [],
+            "additional_info": [
+                "English: Professional working proficiency"
+            ]
+        }
+    }
+}

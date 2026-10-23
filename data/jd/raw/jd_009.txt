@@ -1,0 +1,48 @@
+Tinovation
+is a
+technology company
+focusing on
+real products
+and
+real projects
+.
+We highly value
+self-discipline, independence
+, and p
+roactiveness, especially
+in engineering roles.
+We are currently looking for 01
+PHP Laravel Junior Developer
+to join our growing technical team.
+JOB DETAILS
+Position: PHP Laravel Junior Developer
+Openings: 01
+Location: 27 Street No.4, Khang An Residential Area, Phu Huu Ward, Thu Duc City, Ho Chi Minh City
+Job Description
+Develop and maintain backend systems using PHP Laravel.
+Build and maintain RESTful APIs.
+Work with relational databases such as MySQL / PostgreSQL.
+Participate in code reviews, bug fixing, and performance optimization.
+Collaborate with frontend, QA, and other team members.
+Requirements
+1+ year of experience with PHP Laravel (or strong fresher with real projects).
+Solid understanding of: MVC, OOP concepts, Laravel (Routing, Eloquent ORM, Migrations), RESTful APIs and HTTP.
+Self-motivated, proactive, and responsible mindset.
+Familiar with Git and clean code practices.
+Experience in real-world projects is a plus.
+Who Will Fit Well
+Those who want hands-on experience, not just theory.
+Can learn and solve problems independently.
+Aim to grow into a Middle PHP Developer.
+Benefits
+Competitive salary based on capability.
+Technical mentorship and regular code reviews.
+Long-term career growth opportunities.
+Lean, efficient, and performance-driven environment.
+Company activities and team events.
+CONTACT
+Email: tino@tinovation.io.vn (Email subject: [Tinovation] PHP Laravel Junior - Your Name)
+Phone: 08 2727 7157 hoặc 0708 357 077
+Zalo: 08 2727 7157
+Tinovation
+looks forward to finding the right teammate to grow together and build outstanding software products!

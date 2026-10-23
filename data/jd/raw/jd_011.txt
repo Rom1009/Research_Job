@@ -1,0 +1,46 @@
+About Our Team
+Our team is responsible for creating a brand new suite of digital financial platforms and apps that are highly reliable and scalable, using modern engineering practices. You will be joining a project with talented software engineers in our Digital Bank Build team, who are responsible for designing, building, and maintaining the new digital banking platform and its customer channels. As part of the team, you will implement software features, participate in technical designs, and write tests to ensure high-quality product delivery. Our teams operate in Scrum and DevOps models.
+We're looking for top engineers! During the interview process, we will assess your coding and design skills to evaluate your experience and depth of knowledge. Don't worry, our interview process will be engaging!
+Responsibilities
+As a Backend Engineer, you will work on specific problem domains, designing, developing, and deploying backend services with a focus on scalability, high availability, and low latency.
+Drive the efficient delivery of change through analysis, definition, and documentation of requirements, while identifying potential solutions using agile delivery frameworks.
+Solve complex technical and business problems and learn new technologies and frameworks.
+Be part of a team that takes full responsibility for the features you own
+Design, develop, test, deploy, monitor, and improve - you are responsible for the full lifecycle of your product.
+Hiring Process
+CV Review
+Online Assessment(*): 135 minutes, 100% in English, via HackerRank
+Technical Interview: 90 minutes, online via MS Teams
+Culture Fit Interview: 60 minutes, online via MS Teams
+(*) Assessment invitations are automatically sent via email to candidates who pass the CV review. Please check your mailbox regularly and complete the assessment within 7 days, before the invitation expires.
+Requirements
+You will be a perfect match if your profile ticks some of the items below:
+Must-have
+A pragmatic mindset
+Outstanding problem-solving ability, eagerness to learn, and curiosity
+5+ years of software development experience with Java, Spring Boot, Kafka, Redis, Python (e.g., Django, Flask, FastAPI), or similar technologies
+Strong database and schema design skills for large-scale applications
+Experience developing distributed systems using microservices, serverless, and event-driven architectures.
+Experience with Amazon Web Services (AWS)
+Strong English skills to work comfortably with international teams and stakeholders
+Adaptable attitude and personality, ready for continuous change
+Collaboration and culture fit in an Agile environment
+Nice to have
+Experience working in the banking and financial domain
+Experience with Ansible, Packer, Docker, and Kubernetes is a significant plus
+Experience with automated testing frameworks
+Benefits
+At
+GoTymeX,
+opportunities are here for the taking. If you want to be part of our purpose and live and lead through our values, we can offer exciting development opportunities through expanded lateral roles, stretch assignments, or people leadership.
+Some of our benefits:
+Competitive salary that recognizes your talent and potential, including 13th salary (pro-rata)
+Performance-based bonus and equity participation in Tyme Group
+A fast-moving environment where your ideas and execution actually matter
+Full benefits and salary rank during probation
+Insurance coverage in accordance with Vietnamese labor law, plus premium health care for you and your family
+Generous 20 days of leave annually, including 15 annual leave + 3 sick leave + 1 birthday leave + 1 Christmas leave
+Meal and parking allowances covered by the company
+Hybrid working model with flexibility to work from home or the office
+Values-driven, international working environment and agile culture
+Work-life balance 40-hr per week from Mon to Fri

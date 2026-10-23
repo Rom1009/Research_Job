@@ -1,0 +1,17 @@
+{
+    "jd_id": "jd_001",
+    "label": {
+        "must_have_skills": [
+            "Python",
+            "R",
+            "Java",
+            "Machine Learning",
+            "Statistics",
+            "Experimentation",
+            "SQL"
+        ],
+        "min_exp_years": 2.0,
+        "responsibilities": "Own the dialogue and decisioning logic behind what the agent says and does, against a business objective rather than a technical one.\nOwn the conversation end to end, and be able to tell which layer a behavior came from, and fix it there.\nHold latency, cost per conversation and task accuracy together, and move one without giving away the other two.\nBuild the automated evaluation and monitoring that catches a regression before a customer does.\nTurn operational and customer feedback into concrete improvements to scripts, prompts and models, and prove the gain with a structured experiment.\nBenchmark new models and methods on our own traffic before adopting them, and be willing to say a shiny thing is not worth the migration.",
+        "requirements": "Minimum 2 years of experience in IT, Computer Science, Banking, or Finance.\nProficiency in Python, R, or Java.\nStrong hands-on experience in machine learning, statistics, and experimentation.\nExperience with SQL databases and statistical analysis.\nStrong English communication skills (spoken and written, professional fluency required).\nHigh adaptability and comfort operating in fast-paced, ambiguous environments."
+    }
+}

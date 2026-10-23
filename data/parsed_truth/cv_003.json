@@ -1,0 +1,73 @@
+{
+  "resume_id": "cv_003",
+  "full_name": "Hana Patel",
+  "email": "hana.patel43@example.com",
+  "phone": "+84 995421789",
+  "location": "Ha Noi",
+  "headline": "Senior Backend Engineer",
+  "summary": "Senior Backend Engineer with 9+ years of experience in Java, Spring Boot, Kafka. Experience in payments. Comfortable working in cross-functional teams.",
+  "label": {
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "Kafka",
+      "PostgreSQL",
+      "Kubernetes",
+      "Microservices",
+      "System Design",
+      "AWS",
+      "CI/CD"
+    ],
+    "education": [
+      {
+        "institution": "Northern Valley University",
+        "degree": "Bachelor of Science in Computer Science",
+        "location": "Ha Noi",
+        "period": "2017"
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Redwood Analytics",
+        "title": "Senior Backend Engineer",
+        "location": "Ha Noi",
+        "period": "Jul 2023 - Present",
+        "achievements": [
+          "Implemented background jobs and caching, reducing load on the primary database.",
+          "Wrote unit and integration tests, raising coverage to 85%.",
+          "Built and maintained REST APIs in Kafka serving the payments product.",
+          "Containerized services and set up CI pipelines for automated deployment.",
+          "Designed Microservices-backed data models and optimized slow queries, cutting p95 latency by 22%."
+        ]
+      },
+      {
+        "company": "Orbit Analytics",
+        "title": "Backend Engineer",
+        "location": "Ha Noi",
+        "period": "Jan 2020 - Jul 2023",
+        "achievements": [
+          "Containerized services and set up CI pipelines for automated deployment.",
+          "Implemented background jobs and caching, reducing load on the primary database.",
+          "Designed Kafka-backed data models and optimized slow queries, cutting p95 latency by 18%.",
+          "Collaborated with frontend and product teams to ship features for logistics.",
+          "Built and maintained REST APIs in Java serving the logistics product."
+        ]
+      },
+      {
+        "company": "Orbit Technologies",
+        "title": "Software Engineer",
+        "location": "Ha Noi",
+        "period": "Oct 2017 - Jan 2020",
+        "achievements": [
+          "Wrote unit and integration tests, raising coverage to 90%.",
+          "Containerized services and set up CI pipelines for automated deployment.",
+          "Implemented background jobs and caching, reducing load on the primary database."
+        ]
+      }
+    ],
+    "project": [],
+    "additional_info": [
+      "English: Professional working proficiency"
+    ]
+  }
+}

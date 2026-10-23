@@ -1,0 +1,21 @@
+{
+    "jd_id": "jd_009",
+    "label": {
+        "must_have_skills": [
+            "PHP",
+            "Laravel",
+            "MVC",
+            "OOP",
+            "Routing",
+            "Eloquent ORM",
+            "Migrations",
+            "REST API",
+            "HTTP",
+            "Git",
+            "Clean Code"
+        ],
+        "min_exp_years": 1.0,
+        "responsibilities": "Develop and maintain backend systems using PHP Laravel.\nBuild and maintain RESTful APIs.\nWork with relational databases such as MySQL / PostgreSQL.\nParticipate in code reviews, bug fixing, and performance optimization.\nCollaborate with frontend, QA, and other team members.",
+        "requirements": "1+ year of experience with PHP Laravel (or strong fresher with real projects).\nSolid understanding of: MVC, OOP concepts, Laravel (Routing, Eloquent ORM, Migrations), RESTful APIs and HTTP.\nSelf-motivated, proactive, and responsible mindset.\nFamiliar with Git and clean code practices."
+    }
+}

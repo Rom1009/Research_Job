@@ -12,8 +12,8 @@ class EnvMode(str, Enum):
 
 class Settings(BaseSettings):
     DEBUG: bool = True
-    MODEL_NAME: str = "llama-3.1-8b-instant"
-    MODEL_GIT: str = "llama-3.3-70b-versatile"
+    MODEL_NAME: str = "qwen/qwen3.8-27b"
+    MODEL_GIT: str = "meta-models/muse-spark-open"
     LOG_LEVEL: str = "INFO"
     ENV_MODE: EnvMode = EnvMode.DEV
     CONFIG_PATH : str = "config/input.yml"

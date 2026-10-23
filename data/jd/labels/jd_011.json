@@ -1,0 +1,25 @@
+{
+    "jd_id": "jd_011",
+    "label": {
+        "must_have_skills": [
+            "Java",
+            "Spring Boot",
+            "Kafka",
+            "Redis",
+            "Python",
+            "Django",
+            "Flask",
+            "FastAPI",
+            "Database Design",
+            "Schema Design",
+            "Distributed Systems",
+            "Microservices",
+            "Serverless",
+            "Event-Driven Architecture",
+            "AWS"
+        ],
+        "min_exp_years": 5.0,
+        "responsibilities": "As a Backend Engineer, you will work on specific problem domains, designing, developing, and deploying backend services with a focus on scalability, high availability, and low latency.\nDrive the efficient delivery of change through analysis, definition, and documentation of requirements, while identifying potential solutions using agile delivery frameworks.\nSolve complex technical and business problems and learn new technologies and frameworks.\nBe part of a team that takes full responsibility for the features you own.\nDesign, develop, test, deploy, monitor, and improve - you are responsible for the full lifecycle of your product.",
+        "requirements": "A pragmatic mindset.\nOutstanding problem-solving ability, eagerness to learn, and curiosity.\n5+ years of software development experience with Java, Spring Boot, Kafka, Redis, Python (e.g., Django, Flask, FastAPI), or similar technologies.\nStrong database and schema design skills for large-scale applications.\nExperience developing distributed systems using microservices, serverless, and event-driven architectures.\nExperience with Amazon Web Services (AWS).\nStrong English skills to work comfortably with international teams and stakeholders.\nAdaptable attitude and personality, ready for continuous change.\nCollaboration and culture fit in an Agile environment."
+    }
+}

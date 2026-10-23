@@ -1,0 +1,59 @@
+{
+  "resume_id": "cv_011",
+  "full_name": "Marcus Silva",
+  "email": "marcus.silva5@example.com",
+  "phone": "+1 555-5977",
+  "location": "Austin, TX",
+  "headline": "QA Automation Engineer",
+  "summary": "QA Automation Engineer with 4+ years of experience in Python, Selenium, Pytest. Experience in mobile banking. Comfortable working in cross-functional teams.",
+  "label": {
+    "skills": [
+      "Python",
+      "Selenium",
+      "Pytest",
+      "API Testing",
+      "Postman",
+      "CI/CD",
+      "SQL",
+      "Git"
+    ],
+    "education": [
+      {
+        "institution": "National Economics University",
+        "degree": "Bachelor of Information Technology",
+        "location": "Austin, TX",
+        "period": "2021"
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Lotus Solutions",
+        "title": "QA Automation Engineer",
+        "location": "Austin, TX",
+        "period": "Sep 2023 - Present",
+        "achievements": [
+          "Integrated automated tests into CI so every pull request is verified.",
+          "Built an automation suite with API Testing that cut regression time by 35%.",
+          "Triaged defects with developers and tracked quality metrics per release.",
+          "Wrote manual and automated test cases for mobile banking features using Git."
+        ]
+      },
+      {
+        "company": "Blue Harbor Software",
+        "title": "QA Engineer",
+        "location": "Austin, TX",
+        "period": "Dec 2021 - Sep 2023",
+        "achievements": [
+          "Wrote manual and automated test cases for mobile banking features using Postman.",
+          "Built an automation suite with API Testing that cut regression time by 31%.",
+          "Integrated automated tests into CI so every pull request is verified.",
+          "Triaged defects with developers and tracked quality metrics per release."
+        ]
+      }
+    ],
+    "project": [],
+    "additional_info": [
+      "English: Professional working proficiency"
+    ]
+  }
+}

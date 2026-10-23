@@ -1,0 +1,31 @@
+Linh Garcia
+Full Stack Engineer
+linh.garcia45@example.com | +1 555-7162 | Berlin
+
+Professional Summary
+Full Stack Engineer with 5+ years of experience in TypeScript, Node.js, React. Experience in education. Comfortable working in cross-functional teams.
+
+Skills
+TypeScript, Node.js, React, PostgreSQL, MongoDB, Docker, GraphQL, Git
+
+Work Experience
+Full Stack Engineer - Vertex Labs
+Berlin | Sep 2025 - Present
+• Wrote automated tests across API and UI layers.
+• Delivered end-to-end features using MongoDB on the frontend and React on the backend for education.
+• Designed REST endpoints and database schemas, and built the UI that consumes them.
+• Set up CI/CD and monitoring, reducing deployment time by 31%.
+
+Full Stack Developer - Redwood Labs
+Berlin | Aug 2021 - Sep 2025
+• Designed REST endpoints and database schemas, and built the UI that consumes them.
+• Delivered end-to-end features using Git on the frontend and TypeScript on the backend for education.
+• Set up CI/CD and monitoring, reducing deployment time by 31%.
+• Wrote automated tests across API and UI layers.
+
+Education
+Bachelor of Engineering in Software Engineering - Lakeside University
+Berlin | 2021
+
+Additional Information
+• English: Professional working proficiency

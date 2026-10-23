@@ -1,0 +1,267 @@
+{
+  "cv_001": {
+    "persona": "fresher_backend_python",
+    "seniority": "junior",
+    "years_exp": 0.7,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "Python",
+      "Django",
+      "PostgreSQL",
+      "REST APIs",
+      "Git",
+      "Docker",
+      "Linux"
+    ],
+    "split": "dev"
+  },
+  "cv_002": {
+    "persona": "mid_backend_python",
+    "seniority": "mid",
+    "years_exp": 3.3,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "Redis",
+      "Docker",
+      "AWS",
+      "REST APIs",
+      "CI/CD",
+      "Git"
+    ],
+    "split": "dev"
+  },
+  "cv_003": {
+    "persona": "senior_backend_java",
+    "seniority": "senior",
+    "years_exp": 9.0,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "Java",
+      "Spring Boot",
+      "Kafka",
+      "PostgreSQL",
+      "Kubernetes",
+      "Microservices",
+      "System Design",
+      "AWS",
+      "CI/CD"
+    ],
+    "split": "test"
+  },
+  "cv_004": {
+    "persona": "mid_data_engineer",
+    "seniority": "mid",
+    "years_exp": 4.2,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "SQL",
+      "Python",
+      "Airflow",
+      "dbt",
+      "Apache Spark",
+      "ETL",
+      "Data Warehousing",
+      "AWS"
+    ],
+    "split": "dev"
+  },
+  "cv_005": {
+    "persona": "bi_to_data_engineer",
+    "seniority": "senior",
+    "years_exp": 7.0,
+    "source": "synthetic",
+    "hard_case": "career_shift: BI -> data engineering, chua co nhieu cloud",
+    "skills": [
+      "SQL",
+      "Python",
+      "Airflow",
+      "ETL",
+      "Data Modeling",
+      "Power BI",
+      "Apache Spark"
+    ],
+    "split": "test"
+  },
+  "cv_006": {
+    "persona": "junior_ml_engineer",
+    "seniority": "junior",
+    "years_exp": 1.7,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "Python",
+      "PyTorch",
+      "Scikit-learn",
+      "Pandas",
+      "NumPy",
+      "SQL",
+      "Docker",
+      "Machine Learning"
+    ],
+    "split": "dev"
+  },
+  "cv_007": {
+    "persona": "senior_nlp_engineer",
+    "seniority": "senior",
+    "years_exp": 7.5,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "Python",
+      "PyTorch",
+      "Natural Language Processing",
+      "TensorFlow",
+      "Docker",
+      "Kubernetes",
+      "AWS",
+      "SQL",
+      "Machine Learning"
+    ],
+    "split": "dev"
+  },
+  "cv_008": {
+    "persona": "mid_frontend_react",
+    "seniority": "mid",
+    "years_exp": 3.8,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Redux",
+      "HTML/CSS",
+      "Jest",
+      "Git"
+    ],
+    "split": "test"
+  },
+  "cv_009": {
+    "persona": "mid_fullstack_ts",
+    "seniority": "mid",
+    "years_exp": 5.2,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "TypeScript",
+      "Node.js",
+      "React",
+      "PostgreSQL",
+      "MongoDB",
+      "Docker",
+      "GraphQL",
+      "Git"
+    ],
+    "split": "dev"
+  },
+  "cv_010": {
+    "persona": "mid_devops",
+    "seniority": "mid",
+    "years_exp": 5.8,
+    "source": "synthetic",
+    "hard_case": null,
+    "skills": [
+      "Linux",
+      "Docker",
+      "Kubernetes",
+      "Terraform",
+      "AWS",
+      "Jenkins",
+      "CI/CD",
+      "Python",
+      "Prometheus"
+    ],
+    "split": "dev"
+  },
+  "cv_011": {
+    "persona": "qa_to_sdet",
+    "seniority": "mid",
+    "years_exp": 4.8,
+    "source": "synthetic",
+    "hard_case": "near_fit: manh ve test automation, yeu ve backend dev",
+    "skills": [
+      "Python",
+      "Selenium",
+      "Pytest",
+      "API Testing",
+      "Postman",
+      "CI/CD",
+      "SQL",
+      "Git"
+    ],
+    "split": "test"
+  },
+  "cv_012": {
+    "persona": "marketing_to_data_analyst",
+    "seniority": "junior",
+    "years_exp": 2.5,
+    "source": "synthetic",
+    "hard_case": "career_changer: marketing -> data analyst",
+    "skills": [
+      "SQL",
+      "Excel",
+      "Python",
+      "Pandas",
+      "Tableau",
+      "Google Analytics"
+    ],
+    "split": "dev"
+  },
+  "cv_013": {
+    "persona": "overqualified_eng_manager",
+    "seniority": "lead",
+    "years_exp": 14.0,
+    "source": "synthetic",
+    "hard_case": "overqualified: nen khop JD senior/lead, qua cao so voi JD mid/junior",
+    "skills": [
+      "Python",
+      "Java",
+      "System Design",
+      "Microservices",
+      "Kafka",
+      "AWS",
+      "PostgreSQL",
+      "Team Leadership"
+    ],
+    "split": "test"
+  },
+  "cv_014": {
+    "persona": "mid_backend_nodejs_go",
+    "seniority": "mid",
+    "years_exp": 4.0,
+    "source": "synthetic",
+    "hard_case": "near_fit: backend tot nhung khong dung stack Python/Java",
+    "skills": [
+      "Node.js",
+      "Go",
+      "TypeScript",
+      "MongoDB",
+      "Redis",
+      "Docker",
+      "gRPC",
+      "Git"
+    ],
+    "split": "dev"
+  },
+  "cv_015": {
+    "persona": "sparse_vn_fresher_analyst",
+    "seniority": "junior",
+    "years_exp": 1.0,
+    "source": "synthetic",
+    "hard_case": "sparse_cv: khong co muc Skills, dia diem VN, tieng Viet/Anh",
+    "skills": [
+      "SQL",
+      "Excel",
+      "Power BI",
+      "Python"
+    ],
+    "split": "dev"
+  }
+}

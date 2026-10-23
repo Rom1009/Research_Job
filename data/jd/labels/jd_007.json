@@ -1,0 +1,23 @@
+{
+    "jd_id": "jd_007",
+    "label": {
+        "must_have_skills": [
+            "Statically Typed Language",
+            "Relational Databases",
+            "SQL",
+            "Database Design",
+            "Indexes",
+            "Transactions",
+            "HTTP",
+            "REST API",
+            "API Design",
+            "Authentication",
+            "Authorization",
+            "AI Coding Agent",
+            "Code Review"
+        ],
+        "min_exp_years": 0.0,
+        "responsibilities": "Translate specifications into well-constrained tasks for the AI coding agent: data models, API contracts, business rules, error handling, and security constraints.\nPrepare and maintain the working context for the agent on your assigned repo (project conventions, standard code patterns, permitted scope).\nBreak large problems into steps the agent can execute effectively.\nReview every change before it enters a pull request: correct business logic, correct data constraints, no permission leaks, no security holes, no hidden technical debt.\nCatch the subtle issues that \"working code\" often hides: N+1 queries, missing transactions, race conditions, poor error handling, authorization checked at the wrong layer, sensitive data leaking into logs.\nWrite and maintain tests for the areas you own, including the business cases the agent won't think of on its own.\nDesign and optimize database schemas, and write safe migrations for live data.\nIntegrate third-party systems (payment gateways, identity services, client internal systems, large language models) with proper retry, idempotency, and rate limiting.\nShip to staging via CI/CD, take part in the production release process (under the Technical Lead's approval), monitor logs and alerts, and help resolve incidents.\nWrite concise root cause analyses (RCA) when issues arise and propose ways to prevent recurrence.\nPackage effective prompting approaches, rules, and verification patterns into shared assets for the team.",
+        "requirements": "Under 2 years of backend experience, or no professional experience but at least one product you've personally shipped to a real environment (with a repo/demo to discuss).\nStrong programming foundation in a statically typed language (C#, Java, Go, TypeScript, or equivalent).\nWorking proficiency with relational databases: designing tables, writing queries with joins, and understanding indexes and transactions.\nA solid grasp of HTTP and REST, enough to design a clean API on your own (methods, status codes, pagination, authentication, and authorization).\nAI applied in your daily work: you use an AI coding agent or AI IDE (Claude Code, Cursor, Copilot, or equivalent) for real work.\nA verification mindset for AI output: you can share a specific instance where you caught AI-generated code that \"ran correctly but was fundamentally wrong.\"\nData security awareness: you understand and follow each project's data-handling rules.\nFluent reading comprehension of technical documentation in English.\nInitiative and a willingness to learn: you ask questions early when stuck and take ownership of the quality of your work."
+    }
+}

@@ -1,0 +1,36 @@
+Huy Tanaka
+Data Engineer
+huy.tanaka13@example.com | +1 555-7525 | Seattle, WA
+
+Professional Summary
+Data Engineer with 7+ years of experience in SQL, Python, Airflow. Experience in banking. Comfortable working in cross-functional teams.
+
+Skills
+SQL, Python, Airflow, ETL, Data Modeling, Power BI, Apache Spark
+
+Work Experience
+Data Engineer - Lotus Cloud
+Seattle, WA | Nov 2023 - Present
+• Optimized slow warehouse queries, reducing runtime by 18%.
+• Built ETL pipelines with Python and Power BI loading banking data into the warehouse.
+• Modeled analytics tables and wrote tested transformations used by BI dashboards.
+
+Senior BI Developer - Sunrise Cloud
+Seattle, WA | Jul 2022 - Nov 2023
+• Analyzed banking data with Airflow and SQL to answer business questions for stakeholders.
+• Presented findings to non-technical teams and recommended process changes.
+• Cleaned and joined multiple sources to produce reliable KPI reports.
+
+BI Analyst - Sunrise Digital
+Seattle, WA | Oct 2019 - Jul 2022
+• Cleaned and joined multiple sources to produce reliable KPI reports.
+• Built weekly dashboards that replaced 10 hours per week of manual reporting.
+• Presented findings to non-technical teams and recommended process changes.
+• Analyzed banking data with Data Modeling and Power BI to answer business questions for stakeholders.
+
+Education
+Bachelor of Information Technology - State Institute of Technology
+Seattle, WA | 2019
+
+Additional Information
+• English: Professional working proficiency

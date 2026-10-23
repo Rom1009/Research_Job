@@ -1,0 +1,47 @@
+Trang Johnson
+Engineering Manager
+trang.johnson35@example.com | +84 960059325 | Ho Chi Minh City
+
+Professional Summary
+Engineering Manager with 14+ years of experience in Python, Java, System Design. Experience in telecom. Comfortable working in cross-functional teams.
+
+Skills
+Python, Java, System Design, Microservices, Kafka, AWS, PostgreSQL, Team Leadership
+
+Work Experience
+Engineering Manager - Blue Harbor Digital
+Ho Chi Minh City | Aug 2022 - Present
+• Defined architecture standards in Python and Microservices and reviewed critical designs.
+• Reduced incident count by 27% by introducing postmortems and SLOs.
+• Partnered with product leadership to prioritize and de-risk major releases.
+• Led a team of 7 engineers delivering telecom services; owned roadmap and hiring.
+
+Tech Lead - Redwood Analytics
+Ho Chi Minh City | Nov 2016 - Aug 2022
+• Led a team of 6 engineers delivering telecom services; owned roadmap and hiring.
+• Mentored engineers, ran code reviews and improved delivery predictability.
+• Partnered with product leadership to prioritize and de-risk major releases.
+• Defined architecture standards in Python and PostgreSQL and reviewed critical designs.
+• Reduced incident count by 27% by introducing postmortems and SLOs.
+
+Senior Software Engineer - Apex Technologies
+Ho Chi Minh City | May 2014 - Nov 2016
+• Built and maintained REST APIs in AWS serving the telecom product.
+• Collaborated with frontend and product teams to ship features for telecom.
+• Wrote unit and integration tests, raising coverage to 75%.
+• Containerized services and set up CI pipelines for automated deployment.
+
+Software Engineer - Lotus Labs
+Ho Chi Minh City | Oct 2012 - May 2014
+• Designed Microservices-backed data models and optimized slow queries, cutting p95 latency by 31%.
+• Wrote unit and integration tests, raising coverage to 80%.
+• Built and maintained REST APIs in Kafka serving the telecom product.
+• Implemented background jobs and caching, reducing load on the primary database.
+• Containerized services and set up CI pipelines for automated deployment.
+
+Education
+Master of Science in Computer Science - FPT University
+Ho Chi Minh City | 2012
+
+Additional Information
+• English: Professional working proficiency

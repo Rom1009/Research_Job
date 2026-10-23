@@ -1,0 +1,56 @@
+{
+    "cv_004": {
+        "persona": "mid_data_engineer",
+        "labels": {
+            "skills": [
+                "SQL",
+                "Python",
+                "Airflow",
+                "dbt",
+                "Apache Spark",
+                "ETL",
+                "Data Warehousing",
+                "AWS"
+            ],
+            "education": [
+                {
+                    "institution": "National Economics University",
+                    "degree": "Bachelor of Information Technology",
+                    "location": "Austin, TX",
+                    "period": "2022"
+                }
+            ],
+            "work_experience": [
+                {
+                    "company": "Apex Systems",
+                    "title": "Data Engineer",
+                    "location": "Austin, TX",
+                    "period": "Feb 2024 - Present",
+                    "achievements": [
+                        "Built ETL pipelines with Airflow and dbt loading retail data into the warehouse.",
+                        "Optimized slow warehouse queries, reducing runtime by 31%.",
+                        "Automated daily data quality checks, cutting manual reconciliation by 6 hours per week.",
+                        "Partnered with analysts to define metrics and document data lineage for retail.",
+                        "Modeled analytics tables and wrote tested transformations used by BI dashboards."
+                    ]
+                },
+                {
+                    "company": "Lotus Solutions",
+                    "title": "Data Analyst",
+                    "location": "Austin, TX",
+                    "period": "Aug 2022 - Feb 2024",
+                    "achievements": [
+                        "Built weekly dashboards that replaced 8 hours per week of manual reporting.",
+                        "Analyzed retail data with ETL and dbt to answer business questions for stakeholders.",
+                        "Presented findings to non-technical teams and recommended process changes.",
+                        "Cleaned and joined multiple sources to produce reliable KPI reports."
+                    ]
+                }
+            ],
+            "project": [],
+            "additional_info": [
+                "English: Professional working proficiency"
+            ]
+        }
+    }
+}

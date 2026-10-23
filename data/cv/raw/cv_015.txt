@@ -1,0 +1,27 @@
+Huy Nguyen
+Data Analyst Intern
+huy.nguyen56@example.com | +84 931014049 | Ho Chi Minh City
+
+Professional Summary
+Sinh vien moi ra truong, 1+ years of experience, quan tam phan tich du lieu (SQL, Excel, Power BI). Hoc nhanh, co trach nhiem.
+
+Work Experience
+Data Analyst Intern - Nimbus Analytics
+Ho Chi Minh City | Oct 2025 - Present
+• Cleaned and joined multiple sources to produce reliable KPI reports.
+• Analyzed logistics data with SQL and Excel to answer business questions for stakeholders.
+• Built weekly dashboards that replaced 10 hours per week of manual reporting.
+• Presented findings to non-technical teams and recommended process changes.
+
+Education
+Bachelor of Economics - State Institute of Technology
+Ho Chi Minh City | 2025
+
+Projects
+Retail Sales Dashboard
+2025 | Excel, Python, Power BI
+• KPI dashboard from raw CSV exports
+
+Additional Information
+• Tieng Anh: giao tiep co ban (IELTS 6.0)
+• Vietnamese: Native

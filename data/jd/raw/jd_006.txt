@@ -1,0 +1,32 @@
+Job Description:
+- Taking responsibility for building, developing and maintaining database systems, API system for projects
+- Taking responsibility for checking and fixing bugs
+- Learning, evaluating and applying new technologies to build new projects, as well as optimize incomplete functions.
+- Taking responsibility for reporting work to management (Leader, PO)
+- Coordinating with BA, Front-end, Designer, QC/QA department to understand project requirements, propose optimal solutions to perform requirements
+Job Requirements:
+-
+Having at least 1.5 years of experience working with .NET/.NET Core, PostgreSQL, MySQL/SQL Server, Entity Framework/Swagger
+- Having experience in building medium and large-scale software projects, microservices architecture
+- Having experience working with database management systems (SQL/NoSQL)
+- Have knowledge of LINQ/LAMBDA/JSON
+- Understanding the concept as well as how to build function with REST API, OOP, SOLID, DI, Repository design pattern
+- Having experience in writing unit tests
+- Having experience in cloud-based, cloud-service (Azure is an advantage)
+- Reading and understanding English documents - Experiencing in working with IIS is an advantage
+Our benefit:
+-
+Salary
+: upto 1500
+-
+Benefit
+: Social Insurance, 12 paid leaves, Happy hour, Team building
+-
+Bonus
+: Birthday, holidays, Training support, Referrals Bonus, Invention bonus, Completing project bonus, Seniority bonus, Bonus for improving skill courses.
+Location and time:
+- From Monday to Friday, 08h50 - 18h00; Break 12h00 - 13h00
+- 2nd Floor, Victory House Tower, 19- 23 Dinh Bo Linh Street, Binh Thanh Ward, Ho Chi Minh City
+Contact information:
+- Ms: Nhan HR- 0963 584 894
+- Email: hr@lfglobaltech.com

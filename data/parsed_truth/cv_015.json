@@ -1,0 +1,52 @@
+{
+  "resume_id": "cv_015",
+  "full_name": "Huy Nguyen",
+  "email": "huy.nguyen56@example.com",
+  "phone": "+84 931014049",
+  "location": "Ho Chi Minh City",
+  "headline": "Data Analyst Intern",
+  "summary": "Sinh vien moi ra truong, 1+ years of experience, quan tam phan tich du lieu (SQL, Excel, Power BI). Hoc nhanh, co trach nhiem.",
+  "label": {
+    "skills": [],
+    "education": [
+      {
+        "institution": "State Institute of Technology",
+        "degree": "Bachelor of Economics",
+        "location": "Ho Chi Minh City",
+        "period": "2025"
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Nimbus Analytics",
+        "title": "Data Analyst Intern",
+        "location": "Ho Chi Minh City",
+        "period": "Oct 2025 - Present",
+        "achievements": [
+          "Cleaned and joined multiple sources to produce reliable KPI reports.",
+          "Analyzed logistics data with SQL and Excel to answer business questions for stakeholders.",
+          "Built weekly dashboards that replaced 10 hours per week of manual reporting.",
+          "Presented findings to non-technical teams and recommended process changes."
+        ]
+      }
+    ],
+    "project": [
+      {
+        "name": "Retail Sales Dashboard",
+        "period": "2025",
+        "technologies": [
+          "Excel",
+          "Python",
+          "Power BI"
+        ],
+        "description": [
+          "KPI dashboard from raw CSV exports"
+        ]
+      }
+    ],
+    "additional_info": [
+      "Tieng Anh: giao tiep co ban (IELTS 6.0)",
+      "Vietnamese: Native"
+    ]
+  }
+}

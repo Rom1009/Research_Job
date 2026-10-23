@@ -1,0 +1,29 @@
+{
+    "jd_id": "jd_006",
+    "label": {
+        "must_have_skills": [
+            ".NET",
+            ".NET Core",
+            "PostgreSQL",
+            "MySQL",
+            "SQL Server",
+            "Entity Framework",
+            "Swagger",
+            "Microservices",
+            "SQL",
+            "NoSQL",
+            "LINQ",
+            "Lambda",
+            "JSON",
+            "REST API",
+            "OOP",
+            "SOLID",
+            "Dependency Injection",
+            "Repository Pattern",
+            "Unit Testing"
+        ],
+        "min_exp_years": 1.5,
+        "responsibilities": "Taking responsibility for building, developing and maintaining database systems, API system for projects.\nTaking responsibility for checking and fixing bugs.\nLearning, evaluating and applying new technologies to build new projects, as well as optimize incomplete functions.\nTaking responsibility for reporting work to management (Leader, PO).\nCoordinating with BA, Front-end, Designer, QC/QA department to understand project requirements, propose optimal solutions to perform requirements.",
+        "requirements": "Having at least 1.5 years of experience working with .NET/.NET Core, PostgreSQL, MySQL/SQL Server, Entity Framework/Swagger.\nHaving experience in building medium and large-scale software projects, microservices architecture.\nHaving experience working with database management systems (SQL/NoSQL).\nHave knowledge of LINQ/LAMBDA/JSON.\nUnderstanding the concept as well as how to build function with REST API, OOP, SOLID, DI, Repository design pattern.\nHaving experience in writing unit tests.\nHaving experience in cloud-based, cloud-service (Azure is an advantage).\nReading and understanding English documents."
+    }
+}

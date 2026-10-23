@@ -1,0 +1,50 @@
+Trusting Social is an AI Fintech company building credit profiles for underserved consumers across Vietnam, Indonesia, India, and the Philippines, combining alternative data with advanced AI to expand access to credit. Having profiled over 1 billion consumers, the company is now pushing toward 100 million credit lines delivered — grounded throughout in strict data privacy and consumer data rights.
+How You’ll Make an Impact
+The decision engine decides, for every account in a large consumer portfolio, whether we reach out, through which channel, when, and how often. It is a machine that turns models into money, and it runs every day. As an MLE on the Data Science team you build it and you run it.
+You will see a model you built change a business number within weeks, on a real portfolio rather than a benchmark, with senior data scientists next to you to learn the rigor from. If you want to become a strong data scientist rather than a model trainer, this is the seat where that happens.
+What You’ll Do
+Decisioning Ownership
+Build the decisioning that picks which accounts we work with, through which channel, when, and how often.
+Own a decision end to end, from the signal that triggered it to the outcome it produced.
+Models, Pipelines and Reliability
+Build the models behind those decisions — propensity, timing, channel response, contactability — and the pipelines that feed them.
+Hold recovery, cost and reliability together, and move one without giving away the other two.
+Build the monitoring that catches a broken input or a drifted model before the business notices.
+Evidence and the Frontier
+Backtest a change before it ships and measure it on live traffic after, on the metric the business is actually paid on.
+Benchmark new methods on our own portfolios and our own metrics before adopting them.
+What We’re Looking For
+Experience & Background
+Minimum 2 years of experience in IT, Computer Science, Banking, or Finance.
+Proficiency in Python, R, or Java.
+Strong hands-on experience in machine learning, statistics, and experimentation.
+Experience with SQL databases and statistical analysis.
+Familiarity with bank-related products like unsecured personal loans and credit cards is preferred.
+Experience with big data processing is a plus.
+Startup or tech background is a strong plus.
+How You Work
+You build models and pipelines, and you use AI to get more of it done — writing and reviewing code, exploring data, running more variants than you could by hand — while judging every output on evidence before it reaches a live decision.
+You experiment proactively instead of waiting to be told what to build — you take a hypothesis to the data, then bring the result to the table.
+You move fluidly between modeling, data engineering and business context, coordinating across product and operations without needing a handoff document.
+You treat every failed experiment as a learning input and keep sharpening your craft without being told to.
+Skills & Competencies
+Product Architect — Prototypes a working decisioning system, reads the metrics it produces, and iterates before anyone has to ask.
+AI Engineer/Architect — Ships end-to-end ML systems, owning the path from data pipeline to production decision.
+AI Operator — Keeps the engine running above target at controlled cost, catching a bad feed or a drifted model before it reaches the portfolio.
+Strong English communication skills (spoken and written — professional fluency required).
+High adaptability and comfort operating in fast-paced, ambiguous environments.
+What We Offer
+Join Our Vibrant Team And Enjoy
+Opportunity to work and learn from one of the best and brightest technology teams in Vietnam
+Be part of a winning team with exponential growth regionally, experience recruiting world-class talents
+Competitive compensation package, including 13th-month salary and performance bonuses
+Comprehensive health care coverage for you and your dependents
+Generous leave policies, including annual leave, sick leave, and flexible work hours
+Convenient central district 1 office location, next to a future metro station
+On-site lunch with multiple options, including vegetarian
+Grab for work allowance and fully equipped workstations
+Fun and engaging team-building activities, sponsored sports clubs, and happy hour every Thursday
+Unlimited free coffee, tea, snacks, and fruit to keep you energized
+An opportunity to make a social impact by helping to democratize credit access in emerging markets
+At Trusting Social, we live by ownership, integrity, and agility in execution. We believe in doing what’s right, what’s best, and what’s innovative. If you’re smart, driven, and want to make a difference in the world with the most advanced and fascinating technology, come join our team. We offer the runway to truly make an impact.
+Learn more about us: https://trustingsocial.com | https://www.youtube.com/watch?v=inAEDGvOcL8&t=29s

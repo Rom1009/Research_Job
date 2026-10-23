@@ -1,0 +1,37 @@
+Daniel Cohen
+Frontend Engineer
+daniel.cohen49@example.com | +1 555-2257 | Toronto, ON
+
+Professional Summary
+Frontend Engineer with 3+ years of experience in JavaScript, TypeScript, React. Experience in SaaS. Comfortable working in cross-functional teams.
+
+Skills
+JavaScript, TypeScript, React, Redux, HTML/CSS, Jest, Git
+
+Work Experience
+Frontend Engineer - Helix Solutions
+Toronto, ON | Jul 2025 - Present
+• Worked with designers and backend engineers to deliver features on schedule.
+• Improved page load time by 35% through code splitting and asset optimization.
+• Implemented reusable component library and accessibility fixes.
+• Built responsive interfaces with Redux and JavaScript for the SaaS platform.
+• Wrote component and end-to-end tests, raising coverage to 75%.
+
+Frontend Developer - Blue Harbor Cloud
+Toronto, ON | Jan 2023 - Jul 2025
+• Worked with designers and backend engineers to deliver features on schedule.
+• Improved page load time by 18% through code splitting and asset optimization.
+• Built responsive interfaces with TypeScript and JavaScript for the SaaS platform.
+• Implemented reusable component library and accessibility fixes.
+
+Education
+Bachelor of Science in Computer Science - Lakeside University
+Toronto, ON | 2023
+
+Projects
+Personal Portfolio
+2022 | Jest, Git, Redux
+• Responsive site with performance budget
+
+Additional Information
+• English: Professional working proficiency

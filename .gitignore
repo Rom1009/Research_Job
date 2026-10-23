@@ -21,3 +21,14 @@ INTERGRATION_ROADMAP.md
 /uploads/
 
 workflow.md
+
+/notebook/
+
+database.db
+big_conv.bin
+big_conv.xml
+
+kernel.errors.txt
+
+resnet18.bin
+resnet18.xml

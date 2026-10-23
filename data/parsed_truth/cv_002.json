@@ -1,0 +1,59 @@
+{
+  "resume_id": "cv_002",
+  "full_name": "Huy Garcia",
+  "email": "huy.garcia51@example.com",
+  "phone": "+1 555-9134",
+  "location": "Berlin",
+  "headline": "Backend Engineer",
+  "summary": "Backend Engineer with 3+ years of experience in Python, FastAPI, PostgreSQL. Experience in fintech. Comfortable working in cross-functional teams.",
+  "label": {
+    "skills": [
+      "Python",
+      "FastAPI",
+      "PostgreSQL",
+      "Redis",
+      "Docker",
+      "AWS",
+      "REST APIs",
+      "CI/CD",
+      "Git"
+    ],
+    "education": [
+      {
+        "institution": "Lakeside University",
+        "degree": "Bachelor of Engineering in Software Engineering",
+        "location": "Berlin",
+        "period": "2023"
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Vertex Systems",
+        "title": "Backend Engineer",
+        "location": "Berlin",
+        "period": "Jun 2025 - Present",
+        "achievements": [
+          "Implemented background jobs and caching, reducing load on the primary database.",
+          "Wrote unit and integration tests, raising coverage to 90%.",
+          "Built and maintained REST APIs in FastAPI serving the fintech product."
+        ]
+      },
+      {
+        "company": "Vertex Analytics",
+        "title": "Software Engineer",
+        "location": "Berlin",
+        "period": "Jun 2023 - Jun 2025",
+        "achievements": [
+          "Designed CI/CD-backed data models and optimized slow queries, cutting p95 latency by 27%.",
+          "Collaborated with frontend and product teams to ship features for fintech.",
+          "Containerized services and set up CI pipelines for automated deployment.",
+          "Built and maintained REST APIs in AWS serving the fintech product."
+        ]
+      }
+    ],
+    "project": [],
+    "additional_info": [
+      "English: Professional working proficiency"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+Huy Hoang
+Backend Engineer
+huy.hoang5@example.com | +1 555-4333 | Seattle, WA
+
+Professional Summary
+Backend Engineer with 4+ years of experience in Node.js, Go, TypeScript. Experience in gaming. Comfortable working in cross-functional teams.
+
+Skills
+Node.js, Go, TypeScript, MongoDB, Redis, Docker, gRPC, Git
+
+Work Experience
+Backend Engineer - Vertex Analytics
+Seattle, WA | Aug 2024 - Present
+• Implemented background jobs and caching, reducing load on the primary database.
+• Designed MongoDB-backed data models and optimized slow queries, cutting p95 latency by 35%.
+• Built and maintained REST APIs in Docker serving the gaming product.
+
+Backend Developer - Lotus Cloud
+Seattle, WA | Oct 2022 - Aug 2024
+• Designed Git-backed data models and optimized slow queries, cutting p95 latency by 35%.
+• Collaborated with frontend and product teams to ship features for gaming.
+• Containerized services and set up CI pipelines for automated deployment.
+
+Education
+Bachelor of Science in Computer Science - Bach Khoa University
+Seattle, WA | 2022
+
+Additional Information
+• English: Professional working proficiency

@@ -1,0 +1,39 @@
+Chloe Pham
+Data Analyst
+chloe.pham63@example.com | +84 965972695 | Da Nang
+
+Professional Summary
+Data Analyst with 2+ years of experience in SQL, Excel, Python. Experience in consumer goods. Comfortable working in cross-functional teams.
+
+Skills
+SQL, Excel, Python, Pandas, Tableau, Google Analytics
+
+Work Experience
+Data Analyst - Kite Solutions
+Da Nang | Jun 2025 - Present
+• Cleaned and joined multiple sources to produce reliable KPI reports.
+• Analyzed consumer goods data with Pandas and Python to answer business questions for stakeholders.
+• Built weekly dashboards that replaced 10 hours per week of manual reporting.
+
+Marketing Executive - Sunrise Solutions
+Da Nang | Apr 2024 - Jun 2025
+• Planned and ran email and social campaigns for consumer goods customers.
+• Grew newsletter subscribers by 18% over two quarters.
+• Coordinated with sales on lead follow-up and content calendar.
+• Tracked campaign performance in spreadsheets and reported weekly results.
+
+Education
+Bachelor of Business Administration - FPT University
+Da Nang | 2024
+
+Projects
+Retail Sales Dashboard
+2024 | Excel, Python, Tableau
+• KPI dashboard from raw CSV exports
+
+Customer Churn Analysis
+2023 | Tableau, Pandas, Excel
+• Cohort analysis and recommendations
+
+Additional Information
+• English: Professional working proficiency

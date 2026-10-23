@@ -1,0 +1,36 @@
+OPSWAT, a global leader in IT, OT, and ICS critical infrastructure cybersecurity, delivers an end-to-end platform that gives public and private sector organizations and enterprises the critical advantage needed to protect their complex networks, secure their devices, and ensure compliance. Over the last 20 years our commitment to innovative technology has earned the trust of more than 1,700 organizations, governments, and institutions globally, solidifying our role in protecting the world’s critical infrastructure and securing our way of life.
+The Position
+My OPSWAT Portal
+is OPSWAT's one stop hub for customers and partners. We provide a central place to manage licenses, access support, download products, track training, and navigate OPSWAT cloud services securely. It brings essential tools together in one place so customers and partners can get started quickly and stay productive.
+This role is for an engineer who would rather
+own the model than rely on someone else:
+you build and integrate AI/LLM features into our platform based on product and business requirements.
+You will be responsible for continuously improving the AI’s
+accuracy, latency, cost efficiency, security, and reliability
+.
+What You Will Be Doing:
+Develop and integrate RAG, AI agents, recommendation/search systems, and AI-powered automation workflows.
+Build and maintain data ingestion, embedding, retrieval, and evaluation pipelines.
+Collaborate with the Engineering Team (Developers & QA) to design, build, test, and deliver AI features.
+Collaborate with the DevOps Team to deploy, monitor, and optimize our self-hosted LLMs.
+Build and maintain evaluation gates for every LLM change and make it something the team trusts more than its own intuition.
+What We Need from You:
+At least 3+ years of relevant experience in AI engineering.
+Strong Python, including building data pipelines for training datasets.
+Good understanding of Prompt Engineering, RAG, Embeddings, Vector Databases, Tool Calling, AI Agents, and LLM Evaluation.
+Experience with Rest APIs, SQL/No-SQL databases, Docker, Git, and CI/CD.
+Ability to debug, evaluate, and validate AI systems in real-world production environments.
+Experience with LLM serving, APIs (e.g. OpenAI, Anthropic, Azure OpenAI, ...), inference (e.g. vLLM, Ollama), including quantization and the memory / latency / quality trade-off on constrained hardware.
+Familiarity with tool-calling / agent-based LLM applications.
+Ability to design and run model evaluations for non-deterministic systems: you can name a metric you designed and the number you moved.
+Strong verbal and written communication skills in English: the language of the team, the docs, and the prompts.
+Self-motivated, adaptable, and comfortable owning a track in a fast-paced, team-oriented environment.
+It Would Be Nice If You Had:
+Experience fine-tuning open-weight LLMs
+Experience with agent frameworks
+Awareness of LLM security risks: prompt injection, data leakage, misuse.
+Compact models deployed on-premises, offline, or resource-constrained environments.
+Evaluation tooling for LLM systems: LLM-as-judge, regression suites, human review loops.
+Cybersecurity concepts, or experience building components of a security product
+OPSWAT is an equal opportunity employer. We celebrate diversity and are committed to providing an environment where equal employment opportunities are extended to all employees and applicants, free of discrimination and harassment of any type. All employment decisions are based on individual qualifications, job requirements, and business needs without regard to race, color, religion, age, sex, national origin, disability status, genetics, protected veteran status, sexual orientation, gender identity or expression, or any other category protected by federal, state, or local laws.
+Recruiting Agencies: we do not accept unsolicited resumes from third party agencies for any of our open positions. To submit resumes for our jobs, there must be a recruiting contract approved by our legal team and endorsed by both parties. We are currently not accepting additional 3rd party agencies at this time.

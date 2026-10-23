@@ -1,0 +1,41 @@
+About Knorex
+Founded in 2009, Knorex (https://knorex.com) is a technology company that provides programmatic advertising products and solutions to marketers to connect in real-time to their desired audience worldwide. Through its flagship universal marketing platform, Knorex XPO unifies the connectivity to each of the major marketing channels including social media, search, connected TVs/OTTs, video, audio, display/native, and email, in one place, while simplifying execution and optimization across these channels through AI automation. Knorex operates across the US and APAC.
+Job Description
+We are looking for a motivated Junior Software Engineer to join our Real-Time Bidding (RTB) team and help develop and maintain our high-performance bidding engine.
+Our RTB system processes bid requests from advertising exchanges in real time, making bidding decisions under strict latency requirements. You will work with experienced engineers to build reliable, scalable, and efficient backend systems while learning about programmatic advertising and real-time distributed systems.
+This role is suitable for fresh graduates or engineers with up to one year of experience who have a strong foundation in programming, enjoy solving technical problems, and are eager to grow as backend engineers.
+Key Responsibilities
+Develop, test, and maintain backend services and components of the RTB bidding engine
+Implement new features and improve existing functionality under senior engineers' guidance
+Write clean, efficient, maintainable, and well-tested code
+Investigate bugs, troubleshoot technical issues, and help improve system reliability
+Contribute to performance optimization to improve the bidding engine's latency, throughput, and resource efficiency
+Integrate with external advertising platforms and internal services through APIs and messaging systems
+Participate in code reviews, technical discussions, and engineering best practices
+Collaborate with team members to deliver features and improvements on time
+Learn and apply new technologies, tools, and techniques to improve software quality and development productivity
+Requirements
+Bachelor's degree or final-year student in Computer Science, Software Engineering, Information Technology, or a related field
+Proficiency in at least one programming language, with Go preferred
+Good understanding of data structures, algorithms, and fundamental programming concepts
+Basic understanding of programming concepts, software design principles, computer networks, HTTP, and client-server communication
+Familiarity with Git and basic software development workflows
+Ability to write readable code, test implementations, and debug problems systematically
+Good problem-solving and analytical skills, willingness to learn and accept feedback, and ability to collaborate effectively
+Ability to read and understand technical documentation in English
+Nice to have
+Experience developing backend services or REST APIs
+Familiarity with Go, Linux, SQL
+Basic understanding of concurrency, multithreading, or distributed systems
+Exposure to Docker, Kubernetes, Kafka, Redis, or cloud platforms
+Experience with personal projects, internships, or open-source contributions
+Interest in high-performance computing, real-time processing, or advertising technology
+Benefits
+Competitive remuneration package including quarterly bonus and performance review opportunities
+Full participation in mandatory insurance programs in accordance with Vietnamese Labor Law
+Healthcare insurance package and annual health check-up
+Comprehensive benefits scheme such as W3F (Work, Wellbeing, Welfare) Fund for courses, materials, personal health and wellbeing
+Work from home benefits
+You will have the advance to influence and drive the changes, at Knorex we welcome good ideas and accept any possibility to make our company great
+We offer great learning opportunities; you will have exposure to cutting edge performance marketing and advertising technology
+Opportunity to work cross-country and with a variety of projects of a different nature

@@ -1,0 +1,30 @@
+Huy Garcia
+Backend Engineer
+huy.garcia51@example.com | +1 555-9134 | Berlin
+
+Professional Summary
+Backend Engineer with 3+ years of experience in Python, FastAPI, PostgreSQL. Experience in fintech. Comfortable working in cross-functional teams.
+
+Skills
+Python, FastAPI, PostgreSQL, Redis, Docker, AWS, REST APIs, CI/CD, Git
+
+Work Experience
+Backend Engineer - Vertex Systems
+Berlin | Jun 2025 - Present
+• Implemented background jobs and caching, reducing load on the primary database.
+• Wrote unit and integration tests, raising coverage to 90%.
+• Built and maintained REST APIs in FastAPI serving the fintech product.
+
+Software Engineer - Vertex Analytics
+Berlin | Jun 2023 - Jun 2025
+• Designed CI/CD-backed data models and optimized slow queries, cutting p95 latency by 27%.
+• Collaborated with frontend and product teams to ship features for fintech.
+• Containerized services and set up CI pipelines for automated deployment.
+• Built and maintained REST APIs in AWS serving the fintech product.
+
+Education
+Bachelor of Engineering in Software Engineering - Lakeside University
+Berlin | 2023
+
+Additional Information
+• English: Professional working proficiency

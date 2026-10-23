@@ -1,0 +1,77 @@
+{
+    "cv_012": {
+        "persona": "marketing_to_data_analyst",
+        "labels": {
+            "skills": [
+                "SQL",
+                "Excel",
+                "Python",
+                "Pandas",
+                "Tableau",
+                "Google Analytics"
+            ],
+            "education": [
+                {
+                    "institution": "FPT University",
+                    "degree": "Bachelor of Business Administration",
+                    "location": "Da Nang",
+                    "period": "2024"
+                }
+            ],
+            "work_experience": [
+                {
+                    "company": "Kite Solutions",
+                    "title": "Data Analyst",
+                    "location": "Da Nang",
+                    "period": "Jun 2025 - Present",
+                    "achievements": [
+                        "Cleaned and joined multiple sources to produce reliable KPI reports.",
+                        "Analyzed consumer goods data with Pandas and Python to answer business questions for stakeholders.",
+                        "Built weekly dashboards that replaced 10 hours per week of manual reporting."
+                    ]
+                },
+                {
+                    "company": "Sunrise Solutions",
+                    "title": "Marketing Executive",
+                    "location": "Da Nang",
+                    "period": "Apr 2024 - Jun 2025",
+                    "achievements": [
+                        "Planned and ran email and social campaigns for consumer goods customers.",
+                        "Grew newsletter subscribers by 18% over two quarters.",
+                        "Coordinated with sales on lead follow-up and content calendar.",
+                        "Tracked campaign performance in spreadsheets and reported weekly results."
+                    ]
+                }
+            ],
+            "project": [
+                {
+                    "name": "Retail Sales Dashboard",
+                    "period": "2024",
+                    "technologies": [
+                        "Excel",
+                        "Python",
+                        "Tableau"
+                    ],
+                    "description": [
+                        "KPI dashboard from raw CSV exports"
+                    ]
+                },
+                {
+                    "name": "Customer Churn Analysis",
+                    "period": "2023",
+                    "technologies": [
+                        "Tableau",
+                        "Pandas",
+                        "Excel"
+                    ],
+                    "description": [
+                        "Cohort analysis and recommendations"
+                    ]
+                }
+            ],
+            "additional_info": [
+                "English: Professional working proficiency"
+            ]
+        }
+    }
+}

@@ -1,0 +1,68 @@
+{
+  "resume_id": "cv_005",
+  "full_name": "Huy Tanaka",
+  "email": "huy.tanaka13@example.com",
+  "phone": "+1 555-7525",
+  "location": "Seattle, WA",
+  "headline": "Data Engineer",
+  "summary": "Data Engineer with 7+ years of experience in SQL, Python, Airflow. Experience in banking. Comfortable working in cross-functional teams.",
+  "label": {
+    "skills": [
+      "SQL",
+      "Python",
+      "Airflow",
+      "ETL",
+      "Data Modeling",
+      "Power BI",
+      "Apache Spark"
+    ],
+    "education": [
+      {
+        "institution": "State Institute of Technology",
+        "degree": "Bachelor of Information Technology",
+        "location": "Seattle, WA",
+        "period": "2019"
+      }
+    ],
+    "work_experience": [
+      {
+        "company": "Lotus Cloud",
+        "title": "Data Engineer",
+        "location": "Seattle, WA",
+        "period": "Nov 2023 - Present",
+        "achievements": [
+          "Optimized slow warehouse queries, reducing runtime by 18%.",
+          "Built ETL pipelines with Python and Power BI loading banking data into the warehouse.",
+          "Modeled analytics tables and wrote tested transformations used by BI dashboards."
+        ]
+      },
+      {
+        "company": "Sunrise Cloud",
+        "title": "Senior BI Developer",
+        "location": "Seattle, WA",
+        "period": "Jul 2022 - Nov 2023",
+        "achievements": [
+          "Analyzed banking data with Airflow and SQL to answer business questions for stakeholders.",
+          "Presented findings to non-technical teams and recommended process changes.",
+          "Cleaned and joined multiple sources to produce reliable KPI reports."
+        ]
+      },
+      {
+        "company": "Sunrise Digital",
+        "title": "BI Analyst",
+        "location": "Seattle, WA",
+        "period": "Oct 2019 - Jul 2022",
+        "achievements": [
+          "Cleaned and joined multiple sources to produce reliable KPI reports.",
+          "Built weekly dashboards that replaced 10 hours per week of manual reporting.",
+          "Presented findings to non-technical teams and recommended process changes.",
+          "Analyzed banking data with Data Modeling and Power BI to answer business questions for stakeholders."
+        ]
+      }
+    ],
+    "project": [],
+    "additional_info": [
+      "English: Professional working proficiency"
+    ]
+  }
+}

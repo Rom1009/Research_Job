@@ -1,0 +1,32 @@
+Omar Cohen
+Data Engineer
+omar.cohen28@example.com | +1 555-1458 | Austin, TX
+
+Professional Summary
+Data Engineer with 4+ years of experience in SQL, Python, Airflow. Experience in retail. Comfortable working in cross-functional teams.
+
+Skills
+SQL, Python, Airflow, dbt, Apache Spark, ETL, Data Warehousing, AWS
+
+Work Experience
+Data Engineer - Apex Systems
+Austin, TX | Feb 2024 - Present
+• Built ETL pipelines with Airflow and dbt loading retail data into the warehouse.
+• Optimized slow warehouse queries, reducing runtime by 31%.
+• Automated daily data quality checks, cutting manual reconciliation by 6 hours per week.
+• Partnered with analysts to define metrics and document data lineage for retail.
+• Modeled analytics tables and wrote tested transformations used by BI dashboards.
+
+Data Analyst - Lotus Solutions
+Austin, TX | Aug 2022 - Feb 2024
+• Built weekly dashboards that replaced 8 hours per week of manual reporting.
+• Analyzed retail data with ETL and dbt to answer business questions for stakeholders.
+• Presented findings to non-technical teams and recommended process changes.
+• Cleaned and joined multiple sources to produce reliable KPI reports.
+
+Education
+Bachelor of Information Technology - National Economics University
+Austin, TX | 2022
+
+Additional Information
+• English: Professional working proficiency
