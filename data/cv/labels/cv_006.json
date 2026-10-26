@@ -1,67 +1,66 @@
 {
-    "cv_006": {
-        "persona": "junior_ml_engineer",
-        "labels": {
-            "skills": [
-                "Python",
-                "PyTorch",
-                "Scikit-learn",
-                "Pandas",
-                "NumPy",
-                "SQL",
-                "Docker",
-                "Machine Learning"
-            ],
-            "education": [
-                {
-                    "institution": "National Economics University",
-                    "degree": "Master of Science in Data Science",
-                    "location": "Berlin",
-                    "period": "2025"
-                }
-            ],
-            "work_experience": [
-                {
-                    "company": "Quanta Digital",
-                    "title": "Machine Learning Engineer",
-                    "location": "Berlin",
-                    "period": "Feb 2025 - Present",
-                    "achievements": [
-                        "Ran error analysis and labeling reviews to improve data quality.",
-                        "Wrote evaluation scripts and compared candidate models on held-out data.",
-                        "Built feature pipelines with Pandas and tracked experiments for reproducibility."
-                    ]
-                }
-            ],
-            "project": [
-                {
-                    "name": "Sentiment Classifier",
-                    "period": "2025",
-                    "technologies": [
-                        "NumPy",
-                        "Python",
-                        "PyTorch"
-                    ],
-                    "description": [
-                        "Fine-tuned text classifier with evaluation report"
-                    ]
-                },
-                {
-                    "name": "Image Defect Detection",
-                    "period": "2025",
-                    "technologies": [
-                        "Scikit-learn",
-                        "Docker",
-                        "Pandas"
-                    ],
-                    "description": [
-                        "CNN trained on a small labeled dataset"
-                    ]
-                }
-            ],
-            "additional_info": [
-                "English: Professional working proficiency"
-            ]
-        }
+    "cv_id": "cv_006",
+    "persona": "junior_ml_engineer",
+    "labels": {
+        "skills": [
+            "Python",
+            "PyTorch",
+            "Scikit-learn",
+            "Pandas",
+            "NumPy",
+            "SQL",
+            "Docker",
+            "Machine Learning"
+        ],
+        "education": [
+            {
+                "institution": "National Economics University",
+                "degree": "Master of Science in Data Science",
+                "location": "Berlin",
+                "period": "2025"
+            }
+        ],
+        "work_experience": [
+            {
+                "company": "Quanta Digital",
+                "title": "Machine Learning Engineer",
+                "location": "Berlin",
+                "period": "Feb 2025 - Present",
+                "achievements": [
+                    "Ran error analysis and labeling reviews to improve data quality.",
+                    "Wrote evaluation scripts and compared candidate models on held-out data.",
+                    "Built feature pipelines with Pandas and tracked experiments for reproducibility."
+                ]
+            }
+        ],
+        "project": [
+            {
+                "name": "Sentiment Classifier",
+                "period": "2025",
+                "technologies": [
+                    "NumPy",
+                    "Python",
+                    "PyTorch"
+                ],
+                "description": [
+                    "Fine-tuned text classifier with evaluation report"
+                ]
+            },
+            {
+                "name": "Image Defect Detection",
+                "period": "2025",
+                "technologies": [
+                    "Scikit-learn",
+                    "Docker",
+                    "Pandas"
+                ],
+                "description": [
+                    "CNN trained on a small labeled dataset"
+                ]
+            }
+        ],
+        "additional_info": [
+            "English: Professional working proficiency"
+        ]
     }
 }

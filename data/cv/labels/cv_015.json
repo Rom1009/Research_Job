@@ -1,48 +1,47 @@
 {
-    "cv_015": {
-        "persona": "sparse_vn_fresher_analyst",
-        "labels": {
-            "skills": [],
-            "education": [
-                {
-                    "institution": "State Institute of Technology",
-                    "degree": "Bachelor of Economics",
-                    "location": "Ho Chi Minh City",
-                    "period": "2025"
-                }
-            ],
-            "work_experience": [
-                {
-                    "company": "Nimbus Analytics",
-                    "title": "Data Analyst Intern",
-                    "location": "Ho Chi Minh City",
-                    "period": "Oct 2025 - Present",
-                    "achievements": [
-                        "Cleaned and joined multiple sources to produce reliable KPI reports.",
-                        "Analyzed logistics data with SQL and Excel to answer business questions for stakeholders.",
-                        "Built weekly dashboards that replaced 10 hours per week of manual reporting.",
-                        "Presented findings to non-technical teams and recommended process changes."
-                    ]
-                }
-            ],
-            "project": [
-                {
-                    "name": "Retail Sales Dashboard",
-                    "period": "2025",
-                    "technologies": [
-                        "Excel",
-                        "Python",
-                        "Power BI"
-                    ],
-                    "description": [
-                        "KPI dashboard from raw CSV exports"
-                    ]
-                }
-            ],
-            "additional_info": [
-                "Tieng Anh: giao tiep co ban (IELTS 6.0)",
-                "Vietnamese: Native"
-            ]
-        }
+    "cv_id": "cv_015",
+    "persona": "sparse_vn_fresher_analyst",
+    "labels": {
+        "skills": [],
+        "education": [
+            {
+                "institution": "State Institute of Technology",
+                "degree": "Bachelor of Economics",
+                "location": "Ho Chi Minh City",
+                "period": "2025"
+            }
+        ],
+        "work_experience": [
+            {
+                "company": "Nimbus Analytics",
+                "title": "Data Analyst Intern",
+                "location": "Ho Chi Minh City",
+                "period": "Oct 2025 - Present",
+                "achievements": [
+                    "Cleaned and joined multiple sources to produce reliable KPI reports.",
+                    "Analyzed logistics data with SQL and Excel to answer business questions for stakeholders.",
+                    "Built weekly dashboards that replaced 10 hours per week of manual reporting.",
+                    "Presented findings to non-technical teams and recommended process changes."
+                ]
+            }
+        ],
+        "project": [
+            {
+                "name": "Retail Sales Dashboard",
+                "period": "2025",
+                "technologies": [
+                    "Excel",
+                    "Python",
+                    "Power BI"
+                ],
+                "description": [
+                    "KPI dashboard from raw CSV exports"
+                ]
+            }
+        ],
+        "additional_info": [
+            "Tieng Anh: giao tiep co ban (IELTS 6.0)",
+            "Vietnamese: Native"
+        ]
     }
 }

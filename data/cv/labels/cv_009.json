@@ -1,55 +1,54 @@
 {
-    "cv_009": {
-        "persona": "mid_fullstack_ts",
-        "labels": {
-            "skills": [
-                "TypeScript",
-                "Node.js",
-                "React",
-                "PostgreSQL",
-                "MongoDB",
-                "Docker",
-                "GraphQL",
-                "Git"
-            ],
-            "education": [
-                {
-                    "institution": "Lakeside University",
-                    "degree": "Bachelor of Engineering in Software Engineering",
-                    "location": "Berlin",
-                    "period": "2021"
-                }
-            ],
-            "work_experience": [
-                {
-                    "company": "Vertex Labs",
-                    "title": "Full Stack Engineer",
-                    "location": "Berlin",
-                    "period": "Sep 2025 - Present",
-                    "achievements": [
-                        "Wrote automated tests across API and UI layers.",
-                        "Delivered end-to-end features using MongoDB on the frontend and React on the backend for education.",
-                        "Designed REST endpoints and database schemas, and built the UI that consumes them.",
-                        "Set up CI/CD and monitoring, reducing deployment time by 31%."
-                    ]
-                },
-                {
-                    "company": "Redwood Labs",
-                    "title": "Full Stack Developer",
-                    "location": "Berlin",
-                    "period": "Aug 2021 - Sep 2025",
-                    "achievements": [
-                        "Designed REST endpoints and database schemas, and built the UI that consumes them.",
-                        "Delivered end-to-end features using Git on the frontend and TypeScript on the backend for education.",
-                        "Set up CI/CD and monitoring, reducing deployment time by 31%.",
-                        "Wrote automated tests across API and UI layers."
-                    ]
-                }
-            ],
-            "project": [],
-            "additional_info": [
-                "English: Professional working proficiency"
-            ]
-        }
+    "cv_id": "cv_009",
+    "persona": "mid_fullstack_ts",
+    "labels": {
+        "skills": [
+            "TypeScript",
+            "Node.js",
+            "React",
+            "PostgreSQL",
+            "MongoDB",
+            "Docker",
+            "GraphQL",
+            "Git"
+        ],
+        "education": [
+            {
+                "institution": "Lakeside University",
+                "degree": "Bachelor of Engineering in Software Engineering",
+                "location": "Berlin",
+                "period": "2021"
+            }
+        ],
+        "work_experience": [
+            {
+                "company": "Vertex Labs",
+                "title": "Full Stack Engineer",
+                "location": "Berlin",
+                "period": "Sep 2025 - Present",
+                "achievements": [
+                    "Wrote automated tests across API and UI layers.",
+                    "Delivered end-to-end features using MongoDB on the frontend and React on the backend for education.",
+                    "Designed REST endpoints and database schemas, and built the UI that consumes them.",
+                    "Set up CI/CD and monitoring, reducing deployment time by 31%."
+                ]
+            },
+            {
+                "company": "Redwood Labs",
+                "title": "Full Stack Developer",
+                "location": "Berlin",
+                "period": "Aug 2021 - Sep 2025",
+                "achievements": [
+                    "Designed REST endpoints and database schemas, and built the UI that consumes them.",
+                    "Delivered end-to-end features using Git on the frontend and TypeScript on the backend for education.",
+                    "Set up CI/CD and monitoring, reducing deployment time by 31%.",
+                    "Wrote automated tests across API and UI layers."
+                ]
+            }
+        ],
+        "project": [],
+        "additional_info": [
+            "English: Professional working proficiency"
+        ]
     }
 }

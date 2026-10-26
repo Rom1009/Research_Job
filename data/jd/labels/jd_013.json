@@ -1,0 +1,17 @@
+{
+    "jd_id": "jd_013",
+    "label": {
+        "must_have_skills": [
+            "TypeScript",
+            "ReactJS",
+            "VueJS",
+            "Frontend Frameworks",
+            "Web Browser Principles",
+            "Web Application Security",
+            "Unit Testing"
+        ],
+        "min_exp_years": 10.0,
+        "responsibilities": "Design and implementation function of the product in charge using ReactJS/VueJS.\nImplement UI and improve UX close to the customer's business to realize DX promotion.\nRequirements definition and specification formulated in collaboration with product managers and designers.\nReview the design, programming of other engineers.",
+        "requirements": "Empathy for Andpad's mission and values.\n10+ years of experience in a software development role: Frontend Engineer.\nExperience with TypeScript language.\nExperience with frontend frameworks (ReactJS, VueJS, etc.).\nKnowledge and ability to explain principles of web operation and differences of browsers.\nExperience as a technical lead throughout the full project development lifecycle.\nBasic knowledge of Web application security.\nSkills of development and operation using various frameworks.\nExperience Test code implementation (Unit Test).\nGood at English communication."
+    }
+}

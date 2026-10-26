@@ -1,0 +1,50 @@
+ANDPAD Vietnam is looking for a
+Principal Frontend Developer (ReactJS/VueJS)
+who can join to our team and develop the application in cooperation with the product manager, working in the form of Squad, a small team can quickly and consistently engage in everything from design to development, testing and operation.
+Also, there are a lot of opportunities to work with new languages and FWs other than the main language in an international environment.
+■ Job Scope
+Design and implementation function of the product in charge using ReactJS/VueJS
+Implement UI and improve UX close to the customer‘s business to realize DX promotion
+Requirements definition and specification formulated in collaboration with product managers and designers
+Review the design, programming of other engineers
+■ Development environment
+Programming: TypeScript/HTML/CSS
+Framework: ReactJS, VueJS, NuxtJS, NextJS
+Infrastructure: AWS/GCP
+CI/CD: Circle CI/Bitrise/GitHub Actions
+Knowledge Tool: Confluence/esa
+VCS: GitHub
+Others: Slack/Jira/Trello
+Your Skills and Experience
+Must have:
+Empathy for Andpad‘s mission and values
+10+ years of experience in a software development role: Frontend Engineer
+Experience with TypeScript language
+Experience with frontend frameworks (
+ReactJS
+, VueJS, etc.)
+Knowledge and ability to explain principles of web operation and differences of browsers
+Experience as a technical lead throughout the full project development lifecycle
+Basic knowledge of Web application security
+Skills of development and operation using various frameworks
+Experience Test code implementation (Unit Test)
+Good at English communication
+Nice to have:
+Knowledge of backend development (Golang/ Ruby on rails/ Others)
+Experienced developing Front-end microservices.
+Experience of discovering problems from logs and solving problems
+Experience of deciding and progressing the technical policy of the team as a tech lead.
+Experience of using and understanding of Library and Framework.
+Experience of publishing and contributing to OSS.
+Why You‘ll Love Working Here
+Competitive salary package, including full insurance coverage
+Annual performance review: twice/ year
+Year-end Bonus
+Hybrid working model
+12 days of annual leave and maximum of 6 days for New Year Leave
+Premium Healthcare Insurance Package starting from day one
+Annual Health Check-up
+Excellent career development opportunities, with exposure to and experience in the latest technologies
+Patents and Inventions bonus
+Company trip, Year-End Party, Gifts for Tet/ Holidays
+MacBook Pro/ Laptop is provided

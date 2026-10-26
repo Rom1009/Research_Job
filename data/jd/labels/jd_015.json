@@ -1,0 +1,24 @@
+{
+    "jd_id": "jd_015",
+    "label": {
+        "must_have_skills": [
+            "Python",
+            "Data Structures",
+            "Algorithmic Complexity",
+            "Recursion",
+            "Concurrency",
+            "OOP",
+            "Clean Code",
+            "Unit Testing",
+            "Debugging",
+            "SQL",
+            "Relational Databases",
+            "Git",
+            "Linux",
+            "AI Coding Agents"
+        ],
+        "min_exp_years": 0.0,
+        "responsibilities": "Turn ideas from researchers and engineers into clear task descriptions and acceptance criteria that an agent can implement.\nReview agent-written pull requests: read the diff, run the tests, check the result against the requirement, and send it back when it falls short.\nDebug problems the agent cannot solve, and know when to write the code yourself.\nWork with market and research data: ingestion, transformation, validation and storage.\nImprove our tooling (tests, linters, prompts and checks) so recurring issues are caught automatically.\nTake part in code reviews and knowledge sharing.",
+        "requirements": "Graduating or graduated in Computer Science, Software Engineering or a related field, or equivalent experience through projects.\nSolid Python: functions, classes, modules, exceptions and the common standard library. You can write a working program without AI help.\nCore computer science: data structures, algorithmic complexity, recursion, and basic concurrency (threads, processes, async).\nObject-oriented design and clean code: clear naming, small functions, separation of concerns, and knowing when not to add an abstraction.\nTesting: you can write unit tests and tell what a test does not cover.\nDebugging: reading stack traces and logs, and using a debugger or prints to narrow a problem down.\nBasic SQL and relational database concepts (tables, joins, indexes, transactions).\nGit (branch, commit, merge or rebase, reading a diff) and the Linux command line.\nYou can read unfamiliar code and explain what it does and where it can break.\nWorking with AI coding agents: either experience using one, or willingness to learn. Describe tasks clearly, treat agent output as a draft and verify it, take ownership, and write clear English."
+    }
+}

@@ -1,0 +1,91 @@
+﻿cv_id,jd_id,summarize,jd_title,jd_min_years,human_relevance,human_reason,ambiguous
+cv_002,jd_004,"Backend Engineer | 3.3 | Bachelor of Engineering in Software Engineering(2023)
+Skills: Python, FastAPI, PostgreSQL, Redis, Docker, AWS, REST APIs, CI/CD, Git
+Projects: ",AI Engineer (LLM/RAG),3.0,,,
+cv_006,jd_015,"Machine Learning Engineer | 1.7 | Master of Science in Data Science(2025)
+Skills: Python, PyTorch, Scikit-learn, Pandas, NumPy, SQL, Docker, Machine Learning
+Projects: Sentiment Classifier, Image Defect Detection",Junior Software Engineer (Python,0.0,,,
+cv_001,jd_015,"Junior Backend Developer | 0.7 | Bachelor of Science in Computer Science(2026)
+Skills: Python, Django, PostgreSQL, REST APIs, Git, Docker, Linux
+Projects: Library Management System, Task Manager API",Junior Software Engineer (Python,0.0,,,
+cv_002,jd_005,"Backend Engineer | 3.3 | Bachelor of Engineering in Software Engineering(2023)
+Skills: Python, FastAPI, PostgreSQL, Redis, Docker, AWS, REST APIs, CI/CD, Git
+Projects: ",GenAI Engineer / Developer,3.0,,,
+cv_008,jd_005,"Frontend Engineer | 3.8 | Bachelor of Science in Computer Science(2023)
+Skills: JavaScript, TypeScript, React, Redux, HTML/CSS, Jest, Git
+Projects: Personal Portfolio",GenAI Engineer / Developer,3.0,,,
+cv_001,jd_011,"Junior Backend Developer | 0.7 | Bachelor of Science in Computer Science(2026)
+Skills: Python, Django, PostgreSQL, REST APIs, Git, Docker, Linux
+Projects: Library Management System, Task Manager API",Backend Engineer,5.0,,,
+cv_004,jd_003,"Data Engineer | 4.2 | Bachelor of Information Technology(2022)
+Skills: SQL, Python, Airflow, dbt, Apache Spark, ETL, Data Warehousing, AWS
+Projects: ",Middle/Senior AI Engineer,3.0,,,
+cv_011,jd_010,"QA Automation Engineer | 4.8 | Bachelor of Information Technology(2021)
+Skills: Python, Selenium, Pytest, API Testing, Postman, CI/CD, SQL, Git
+Projects: ",Backend Engineer (Python),2.0,,,
+cv_002,jd_015,"Backend Engineer | 3.3 | Bachelor of Engineering in Software Engineering(2023)
+Skills: Python, FastAPI, PostgreSQL, Redis, Docker, AWS, REST APIs, CI/CD, Git
+Projects: ",Junior Software Engineer (Python,0.0,,,
+cv_008,jd_012,"Frontend Engineer | 3.8 | Bachelor of Science in Computer Science(2023)
+Skills: JavaScript, TypeScript, React, Redux, HTML/CSS, Jest, Git
+Projects: Personal Portfolio",Backend Engineer (Python),4.0,,,
+cv_005,jd_007,"Data Engineer | 7.0 | Bachelor of Information Technology(2019)
+Skills: SQL, Python, Airflow, ETL, Data Modeling, Power BI, Apache Spark
+Projects: ",Junior Backend Engineer (AI-assisted),0.0,,,
+cv_014,jd_012,"Backend Engineer | 4.0 | Bachelor of Science in Computer Science(2022)
+Skills: Node.js, Go, TypeScript, MongoDB, Redis, Docker, gRPC, Git
+Projects: ",Backend Engineer (Python),4.0,,,
+cv_006,jd_003,"Machine Learning Engineer | 1.7 | Master of Science in Data Science(2025)
+Skills: Python, PyTorch, Scikit-learn, Pandas, NumPy, SQL, Docker, Machine Learning
+Projects: Sentiment Classifier, Image Defect Detection",Middle/Senior AI Engineer,3.0,,,
+cv_002,jd_007,"Backend Engineer | 3.3 | Bachelor of Engineering in Software Engineering(2023)
+Skills: Python, FastAPI, PostgreSQL, Redis, Docker, AWS, REST APIs, CI/CD, Git
+Projects: ",Junior Backend Engineer (AI-assisted),0.0,,,
+cv_004,jd_005,"Data Engineer | 4.2 | Bachelor of Information Technology(2022)
+Skills: SQL, Python, Airflow, dbt, Apache Spark, ETL, Data Warehousing, AWS
+Projects: ",GenAI Engineer / Developer,3.0,,,
+cv_005,jd_011,"Data Engineer | 7.0 | Bachelor of Information Technology(2019)
+Skills: SQL, Python, Airflow, ETL, Data Modeling, Power BI, Apache Spark
+Projects: ",Backend Engineer,5.0,,,
+cv_012,jd_007,"Data Analyst | 2.5 | Bachelor of Business Administration(2024)
+Skills: SQL, Excel, Python, Pandas, Tableau, Google Analytics
+Projects: Retail Sales Dashboard, Customer Churn Analysis",Junior Backend Engineer (AI-assisted),0.0,,,
+cv_013,jd_004,"Engineering Manager | 14.0 | Master of Science in Computer Science(2012)
+Skills: Python, Java, System Design, Microservices, Kafka, AWS, PostgreSQL, Team Leadership
+Projects: ",AI Engineer (LLM/RAG),3.0,,,
+cv_005,jd_015,"Data Engineer | 7.0 | Bachelor of Information Technology(2019)
+Skills: SQL, Python, Airflow, ETL, Data Modeling, Power BI, Apache Spark
+Projects: ",Junior Software Engineer (Python,0.0,,,
+cv_008,jd_015,"Frontend Engineer | 3.8 | Bachelor of Science in Computer Science(2023)
+Skills: JavaScript, TypeScript, React, Redux, HTML/CSS, Jest, Git
+Projects: Personal Portfolio",Junior Software Engineer (Python,0.0,,,
+cv_013,jd_007,"Engineering Manager | 14.0 | Master of Science in Computer Science(2012)
+Skills: Python, Java, System Design, Microservices, Kafka, AWS, PostgreSQL, Team Leadership
+Projects: ",Junior Backend Engineer (AI-assisted),0.0,,,
+cv_014,jd_015,"Backend Engineer | 4.0 | Bachelor of Science in Computer Science(2022)
+Skills: Node.js, Go, TypeScript, MongoDB, Redis, Docker, gRPC, Git
+Projects: ",Junior Software Engineer (Python,0.0,,,
+cv_011,jd_005,"QA Automation Engineer | 4.8 | Bachelor of Information Technology(2021)
+Skills: Python, Selenium, Pytest, API Testing, Postman, CI/CD, SQL, Git
+Projects: ",GenAI Engineer / Developer,3.0,,,
+cv_002,jd_013,"Backend Engineer | 3.3 | Bachelor of Engineering in Software Engineering(2023)
+Skills: Python, FastAPI, PostgreSQL, Redis, Docker, AWS, REST APIs, CI/CD, Git
+Projects: ",Principal Frontend Developer (ReactJS/VueJS),10.0,,,
+cv_002,jd_008,"Backend Engineer | 3.3 | Bachelor of Engineering in Software Engineering(2023)
+Skills: Python, FastAPI, PostgreSQL, Redis, Docker, AWS, REST APIs, CI/CD, Git
+Projects: ",Junior Software Engineer (RTB / Go),0.0,,,
+cv_001,jd_008,"Junior Backend Developer | 0.7 | Bachelor of Science in Computer Science(2026)
+Skills: Python, Django, PostgreSQL, REST APIs, Git, Docker, Linux
+Projects: Library Management System, Task Manager API",Junior Software Engineer (RTB / Go),0.0,,,
+cv_011,jd_015,"QA Automation Engineer | 4.8 | Bachelor of Information Technology(2021)
+Skills: Python, Selenium, Pytest, API Testing, Postman, CI/CD, SQL, Git
+Projects: ",Junior Software Engineer (Python,0.0,,,
+cv_006,jd_001,"Machine Learning Engineer | 1.7 | Master of Science in Data Science(2025)
+Skills: Python, PyTorch, Scikit-learn, Pandas, NumPy, SQL, Docker, Machine Learning
+Projects: Sentiment Classifier, Image Defect Detection",MLE - Conversational AI Agent,2.0,,,
+cv_007,jd_015,"Senior Machine Learning Engineer | 7.5 | Master of Science in Computer Science(2019)
+Skills: Python, PyTorch, Natural Language Processing, TensorFlow, Docker, Kubernetes, AWS, SQL, Machine Learning
+Projects: ",Junior Software Engineer (Python,0.0,,,
+cv_007,jd_005,"Senior Machine Learning Engineer | 7.5 | Master of Science in Computer Science(2019)
+Skills: Python, PyTorch, Natural Language Processing, TensorFlow, Docker, Kubernetes, AWS, SQL, Machine Learning
+Projects: ",GenAI Engineer / Developer,3.0,,,

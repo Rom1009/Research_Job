@@ -1,0 +1,39 @@
+About The Role
+Most of our code is written by AI coding agents. Engineers decide what to build, define what "done" means, review and verify what the agents produce, and improve the workflow so the same mistake does not happen twice. You will do this on our research and trading platform (backend services, data pipelines and internal tools), working with mentors who review alongside you.
+Key Responsibilities
+Turn ideas from researchers and engineers into clear task descriptions and acceptance criteria that an agent can implement.
+Review agent-written pull requests: read the diff, run the tests, check the result against the requirement, and send it back when it falls short.
+Debug problems the agent cannot solve, and know when to write the code yourself.
+Work with market and research data: ingestion, transformation, validation and storage.
+Improve our tooling (tests, linters, prompts and checks) so recurring issues are caught automatically.
+Take part in code reviews and knowledge sharing.
+Some systems you touch run live trading, so changes go through review gates and a staged rollout.
+Requirements
+Graduating or graduated in Computer Science, Software Engineering or a related field, or equivalent experience through projects.
+Solid Python: functions, classes, modules, exceptions and the common standard library. You can write a working program without AI help.
+Core computer science: data structures, algorithmic complexity, recursion, and basic concurrency (threads, processes, async).
+Object-oriented design and clean code: clear naming, small functions, separation of concerns, and knowing when not to add an abstraction.
+Testing: you can write unit tests and tell what a test does not cover.
+Debugging: reading stack traces and logs, and using a debugger or prints to narrow a problem down.
+Basic SQL and relational database concepts (tables, joins, indexes, transactions).
+Git (branch, commit, merge or rebase, reading a diff) and the Linux command line.
+You can read unfamiliar code and explain what it does and where it can break.
+Required: Working with AI Coding Agents
+Either Of The Following Is Fine
+Experience: you have used a coding agent (Claude Code, Codex, Cursor agent or similar) to build or change real code, and can describe how you checked its output.
+Willingness: you have not worked this way yet, but you want to. We will teach you, and you are comfortable spending most of your time specifying, reviewing and verifying rather than typing code.
+In Both Cases We Expect You To
+Describe a task clearly: the goal, the constraints, and how to tell it is done.
+Treat agent output as a draft from a fast but careless colleague: read it, run it, and challenge it.
+Take ownership: if agent-written code you approved breaks, it is your bug.
+Write clear English in task descriptions, pull requests and review comments.
+Nice to Have
+Projects built with a coding agent, or prompts, skills or MCP tools you wrote for one.
+pandas, numpy or pyarrow; time-series or market data.
+FastAPI, Django or Flask.
+Docker, Kubernetes, PostgreSQL, Redis or Kafka.
+Bonus Skills
+Built side projects in Python (servers, crawlers, automation, APIs, data processing, bots, etc.).
+Familiar with Git, Docker, Kafka, Redis, or PostgreSQL.
+Familiar with cloud platforms (AWS / GCP) or Linux environments.
+Interest in finance, algorithmic trading, or quantitative systems.

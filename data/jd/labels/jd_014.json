@@ -1,0 +1,24 @@
+{
+    "jd_id": "jd_014",
+    "label": {
+        "must_have_skills": [
+            "HTML5",
+            "CSS3",
+            "JavaScript",
+            "ReactJS",
+            "React Native",
+            "REST API",
+            "JSON",
+            "Responsive Design",
+            "Accessibility",
+            "Git",
+            "CI/CD",
+            "UI/UX Design",
+            "Figma",
+            "Adobe XD"
+        ],
+        "min_exp_years": 3.0,
+        "responsibilities": "Design and implement user interfaces for web and mobile platforms using modern frameworks (ReactJS, React Native).\nDevelop and maintain user-facing features ensuring responsive design and accessibility standards.\nCreate wireframes and mockups to visualize layouts and user flows.\nCollaborate with product owners and stakeholders to translate requirements into functional and visually appealing interfaces.\nIntegrate APIs and work closely with back-end developers for seamless data exchange.\nOptimize application performance and ensure cross-browser compatibility.\nMaintain code quality through testing, debugging, and adherence to best practices.\nStay updated on emerging front-end technologies and design trends.",
+        "requirements": "Bachelor's degree in Computer Science, Information Technology, or related field.\n3-5 years of front-end development experience.\nExposure to UI/UX design principles and tools (Figma, Adobe XD).\nProficiency in HTML5, CSS3, JavaScript (ES6+).\nExperience with ReactJS and React Native.\nFamiliarity with RESTful APIs and JSON.\nKnowledge of responsive design and accessibility standards.\nVersion control (Git) and CI/CD pipelines.\nStrong problem-solving and analytical skills.\nAbility to work independently and in Agile teams.\nGood communication and stakeholder management skills."
+    }
+}

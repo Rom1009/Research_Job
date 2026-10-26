@@ -1,0 +1,56 @@
+JOB DESCRIPTION
+Position:
+Front-End Developer
+Quantity: 01 (Senior)
+Type: Full-time
+Working location: HCMC
+ABOUT US
+Astek is a global player in engineering and technology consulting, founded in France in 1988. Today, we are +7500 engineers across over 30 countries in the world.
+With expertise in many industrial and tertiary sectors, we support our international clients in the intelligent deployment of their products and services, and in the implementation of their digital transformation.
+Astek Vietnam is established in 2022 to increase group’s capability to support our clients’ operation around the globe, leveraging Vietnam talented engineers.
+More information about our group: https://astekgroup.fr/
+REQUIREMENTS
+Job Purpose
+The Front-End Developer will be responsible for designing and implementing user interfaces for web and mobile applications, ensuring usability, responsiveness, and visual consistency. This role combines front-end development expertise with basic UI/UX design skills to deliver intuitive and engaging user experiences in the absence of a dedicated UX/UI designer.
+Key Responsibilities
+Design and implement user interfaces for web and mobile platforms using modern frameworks (ReactJS, React Native).
+Develop and maintain user-facing features ensuring responsive design and accessibility standards.
+Create wireframes and mockups to visualize layouts and user flows.
+Collaborate with product owners and stakeholders to translate requirements into functional and visually appealing interfaces.
+Integrate APIs and work closely with back-end developers for seamless data exchange.
+Optimize application performance and ensure cross-browser compatibility.
+Maintain code quality through testing, debugging, and adherence to best
+practices.
+Stay updated on emerging front-end technologies and design trends.
+Qualifications
+Education:
+Bachelor’s degree in Computer Science, Information Technology, or related field.
+Experience:
+o 3–5 years of front-end development experience.
+o Exposure to UI/UX design principles and tools (Figma, Adobe XD).
+Technical Skills:
+o Proficiency in HTML5, CSS3, JavaScript (ES6+).
+o Experience with ReactJS and React Native.
+o Familiarity with RESTful APIs and JSON.
+o Knowledge of responsive design and accessibility standards.
+o Version control (Git) and CI/CD pipelines.
+Soft Skills:
+o Strong problem-solving and analytical skills.
+o Ability to work independently and in Agile teams.
+o Good communication and stakeholder management skills.
+Preferred Skills
+Experience with AWS or other cloud platforms.
+Knowledge of SEO best practices and performance optimization.
+Familiarity with UI frameworks (Material UI, Bootstrap).
+Key Performance Indicators (KPIs)
+Timely delivery of front-end components aligned with project milestones.
+Quality and usability of UI designs without dedicated UX support.
+Application performance and responsiveness across devices.
+Positive stakeholder feedback on user experience.
+BENEFITS
+Attractive salary: Nego. Performance-based award.
+Young and dynamic working environment.
+Continuous development of hard and soft skills through work and professional training.
+Opportunity to approach the newest technology trends.
+Salary reviews 1 times/year or based on excellent performance
+The company’s labor policy is fully in accordance with Vietnamese labor legislation, plus other benefits offered by the company (company trips, holidays, etc.)

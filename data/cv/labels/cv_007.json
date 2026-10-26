@@ -1,69 +1,68 @@
 {
-    "cv_007": {
-        "persona": "senior_nlp_engineer",
-        "labels": {
-            "skills": [
-                "Python",
-                "PyTorch",
-                "Natural Language Processing",
-                "TensorFlow",
-                "Docker",
-                "Kubernetes",
-                "AWS",
-                "SQL",
-                "Machine Learning"
-            ],
-            "education": [
-                {
-                    "institution": "FPT University",
-                    "degree": "Master of Science in Computer Science",
-                    "location": "Singapore",
-                    "period": "2019"
-                }
-            ],
-            "work_experience": [
-                {
-                    "company": "Helix Software",
-                    "title": "Senior Machine Learning Engineer",
-                    "location": "Singapore",
-                    "period": "Dec 2025 - Present",
-                    "achievements": [
-                        "Deployed model inference as an API and monitored drift in production.",
-                        "Trained and evaluated AWS models for document understanding, improving F1 by 35% over the baseline.",
-                        "Ran error analysis and labeling reviews to improve data quality.",
-                        "Wrote evaluation scripts and compared candidate models on held-out data."
-                    ]
-                },
-                {
-                    "company": "Redwood Digital",
-                    "title": "Machine Learning Engineer",
-                    "location": "Singapore",
-                    "period": "May 2021 - Dec 2025",
-                    "achievements": [
-                        "Ran error analysis and labeling reviews to improve data quality.",
-                        "Built feature pipelines with TensorFlow and tracked experiments for reproducibility.",
-                        "Wrote evaluation scripts and compared candidate models on held-out data.",
-                        "Deployed model inference as an API and monitored drift in production."
-                    ]
-                },
-                {
-                    "company": "Sunrise Cloud",
-                    "title": "Data Scientist",
-                    "location": "Singapore",
-                    "period": "Apr 2019 - May 2021",
-                    "achievements": [
-                        "Deployed model inference as an API and monitored drift in production.",
-                        "Trained and evaluated PyTorch models for customer support, improving F1 by 18% over the baseline.",
-                        "Built feature pipelines with Kubernetes and tracked experiments for reproducibility.",
-                        "Ran error analysis and labeling reviews to improve data quality.",
-                        "Wrote evaluation scripts and compared candidate models on held-out data."
-                    ]
-                }
-            ],
-            "project": [],
-            "additional_info": [
-                "English: Professional working proficiency"
-            ]
-        }
+    "cv_id": "cv_007",
+    "persona": "senior_nlp_engineer",
+    "labels": {
+        "skills": [
+            "Python",
+            "PyTorch",
+            "Natural Language Processing",
+            "TensorFlow",
+            "Docker",
+            "Kubernetes",
+            "AWS",
+            "SQL",
+            "Machine Learning"
+        ],
+        "education": [
+            {
+                "institution": "FPT University",
+                "degree": "Master of Science in Computer Science",
+                "location": "Singapore",
+                "period": "2019"
+            }
+        ],
+        "work_experience": [
+            {
+                "company": "Helix Software",
+                "title": "Senior Machine Learning Engineer",
+                "location": "Singapore",
+                "period": "Dec 2025 - Present",
+                "achievements": [
+                    "Deployed model inference as an API and monitored drift in production.",
+                    "Trained and evaluated AWS models for document understanding, improving F1 by 35% over the baseline.",
+                    "Ran error analysis and labeling reviews to improve data quality.",
+                    "Wrote evaluation scripts and compared candidate models on held-out data."
+                ]
+            },
+            {
+                "company": "Redwood Digital",
+                "title": "Machine Learning Engineer",
+                "location": "Singapore",
+                "period": "May 2021 - Dec 2025",
+                "achievements": [
+                    "Ran error analysis and labeling reviews to improve data quality.",
+                    "Built feature pipelines with TensorFlow and tracked experiments for reproducibility.",
+                    "Wrote evaluation scripts and compared candidate models on held-out data.",
+                    "Deployed model inference as an API and monitored drift in production."
+                ]
+            },
+            {
+                "company": "Sunrise Cloud",
+                "title": "Data Scientist",
+                "location": "Singapore",
+                "period": "Apr 2019 - May 2021",
+                "achievements": [
+                    "Deployed model inference as an API and monitored drift in production.",
+                    "Trained and evaluated PyTorch models for customer support, improving F1 by 18% over the baseline.",
+                    "Built feature pipelines with Kubernetes and tracked experiments for reproducibility.",
+                    "Ran error analysis and labeling reviews to improve data quality.",
+                    "Wrote evaluation scripts and compared candidate models on held-out data."
+                ]
+            }
+        ],
+        "project": [],
+        "additional_info": [
+            "English: Professional working proficiency"
+        ]
     }
 }

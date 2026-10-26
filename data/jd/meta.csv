@@ -1,0 +1,16 @@
+jd_id,jd_title,company,level,title_source
+jd_001,MLE - Conversational AI Agent,Trusting Social,mid,derived
+jd_002,MLE - Decisioning Engine,Trusting Social,mid,derived
+jd_003,Middle/Senior AI Engineer,FPT Software,senior,stated
+jd_004,AI Engineer (LLM/RAG),OPSWAT,mid,derived
+jd_005,GenAI Engineer / Developer,Manulife,mid,stated
+jd_006,Backend Developer (.NET),LF Global Tech,junior,derived
+jd_007,Junior Backend Engineer (AI-assisted),Nexlab Technology,junior,stated
+jd_008,Junior Software Engineer (RTB / Go),Knorex,junior,stated
+jd_009,PHP Laravel Junior Developer,Tinovation,junior,stated
+jd_010,Backend Engineer (Python),WorldQuant BRAIN,mid,derived
+jd_011,Backend Engineer,GoTymeX,senior,stated
+jd_012,Backend Engineer (Python),CODE LEAP / AINAVIO,mid,stated
+jd_013,Principal Frontend Developer (ReactJS/VueJS),ANDPAD Vietnam,principal,stated
+jd_014,Front-End Developer (Senior),Astek Vietnam,senior,stated
+jd_015,Junior Software Engineer (Python, AI-assisted),junior,derived

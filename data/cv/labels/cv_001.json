@@ -1,68 +1,67 @@
 {
-    "cv_001": {
-        "persona": "fresher_backend_python",
-        "labels": {
-            "skills": [
-                "Python",
-                "Django",
-                "PostgreSQL",
-                "REST APIs",
-                "Git",
-                "Docker",
-                "Linux"
-            ],
-            "education": [
-                {
-                    "institution": "Northern Valley University",
-                    "degree": "Bachelor of Science in Computer Science",
-                    "location": "Toronto, ON",
-                    "period": "2026"
-                }
-            ],
-            "work_experience": [
-                {
-                    "company": "Quanta Solutions",
-                    "title": "Junior Backend Developer",
-                    "location": "Toronto, ON",
-                    "period": "Feb 2026 - Present",
-                    "achievements": [
-                        "Built and maintained REST APIs in Git serving the e-commerce product.",
-                        "Collaborated with frontend and product teams to ship features for e-commerce.",
-                        "Containerized services and set up CI pipelines for automated deployment.",
-                        "Designed Python-backed data models and optimized slow queries, cutting p95 latency by 35%.",
-                        "Wrote unit and integration tests, raising coverage to 85%."
-                    ]
-                }
-            ],
-            "project": [
-                {
-                    "name": "Library Management System",
-                    "period": "2026",
-                    "technologies": [
-                        "Python",
-                        "Git",
-                        "Linux"
-                    ],
-                    "description": [
-                        "Role-based access and reporting endpoints"
-                    ]
-                },
-                {
-                    "name": "Task Manager API",
-                    "period": "2025",
-                    "technologies": [
-                        "Git",
-                        "Django",
-                        "REST APIs"
-                    ],
-                    "description": [
-                        "Auth, CRUD and pagination with automated tests"
-                    ]
-                }
-            ],
-            "additional_info": [
-                "English: Professional working proficiency"
-            ]
-        }
+    "cv_id": "cv_001",
+    "persona": "fresher_backend_python",
+    "labels": {
+        "skills": [
+            "Python",
+            "Django",
+            "PostgreSQL",
+            "REST APIs",
+            "Git",
+            "Docker",
+            "Linux"
+        ],
+        "education": [
+            {
+                "institution": "Northern Valley University",
+                "degree": "Bachelor of Science in Computer Science",
+                "location": "Toronto, ON",
+                "period": "2026"
+            }
+        ],
+        "work_experience": [
+            {
+                "company": "Quanta Solutions",
+                "title": "Junior Backend Developer",
+                "location": "Toronto, ON",
+                "period": "Feb 2026 - Present",
+                "achievements": [
+                    "Built and maintained REST APIs in Git serving the e-commerce product.",
+                    "Collaborated with frontend and product teams to ship features for e-commerce.",
+                    "Containerized services and set up CI pipelines for automated deployment.",
+                    "Designed Python-backed data models and optimized slow queries, cutting p95 latency by 35%.",
+                    "Wrote unit and integration tests, raising coverage to 85%."
+                ]
+            }
+        ],
+        "project": [
+            {
+                "name": "Library Management System",
+                "period": "2026",
+                "technologies": [
+                    "Python",
+                    "Git",
+                    "Linux"
+                ],
+                "description": [
+                    "Role-based access and reporting endpoints"
+                ]
+            },
+            {
+                "name": "Task Manager API",
+                "period": "2025",
+                "technologies": [
+                    "Git",
+                    "Django",
+                    "REST APIs"
+                ],
+                "description": [
+                    "Auth, CRUD and pagination with automated tests"
+                ]
+            }
+        ],
+        "additional_info": [
+            "English: Professional working proficiency"
+        ]
     }
 }
