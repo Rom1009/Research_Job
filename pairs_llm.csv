@@ -1,0 +1,226 @@
+pair_id,cv_id,jd_id,llm_relevance,llm_reason,human_relevance,human_reason,human_blind,final_relevance,final_source,ambiguous,llm_model,llm_jd_min_years
+cv_001__jd_001,cv_001,jd_001,1,"The candidate's role (Junior Backend) is adjacent to the MLE position and they have only 0.7 years of experience versus the required 2 years. They lack core ML, statistics and experimentation skills, making them only partially suitable.",,,,,,,openai/gpt-oss-120b,2.0
+cv_001__jd_002,cv_001,jd_002,1,"Role is adjacent (backend vs ML Engineer) and experience is slightly below required. Core ML/Statistical skills are missing, limiting fit to partial.",,,,,,,openai/gpt-oss-120b,2.0
+cv_001__jd_003,cv_001,jd_003,1,"Role is adjacent (AI Engineer vs Junior Backend) and experience is 2.3 years below the required 3 years (low gap). Core AI/ML skills and MLOps experience are missing, so only partial fit.",,,,,,,openai/gpt-oss-120b,3.0
+cv_001__jd_004,cv_001,jd_004,1,"The candidate is a Junior Backend Developer, which is adjacent to the AI Engineer role required. Experience and core AI/LLM skills are insufficient and years of experience are below the 3‑year minimum.",,,,,,,openai/gpt-oss-120b,3.0
+cv_001__jd_005,cv_001,jd_005,1,"The candidate is a Junior Backend Developer (adjacent to GenAI Engineer) with a 0.7‑year gap below the 3‑year requirement, and lacks core Generative AI/LLM skills required by the JD.",,,,,,,openai/gpt-oss-120b,3.0
+cv_001__jd_006,cv_001,jd_006,1,"Role matches (backend) but candidate has less than the required 1.5 years of experience (gap <1 year). Core .NET stack and related technologies required by the JD are missing, leading to a partial fit.",,,,,,,openai/gpt-oss-120b,1.5
+cv_001__jd_007,cv_001,jd_007,1,"Role and level match, but core requirements for a statically typed language and AI coding agent usage are missing.",,,,,,,openai/gpt-oss-120b,0.0
+cv_001__jd_008,cv_001,jd_008,2,"Role matches (Junior Backend vs Junior Software Engineer) and experience exceeds the JD minimum. Core skills align with requirements, only the preferred Go language is absent.",2.0,"Level khớp, Go chỉ là ưu tiên",False,2.0,human_adjudicated,True,openai/gpt-oss-120b,0.0
+cv_001__jd_009,cv_001,jd_009,1,"Same backend role and level gap is minimal, but the candidate lacks required PHP/Laravel expertise, resulting in a partial match.",,,,,,,openai/gpt-oss-120b,1.0
+cv_001__jd_010,cv_001,jd_010,1,"Role matches and core stack aligns, but candidate has only 0.7 years vs required 2 years (low level gap) and lacks microservices, caching, queuing, and async experience.",,,,,,,openai/gpt-oss-120b,2.0
+cv_001__jd_011,cv_001,jd_011,0,"Role matches but candidate lacks the required 5+ years of experience (gap >4 years). According to the rubric, a level gap of 4 years or more results in a relevance score of 0.",0.0,Junior 0.7 năm vs yêu cầu 5 năm,False,0.0,human_adjudicated,True,openai/gpt-oss-120b,5.0
+cv_001__jd_012,cv_001,jd_012,1,"Role matches but candidate has only 0.7 years versus required 4 years and lacks cloud‑native AWS experience, so suitability is partial.",,,,,,,openai/gpt-oss-120b,4.0
+cv_001__jd_013,cv_001,jd_013,0,"Role mismatch: CV is Backend while JD seeks a Principal Frontend Developer, leading to relevance 0. Additionally, CV has only 0.7 years of experience versus the required 10+ years.",,,,,,,openai/gpt-oss-120b,10.0
+cv_001__jd_014,cv_001,jd_014,0,"The candidate is a Backend developer while the job is for a Front-End developer, which is a different role, resulting in a relevance score of 0. Additionally, the candidate lacks the required front-end skill set and has insufficient experience.",,,,,,,openai/gpt-oss-120b,3.0
+cv_001__jd_015,cv_001,jd_015,1,"Role and level match, core stack aligns, but missing key CS fundamentals and AI‑agent experience, so only partially suitable.",2.0,"Cùng vai trò, level, stack",False,2.0,human_adjudicated,False,openai/gpt-oss-120b,0.0
+cv_002__jd_001,cv_002,jd_001,1,"Role is adjacent (ML Engineer vs Backend) and experience level is sufficient. Core ML/statistics skills required by JD are missing, limiting fit to partial.",,,,,,,openai/gpt-oss-120b,2.0
+cv_002__jd_002,cv_002,jd_002,1,"Role is adjacent (ML Engineer vs Backend Engineer) and core ML/experimentation skills are missing, limiting fit to partial.",,,,,,,openai/gpt-oss-120b,2.0
+cv_002__jd_003,cv_002,jd_003,1,"Role is adjacent (AI Engineer vs Backend Engineer) and experience meets the JD minimum. Core AI/ML skills required by the JD are missing, resulting in a relevance score of 1.",,,,,,,openai/gpt-oss-120b,3.0
+cv_002__jd_004,cv_002,jd_004,1,"Role is adjacent (backend vs AI engineer) and level is acceptable, but core AI/LLM skills required by the JD are missing.",1.0,Backend good but lack RAG/LLM,False,1.0,human_adjudicated,False,openai/gpt-oss-120b,3.0
+cv_002__jd_005,cv_002,jd_005,1,"Role is adjacent (GenAI Engineer vs Backend Engineer) and level is acceptable, but core GenAI skills required by the JD are absent from the CV.",1.0,Có Python/API/backend nhưng không có LLM/RAG,False,1.0,human_adjudicated,False,openai/gpt-oss-120b,3.0
+cv_002__jd_006,cv_002,jd_006,1,"Same backend role and experience exceeds the required years, but the candidate lacks the required .NET/.NET Core stack and related technologies, resulting in a partial fit.",,,,,,,openai/gpt-oss-120b,1.5
+cv_002__jd_007,cv_002,jd_007,1,"Role and level match, but the candidate lacks the required statically typed language experience and does not demonstrate use of an AI coding agent, which are core JD requirements.",1.0,JD cần ngôn ngữ static typed và AI coding agent,False,1.0,human_adjudicated,True,openai/gpt-oss-120b,0.0
+cv_002__jd_008,cv_002,jd_008,2,Same role (Software Engineer) and candidate exceeds required experience by 3.4 years (within normal surplus). Stack matches required language and backend skills; only Go (preferred) is missing.,2.0,"Go chỉ là ưu tiên, nền tảng khớp, dư 3.3 năm",False,2.0,human_adjudicated,True,openai/gpt-oss-120b,0.0
+cv_002__jd_009,cv_002,jd_009,1,"Role matches and experience exceeds the 1‑year minimum, but the candidate lacks the required PHP/Laravel stack, only having Python/FastAPI. Therefore relevance is 1.",,,,,,,openai/gpt-oss-120b,1.0
+cv_002__jd_010,cv_002,jd_010,2,"Same backend role with 3.4 years (exceeds the 2‑year minimum) and core stack (Python, web framework, PostgreSQL, AWS, caching) matches the JD; missing only ancillary skills like Linux scripting, queuing and specific Python libraries.",,,,,,,openai/gpt-oss-120b,2.0
+cv_002__jd_011,cv_002,jd_011,1,"Role matches and many core skills align, but the candidate has only 3.4 years versus the required 5+ and lacks Java/Spring Boot/Kafka, resulting in a partial fit.",,,,,,,openai/gpt-oss-120b,5.0
+cv_002__jd_012,cv_002,jd_012,1,"Same role and core stack match, but candidate has only 3.4 years versus the required 4 years, resulting in a partial fit.",,,,,,,openai/gpt-oss-120b,4.0
+cv_002__jd_013,cv_002,jd_013,0,"The candidate is a Backend Engineer while the JD seeks a Principal Frontend Developer, which is a different role. Consequently the fit is rated 0 regardless of experience or skills.",0.0,Backend vs Principal Frontend,False,0.0,human_adjudicated,False,openai/gpt-oss-120b,10.0
+cv_002__jd_014,cv_002,jd_014,0,"The candidate is a Backend Engineer while the job is for a Front-End Developer, which are different roles. Consequently the fit is not suitable despite some overlapping skills.",,,,,,,openai/gpt-oss-120b,3.0
+cv_002__jd_015,cv_002,jd_015,2,"Role matches and core stack (Python, FastAPI, SQL, Git) aligns with JD; only Linux command line is not listed in CV.",2.0,"Cùng vai trò, stack Python khớp, dư 3.3 năm",False,2.0,human_adjudicated,False,openai/gpt-oss-120b,0.0
+cv_003__jd_001,cv_003,jd_001,0,"The candidate is a senior backend engineer, which is an adjacent role to the ML Engineer position, but lacks the required ML, statistics and experimentation experience. Consequently the fit is judged not suitable (relevance 0).",,,,,,,openai/gpt-oss-120b,2.0
+cv_003__jd_002,cv_003,jd_002,0,"The candidate is a senior backend engineer (adjacent role) but lacks core ML, statistics and experimentation skills required; excess experience (7+ years over the 2‑year minimum) further reduces fit, resulting in a relevance of 0.",,,,,,,openai/gpt-oss-120b,2.0
+cv_003__jd_003,cv_003,jd_003,0,"Role is adjacent but core AI/ML skills are missing and experience exceeds the required range by >5 years, resulting in a mismatch.",,,,,,,openai/gpt-oss-120b,3.0
+cv_003__jd_004,cv_003,jd_004,0,"The candidate is a senior backend engineer (adjacent role) and exceeds the required experience by >5 years, but lacks the core AI/LLM skills and Python stack required by the JD. Consequently, the fit is judged as not suitable (relevance 0).",,,,,,,openai/gpt-oss-120b,3.0
+cv_003__jd_005,cv_003,jd_005,0,"Role is adjacent, not the same, and candidate lacks core GenAI skills while having a surplus of >5 years experience, resulting in a 0 score.",,,,,,,openai/gpt-oss-120b,3.0
+cv_003__jd_006,cv_003,jd_006,1,"Same backend role but candidate exceeds required experience by 7.6 years, which caps relevance to 1 per rubric. Required .NET/.NET Core stack and related technologies are missing, further limiting suitability.",,,,,,,openai/gpt-oss-120b,1.5
+cv_003__jd_007,cv_003,jd_007,1,"Role matches and core backend stack aligns, but candidate exceeds required experience by >5 years and lacks the mandatory AI coding agent usage and verification skills, resulting in a partial fit.",,,,,,,openai/gpt-oss-120b,0.0
+cv_003__jd_008,cv_003,jd_008,1,"Role matches (backend/software engineer) but candidate has >5 years excess experience, which caps relevance to 1; core stack and most must‑have skills align with the JD.",,,,,,,openai/gpt-oss-120b,0.0
+cv_003__jd_009,cv_003,jd_009,1,"Role matches backend development, but the candidate lacks required PHP/Laravel expertise and has >5 years excess experience, leading to a partial fit.",,,,,,,openai/gpt-oss-120b,1.0
+cv_003__jd_010,cv_003,jd_010,1,"Role and seniority align, but the JD requires Python and related ecosystem which the CV lacks, resulting in a partial match.",,,,,,,openai/gpt-oss-120b,2.0
+cv_003__jd_011,cv_003,jd_011,2,"Same Backend Engineer role with sufficient experience (9.1 years > 5 required) and core stack (Java, Spring Boot, Kafka) matches; missing only Redis/Python which are not exclusive, so candidate is highly suitable.",,,,,,,openai/gpt-oss-120b,5.0
+cv_003__jd_012,cv_003,jd_012,1,"Same backend role and experience exceeds requirement, but core required Python stack is absent, leading to partial fit.",,,,,,,openai/gpt-oss-120b,4.0
+cv_003__jd_013,cv_003,jd_013,0,"Role mismatch: CV is a backend engineer while JD seeks a frontend developer, which are different roles, resulting in relevance 0.",,,,,,,openai/gpt-oss-120b,10.0
+cv_003__jd_014,cv_003,jd_014,0,"The candidate’s experience is backend-focused while the JD seeks a Front-End Developer, which is a different role; therefore the match is not suitable.",,,,,,,openai/gpt-oss-120b,3.0
+cv_003__jd_015,cv_003,jd_015,1,"Role matches backend/software engineer but core required Python and AI coding‑agent experience are absent, limiting fit to partial.",,,,,,,openai/gpt-oss-120b,0.0
+cv_004__jd_001,cv_004,jd_001,1,"Role is adjacent (Data Engineer vs ML Engineer) and experience level is acceptable. Core ML, statistics and experimentation skills required by the JD are missing.",,,,,,,openai/gpt-oss-120b,2.0
+cv_004__jd_002,cv_004,jd_002,1,"Role is adjacent (Data Engineer vs Machine Learning Engineer) and experience level is sufficient. Core ML, statistics and experimentation skills required by the JD are missing.",,,,,,,openai/gpt-oss-120b,2.0
+cv_004__jd_003,cv_004,jd_003,1,"Role is adjacent (Data Engineer vs AI Engineer) and experience level is acceptable, but core AI/ML skills required by the JD are largely missing.",1.0,"Data Engineer có Python/AWS, thiếu DL/MLOps",False,1.0,human_adjudicated,True,openai/gpt-oss-120b,3.0
+cv_004__jd_004,cv_004,jd_004,1,"Role is adjacent (Data Engineer vs AI Engineer) and candidate has Python and data pipeline experience, but lacks core AI/LLM skills required by the JD.",,,,,,,openai/gpt-oss-120b,3.0
+cv_004__jd_005,cv_004,jd_005,1,Role is adjacent (Data Engineer vs GenAI Engineer) and candidate lacks core Generative AI skills required by the JD.,1.0,"Data Engineer, thiếu LLM/RAG",False,1.0,human_adjudicated,True,openai/gpt-oss-120b,3.0
+cv_004__jd_006,cv_004,jd_006,1,"Role is adjacent (Data Engineer vs Backend/.NET Engineer) and experience exceeds the required years, but core required stack (.NET, Entity Framework, REST API, etc.) is missing, leading to a partial fit.",,,,,,,openai/gpt-oss-120b,1.5
+cv_004__jd_007,cv_004,jd_007,1,"Role is adjacent (Data Engineer vs Junior Backend Engineer) and core backend skills like a statically typed language and AI‑coding‑agent experience are missing, limiting suitability to a partial match.",,,,,,,openai/gpt-oss-120b,0.0
+cv_004__jd_008,cv_004,jd_008,1,"The candidate is a Data Engineer (adjacent to Junior Software Engineer) with 4.2 years experience, exceeding the JD's up‑to‑1‑year requirement but not by >5 years. Core required stack (Go) and several backend fundamentals are missing, leading to a partial fit.",,,,,,,openai/gpt-oss-120b,0.0
+cv_004__jd_009,cv_004,jd_009,1,"Role is adjacent (Data Engineer vs Backend PHP Developer) and experience exceeds the minimum by ~3 years, which is acceptable. Core required stack (PHP/Laravel, MVC, OOP, RESTful APIs, Git) is absent, so only a partial fit is achieved.",,,,,,,openai/gpt-oss-120b,1.0
+cv_004__jd_010,cv_004,jd_010,1,"Role is adjacent (Data Engineer vs Backend Software Engineer) and experience exceeds the minimum. Core backend stack (web frameworks, microservices, caching, Linux, async) is missing, limiting fit to partial.",,,,,,,openai/gpt-oss-120b,2.0
+cv_004__jd_011,cv_004,jd_011,1,"Role is adjacent (Data Engineer vs Backend Engineer) and experience is 0.8 years below the 5‑year requirement, which is within the <1‑year tolerance, so level gap is ok. Core stack matches Python, AWS and database design, but lacks Java/Spring/Kafka etc., resulting in relevance 1.",,,,,,,openai/gpt-oss-120b,5.0
+cv_004__jd_012,cv_004,jd_012,1,"Role is adjacent (Data Engineer vs Backend Engineer) and years meet the minimum, but key required skills like FastAPI, RESTful API design, and Pytest are absent.",,,,,,,openai/gpt-oss-120b,4.0
+cv_004__jd_013,cv_004,jd_013,0,"Role mismatch: CV is a Data Engineer while JD seeks a Principal Frontend Developer, which is a different role. Therefore the candidate is not considered suitable (relevance 0).",,,,,,,openai/gpt-oss-120b,10.0
+cv_004__jd_014,cv_004,jd_014,0,"The candidate is a Data Engineer while the job is for a Front-End Developer, which is a different role. Additionally, the CV lacks all required front‑end technologies listed in the JD.",,,,,,,openai/gpt-oss-120b,3.0
+cv_004__jd_015,cv_004,jd_015,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_001,cv_005,jd_001,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_002,cv_005,jd_002,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_003,cv_005,jd_003,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_004,cv_005,jd_004,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_005,cv_005,jd_005,1,"Role is adjacent (Data Engineer vs GenAI Engineer) and experience exceeds required years, but core GenAI skills (LLM development, RAG, embeddings, vector DB, LangChain) are missing, leading to partial fit.",,,,,,,openai/gpt-oss-120b,3.0
+cv_005__jd_006,cv_005,jd_006,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_007,cv_005,jd_007,,ERROR: LLM-judge failed,0.0,Data Engineer 7 năm vs junior backend,False,0.0,human_adjudicated,False,,
+cv_005__jd_008,cv_005,jd_008,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_009,cv_005,jd_009,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_010,cv_005,jd_010,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_011,cv_005,jd_011,,ERROR: LLM-judge failed,1.0,"Data Engineer 7 năm, level ổn, vai trò liền kề",False,1.0,human_adjudicated,True,,
+cv_005__jd_012,cv_005,jd_012,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_013,cv_005,jd_013,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_014,cv_005,jd_014,,ERROR: LLM-judge failed,,,,,,,,
+cv_005__jd_015,cv_005,jd_015,,ERROR: LLM-judge failed,0.0,Dư 7 năm và vai trò liền kề,False,0.0,human_adjudicated,True,,
+cv_006__jd_001,cv_006,jd_001,,ERROR: LLM-judge failed,2.0,"MLE vs MLE, level ổn",False,2.0,human_adjudicated,False,,
+cv_006__jd_002,cv_006,jd_002,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_003,cv_006,jd_003,,ERROR: LLM-judge failed,1.0,"Thiếu 1.3 năm, thiếu MLOps/cloud",False,1.0,human_adjudicated,True,,
+cv_006__jd_004,cv_006,jd_004,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_005,cv_006,jd_005,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_006,cv_006,jd_006,1,"The candidate is a Machine Learning Engineer, which is adjacent to the backend/software engineer role required. Core backend skills such as .NET, Entity Framework, LINQ, and REST API are missing, limiting suitability to a partial match.",,,,,,,openai/gpt-oss-120b,1.5
+cv_006__jd_007,cv_006,jd_007,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_008,cv_006,jd_008,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_009,cv_006,jd_009,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_010,cv_006,jd_010,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_011,cv_006,jd_011,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_012,cv_006,jd_012,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_013,cv_006,jd_013,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_014,cv_006,jd_014,,ERROR: LLM-judge failed,,,,,,,,
+cv_006__jd_015,cv_006,jd_015,,ERROR: LLM-judge failed,1.0,"MLE có Python, level ổn, nhưng vai trò liền kề",False,1.0,human_adjudicated,True,,
+cv_007__jd_001,cv_007,jd_001,,,,,,,,,,
+cv_007__jd_002,cv_007,jd_002,,,,,,,,,,
+cv_007__jd_003,cv_007,jd_003,,,,,,,,,,
+cv_007__jd_004,cv_007,jd_004,,,,,,,,,,
+cv_007__jd_005,cv_007,jd_005,,,1.0,"Cùng mảng AI nhưng không thấy LLM/RAG, dư level",False,1.0,human_adjudicated,True,,
+cv_007__jd_006,cv_007,jd_006,,,,,,,,,,
+cv_007__jd_007,cv_007,jd_007,,,,,,,,,,
+cv_007__jd_008,cv_007,jd_008,,,,,,,,,,
+cv_007__jd_009,cv_007,jd_009,,,,,,,,,,
+cv_007__jd_010,cv_007,jd_010,,,,,,,,,,
+cv_007__jd_011,cv_007,jd_011,,,,,,,,,,
+cv_007__jd_012,cv_007,jd_012,,,,,,,,,,
+cv_007__jd_013,cv_007,jd_013,,,,,,,,,,
+cv_007__jd_014,cv_007,jd_014,,,,,,,,,,
+cv_007__jd_015,cv_007,jd_015,,,0.0,Senior MLE 7.5 năm vs junior,False,0.0,human_adjudicated,False,,
+cv_008__jd_001,cv_008,jd_001,,,,,,,,,,
+cv_008__jd_002,cv_008,jd_002,,,,,,,,,,
+cv_008__jd_003,cv_008,jd_003,,,,,,,,,,
+cv_008__jd_004,cv_008,jd_004,,,,,,,,,,
+cv_008__jd_005,cv_008,jd_005,,,0.0,Frontend vs GenAI,False,0.0,human_adjudicated,False,,
+cv_008__jd_006,cv_008,jd_006,,,,,,,,,,
+cv_008__jd_007,cv_008,jd_007,,,,,,,,,,
+cv_008__jd_008,cv_008,jd_008,,,,,,,,,,
+cv_008__jd_009,cv_008,jd_009,,,,,,,,,,
+cv_008__jd_010,cv_008,jd_010,,,,,,,,,,
+cv_008__jd_011,cv_008,jd_011,,,,,,,,,,
+cv_008__jd_012,cv_008,jd_012,,,0.0,Frontend vs Backend,False,0.0,human_adjudicated,False,,
+cv_008__jd_013,cv_008,jd_013,,,,,,,,,,
+cv_008__jd_014,cv_008,jd_014,,,,,,,,,,
+cv_008__jd_015,cv_008,jd_015,,,0.0,"Frontend, không có Python",False,0.0,human_adjudicated,False,,
+cv_009__jd_001,cv_009,jd_001,,,,,,,,,,
+cv_009__jd_002,cv_009,jd_002,,,,,,,,,,
+cv_009__jd_003,cv_009,jd_003,,,,,,,,,,
+cv_009__jd_004,cv_009,jd_004,,,,,,,,,,
+cv_009__jd_005,cv_009,jd_005,,,,,,,,,,
+cv_009__jd_006,cv_009,jd_006,,,,,,,,,,
+cv_009__jd_007,cv_009,jd_007,,,,,,,,,,
+cv_009__jd_008,cv_009,jd_008,,,,,,,,,,
+cv_009__jd_009,cv_009,jd_009,,,,,,,,,,
+cv_009__jd_010,cv_009,jd_010,,,,,,,,,,
+cv_009__jd_011,cv_009,jd_011,,,,,,,,,,
+cv_009__jd_012,cv_009,jd_012,,,,,,,,,,
+cv_009__jd_013,cv_009,jd_013,,,,,,,,,,
+cv_009__jd_014,cv_009,jd_014,,,,,,,,,,
+cv_009__jd_015,cv_009,jd_015,,,,,,,,,,
+cv_010__jd_001,cv_010,jd_001,,,,,,,,,,
+cv_010__jd_002,cv_010,jd_002,,,,,,,,,,
+cv_010__jd_003,cv_010,jd_003,,,,,,,,,,
+cv_010__jd_004,cv_010,jd_004,,,,,,,,,,
+cv_010__jd_005,cv_010,jd_005,,,,,,,,,,
+cv_010__jd_006,cv_010,jd_006,,,,,,,,,,
+cv_010__jd_007,cv_010,jd_007,,,,,,,,,,
+cv_010__jd_008,cv_010,jd_008,,,,,,,,,,
+cv_010__jd_009,cv_010,jd_009,,,,,,,,,,
+cv_010__jd_010,cv_010,jd_010,,,,,,,,,,
+cv_010__jd_011,cv_010,jd_011,,,,,,,,,,
+cv_010__jd_012,cv_010,jd_012,,,,,,,,,,
+cv_010__jd_013,cv_010,jd_013,,,,,,,,,,
+cv_010__jd_014,cv_010,jd_014,,,,,,,,,,
+cv_010__jd_015,cv_010,jd_015,,,,,,,,,,
+cv_011__jd_001,cv_011,jd_001,,,,,,,,,,
+cv_011__jd_002,cv_011,jd_002,,,,,,,,,,
+cv_011__jd_003,cv_011,jd_003,,,,,,,,,,
+cv_011__jd_004,cv_011,jd_004,,,,,,,,,,
+cv_011__jd_005,cv_011,jd_005,,,0.0,QA vs GenAI,False,0.0,human_adjudicated,False,,
+cv_011__jd_006,cv_011,jd_006,,,,,,,,,,
+cv_011__jd_007,cv_011,jd_007,,,,,,,,,,
+cv_011__jd_008,cv_011,jd_008,,,,,,,,,,
+cv_011__jd_009,cv_011,jd_009,,,,,,,,,,
+cv_011__jd_010,cv_011,jd_010,,,1.0,"QA có Python/SQL/Pytest, vai trò liền kề",False,1.0,human_adjudicated,True,,
+cv_011__jd_011,cv_011,jd_011,,,,,,,,,,
+cv_011__jd_012,cv_011,jd_012,,,,,,,,,,
+cv_011__jd_013,cv_011,jd_013,,,,,,,,,,
+cv_011__jd_014,cv_011,jd_014,,,,,,,,,,
+cv_011__jd_015,cv_011,jd_015,,,1.0,"QA có Python, dư gần 5 năm",False,1.0,human_adjudicated,True,,
+cv_012__jd_001,cv_012,jd_001,,,,,,,,,,
+cv_012__jd_002,cv_012,jd_002,,,,,,,,,,
+cv_012__jd_003,cv_012,jd_003,,,,,,,,,,
+cv_012__jd_004,cv_012,jd_004,,,,,,,,,,
+cv_012__jd_005,cv_012,jd_005,,,,,,,,,,
+cv_012__jd_006,cv_012,jd_006,,,,,,,,,,
+cv_012__jd_007,cv_012,jd_007,,,0.0,Data Analyst vs backend,False,0.0,human_adjudicated,False,,
+cv_012__jd_008,cv_012,jd_008,,,,,,,,,,
+cv_012__jd_009,cv_012,jd_009,,,,,,,,,,
+cv_012__jd_010,cv_012,jd_010,,,,,,,,,,
+cv_012__jd_011,cv_012,jd_011,,,,,,,,,,
+cv_012__jd_012,cv_012,jd_012,,,,,,,,,,
+cv_012__jd_013,cv_012,jd_013,,,,,,,,,,
+cv_012__jd_014,cv_012,jd_014,,,,,,,,,,
+cv_012__jd_015,cv_012,jd_015,,,,,,,,,,
+cv_013__jd_001,cv_013,jd_001,,,,,,,,,,
+cv_013__jd_002,cv_013,jd_002,,,,,,,,,,
+cv_013__jd_003,cv_013,jd_003,,,,,,,,,,
+cv_013__jd_004,cv_013,jd_004,,,0.0,"Manager 14 năm, không có AI",False,0.0,human_adjudicated,False,,
+cv_013__jd_005,cv_013,jd_005,,,,,,,,,,
+cv_013__jd_006,cv_013,jd_006,,,,,,,,,,
+cv_013__jd_007,cv_013,jd_007,,,0.0,Manager 14 năm vs junior,False,0.0,human_adjudicated,False,,
+cv_013__jd_008,cv_013,jd_008,,,,,,,,,,
+cv_013__jd_009,cv_013,jd_009,,,,,,,,,,
+cv_013__jd_010,cv_013,jd_010,,,,,,,,,,
+cv_013__jd_011,cv_013,jd_011,,,,,,,,,,
+cv_013__jd_012,cv_013,jd_012,,,,,,,,,,
+cv_013__jd_013,cv_013,jd_013,,,,,,,,,,
+cv_013__jd_014,cv_013,jd_014,,,,,,,,,,
+cv_013__jd_015,cv_013,jd_015,,,,,,,,,,
+cv_014__jd_001,cv_014,jd_001,,,,,,,,,,
+cv_014__jd_002,cv_014,jd_002,,,,,,,,,,
+cv_014__jd_003,cv_014,jd_003,,,,,,,,,,
+cv_014__jd_004,cv_014,jd_004,,,,,,,,,,
+cv_014__jd_005,cv_014,jd_005,,,,,,,,,,
+cv_014__jd_006,cv_014,jd_006,,,,,,,,,,
+cv_014__jd_007,cv_014,jd_007,,,,,,,,,,
+cv_014__jd_008,cv_014,jd_008,,,,,,,,,,
+cv_014__jd_009,cv_014,jd_009,,,,,,,,,,
+cv_014__jd_010,cv_014,jd_010,,,,,,,,,,
+cv_014__jd_011,cv_014,jd_011,,,,,,,,,,
+cv_014__jd_012,cv_014,jd_012,,,1.0,"Cùng vai trò, level ổn, không có Python",False,1.0,human_adjudicated,False,,
+cv_014__jd_013,cv_014,jd_013,,,,,,,,,,
+cv_014__jd_014,cv_014,jd_014,,,,,,,,,,
+cv_014__jd_015,cv_014,jd_015,,,1.0,"Cùng vai trò, nhưng không có Python",False,1.0,human_adjudicated,False,,
+cv_015__jd_001,cv_015,jd_001,,,,,,,,,,
+cv_015__jd_002,cv_015,jd_002,,,,,,,,,,
+cv_015__jd_003,cv_015,jd_003,,,,,,,,,,
+cv_015__jd_004,cv_015,jd_004,,,,,,,,,,
+cv_015__jd_005,cv_015,jd_005,,,,,,,,,,
+cv_015__jd_006,cv_015,jd_006,,,,,,,,,,
+cv_015__jd_007,cv_015,jd_007,,,,,,,,,,
+cv_015__jd_008,cv_015,jd_008,,,,,,,,,,
+cv_015__jd_009,cv_015,jd_009,,,,,,,,,,
+cv_015__jd_010,cv_015,jd_010,,,,,,,,,,
+cv_015__jd_011,cv_015,jd_011,,,,,,,,,,
+cv_015__jd_012,cv_015,jd_012,,,,,,,,,,
+cv_015__jd_013,cv_015,jd_013,,,,,,,,,,
+cv_015__jd_014,cv_015,jd_014,,,,,,,,,,
+cv_015__jd_015,cv_015,jd_015,,,,,,,,,,

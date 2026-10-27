@@ -4,9 +4,10 @@ from pathlib import Path
 import json
 from datetime import date
 from dateutil import parser
+import itertools
 
 def random_sample(quota: dict, group: dict) -> dict:
-    cv_ids = [f"cv_{i:03d}" for i in range(1, 15)]
+    cv_ids = [f"cv_{i:03d}" for i in range(1, 16)]
     sample = []
     for g, jd_list in group.items():
         pool = [(cv, jd) for cv in cv_ids for jd in jd_list]
@@ -69,6 +70,37 @@ def export_to_csv(sample: list[tuple[str, str]], cv_dir: str, jd_dir: str, meta_
     df.to_csv(out_path, index = False, encoding="utf-8-sig")
     return df
 
+def create_pairs(blind_csv: pd.DataFrame, cv_dir: str, meta_path: str, out_path: str) -> pd.DataFrame:
+    cv_ids = sorted(p.stem for p in Path(cv_dir).glob("*.json"))
+    jd_ids = sorted(pd.read_csv(meta_path)["jd_id"])   
+    df = pd.DataFrame(
+        [{"pair_id": f"{cv}__{jd}", "cv_id": cv, "jd_id": jd}
+         for cv, jd in itertools.product(cv_ids, jd_ids)]
+    )
+
+    for col in ["llm_relevance", "llm_reason", "human_relevance", "human_reason",
+            "human_blind", "final_relevance", "final_source", "ambiguous"]:
+        df[col] = pd.NA
+
+    h = blind_csv[["cv_id", "jd_id", "human_relevance", "human_reason", "ambiguous"]].copy()
+    h["pair_id"] = h["cv_id"] + "__" + h["jd_id"]
+
+    missing = set(h["pair_id"]) - set(df["pair_id"])
+    assert not missing, f"Cặp không có trong khung: {missing}"
+    assert h["human_relevance"].isin([0, 1, 2]).all(), "human_relevance phải là 0/1/2"
+    assert not h["pair_id"].duplicated().any(), "Có cặp bị chấm hai lần"
+
+    df = df.set_index("pair_id")
+    h = h.set_index("pair_id")
+    df.loc[h.index, ["human_relevance", "human_reason", "ambiguous"]] = \
+        h[["human_relevance", "human_reason", "ambiguous"]]
+    df.loc[h.index, "human_blind"] = False            # bạn đã xem nhãn của mình
+    df.loc[h.index, "final_relevance"] = h["human_relevance"]
+    df.loc[h.index, "final_source"] = "human_adjudicated"
+    df = df.reset_index()
+
+    df.to_csv(out_path, index = False, encoding="utf-8-sig")
+    return df
 
 if __name__ == "__main__":
     # Date
@@ -91,4 +123,8 @@ if __name__ == "__main__":
     quota = {"expect_2": 8, "expect_1": 12, "expect_0": 10}
 
     sample = random_sample(quota, group)
-    export_to_csv(sample, cv_dir, jd_dir, root / "data" / "jd" / "meta.csv", "parse.csv")
+    # export_to_csv(sample, cv_dir, jd_dir, root / "data" / "jd" / "meta.csv", "parse.csv")
+    blind_csv = pd.read_csv(root / "data" / "blind_eval.csv")
+    pair_csv = create_pairs(blind_csv=blind_csv, cv_dir=cv_dir, meta_path=root / "data" / "jd" / "meta.csv", out_path="pairs.csv")
+
+    
