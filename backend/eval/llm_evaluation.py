@@ -99,7 +99,7 @@ def run_all(pair_path: str, out_path: str, rubric: str ,only_blind: str = False)
     if only_blind:
         todo = todo[todo.human_relevance.notna()]
 
-    for n, (i, r) in enumerate(todo.iterrows(), 1): 
+    for n, (i, r) in enumerate(todo.iloc[167:168].iterrows(), 167): 
         cv = load_json(root / "data" / "cv" / "labels" / f"{r.cv_id}.json")
         jd_text = Path(root / "data" / "jd" / "raw" / f"{r.jd_id}.txt").read_text(encoding="utf-8")
         msgs = build_messages(cv, cv_years(cv), jd_text, rubric)
