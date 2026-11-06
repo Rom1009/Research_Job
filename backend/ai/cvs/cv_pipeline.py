@@ -272,6 +272,7 @@ class ChunkingData:
             ],
             temperature = 0.0,
             seed = 42,
+            max_completion_tokens=8192,
             response_format = {
                 "type": "json_schema",
                 "json_schema": {

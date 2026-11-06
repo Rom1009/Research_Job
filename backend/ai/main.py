@@ -21,13 +21,13 @@ def chunking(out: dict) -> dict:
 
     chunk_out = {}
 
-    # for k, v in out.items():
-    #     chunk = ChunkingData(v)
-    #     val_chunk = chunk(k)
-    #     chunk_out[k] = val_chunk
-    chunk = ChunkingData(out["cv_001"])
-    val_chunk = chunk("cv_001")
-    chunk_out["cv_001"] = val_chunk
+    for k, v in out.items():
+        chunk = ChunkingData(v)
+        val_chunk = chunk(k)
+        chunk_out[k] = val_chunk
+    # chunk = ChunkingData(out["cv_001"])
+    # val_chunk = chunk("cv_001")
+    # chunk_out["cv_001"] = val_chunk
     return chunk_out
 
 def save_txt(output_path: str, content: dict):
